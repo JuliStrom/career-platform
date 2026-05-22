@@ -24,6 +24,14 @@
   "wantsRelocation": "Relocation preference",
   "yearsInCurrentRole": "Years in current role",
   "specialistDetails": "Specialist details",
+  "careerAbroad": {
+    "button": "Career abroad",
+    "title": "Career abroad",
+    "description": "Prepare your profile for international opportunities.",
+    "selectedRoute": "Selected route",
+    "routeTitle": "{{level}} {{direction}} from {{city}} → work in {{targetCountry}}",
+    "backButton": "Back to profile"
+  },
   "directions": {
     "All": "All directions",
     "Creative": "Creative",
@@ -71,6 +79,7 @@
     "germany": "Germany",
     "russia": "Russia",
     "china": "China",
+    "dubai": "Dubai",
     "europe": "Europe",
     "other": "Other"
   },

@@ -63,6 +63,7 @@ const RELOCATION_TO_COUNTRY_VALUES = [
   'germany',
   'russia',
   'china',
+  'dubai',
   'europe',
   'other',
 ] as const;

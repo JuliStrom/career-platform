@@ -24,6 +24,14 @@
   "wantsRelocation": "Готовность к релокации",
   "yearsInCurrentRole": "Лет в текущей роли",
   "specialistDetails": "Детали специалиста",
+  "careerAbroad": {
+    "button": "Карьера за рубежом",
+    "title": "Карьера за рубежом",
+    "description": "Подготовьте профиль к международным карьерным возможностям.",
+    "selectedRoute": "Выбранный маршрут",
+    "routeTitle": "{{level}} {{direction}} из {{city}} → работа в {{targetCountry}}",
+    "backButton": "Назад к профилю"
+  },
   "directions": {
     "All": "Все направления",
     "Creative": "Креатив",
@@ -71,6 +79,7 @@
     "germany": "Германия",
     "russia": "Россия",
     "china": "Китай",
+    "dubai": "Дубай",
     "europe": "Европа",
     "other": "Другое"
   },

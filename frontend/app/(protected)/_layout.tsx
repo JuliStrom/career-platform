@@ -110,6 +110,13 @@ export default function ProtectedLayout() {
         }}
       />
       <Tabs.Screen
+        name="career-abroad"
+        options={{
+          title: tProfile('careerAbroad.title'),
+          href: null,
+        }}
+      />
+      <Tabs.Screen
         name="jobs/[id]"
         options={{
           title: tJobs('detailsTitle'),

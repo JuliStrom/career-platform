@@ -209,6 +209,13 @@ export default function ProfileScreen() {
           </PrimaryButton>
         )}
         <PrimaryButton
+          onPress={() => router.push('/career-abroad')}
+          accessibilityLabel={tProfile('careerAbroad.button')}
+          className="mt-6"
+        >
+          {tProfile('careerAbroad.button')}
+        </PrimaryButton>
+        <PrimaryButton
           onPress={() => router.push('/jobs/favorites')}
           accessibilityLabel={tJobs('favoritesLink')}
           className="mt-3"

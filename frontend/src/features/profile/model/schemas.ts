@@ -31,6 +31,7 @@ export const relocationCountrySchema = z.enum([
   'germany',
   'russia',
   'china',
+  'dubai',
   'europe',
   'other',
 ]);

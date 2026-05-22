@@ -29,7 +29,41 @@
     "title": "Career abroad",
     "description": "Prepare your profile for international opportunities.",
     "selectedRoute": "Selected route",
+    "marketStats": "Current market stats",
+    "vacanciesNow": "{{count}} vacancies for {{level}} {{direction}} in {{targetCountry}} now",
+    "averageSalary": "Average salary: {{salaryRange}}",
     "routeTitle": "{{level}} {{direction}} from {{city}} → work in {{targetCountry}}",
+    "routeFrom": "from",
+    "routeWorkIn": "work in",
+    "progress": {
+      "title": "Progress tracker",
+      "stepPrefix": "Step #{{number}}. ",
+      "steps": {
+        "portfolio": "Portfolio in English",
+        "certificate": "Certificates",
+        "linkedin": "LinkedIn",
+        "companies": "Company list",
+        "applications": "Applications submitted"
+      },
+      "uploading": "Uploading...",
+      "uploadPdf": "Upload PDF",
+      "pdfNotSelected": "No PDF selected",
+      "portfolio": {
+        "description": "Prepare an English portfolio: a short intro, 8+ strong cases, your role in each project, process, results, and links to live materials.",
+        "resources": "Examples and platforms",
+        "linkLabel": "Portfolio link",
+        "pdfLabel": "Portfolio PDF file"
+      },
+      "certificates": {
+        "description": "Add certificates using verification links or PDF files. For each link, add a short description of what you studied and which skill it proves.",
+        "linkLabel": "Certificate link",
+        "titlePlaceholder": "Certificate name",
+        "descriptionPlaceholder": "Certificate description",
+        "addLink": "Add certificate",
+        "pdfLabel": "Certificate PDF files",
+        "emptyPdfs": "No certificate PDFs uploaded"
+      }
+    },
     "backButton": "Back to profile"
   },
   "directions": {
@@ -82,6 +116,16 @@
     "dubai": "Dubai",
     "europe": "Europe",
     "other": "Other"
+  },
+  "relocationCountryMarketNames": {
+    "usa": "USA",
+    "canada": "Canada",
+    "germany": "Germany",
+    "russia": "Russia",
+    "china": "China",
+    "dubai": "Dubai",
+    "europe": "Europe",
+    "other": "another country"
   },
   "relocationOrigins": {
     "kazakhstan": "KZ"

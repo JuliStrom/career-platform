@@ -59,6 +59,18 @@ export const baseProfileSchema = z.object({
         ),
     ])
     .optional(),
+  portfolioPdfContentType: z.union([z.string(), z.null()]).optional(),
+  portfolioPdfName: z.union([z.string(), z.null()]).optional(),
+  certificatePdfs: z
+    .array(
+      z.object({
+        _id: z.string(),
+        name: z.string(),
+        contentType: z.string().optional(),
+        uploadedAt: z.union([z.string(), z.date()]).optional(),
+      })
+    )
+    .optional(),
   direction: directionSchema,
   level: levelSchema,
   experience: z

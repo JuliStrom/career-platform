@@ -29,7 +29,41 @@
     "title": "Карьера за рубежом",
     "description": "Подготовьте профиль к международным карьерным возможностям.",
     "selectedRoute": "Выбранный маршрут",
+    "marketStats": "Статистика рынка сейчас",
+    "vacanciesNow": "{{count}} вакансий для {{level}} {{direction}} в {{targetCountry}} сейчас",
+    "averageSalary": "Средняя зарплата: {{salaryRange}}",
     "routeTitle": "{{level}} {{direction}} из {{city}} → работа в {{targetCountry}}",
+    "routeFrom": "из",
+    "routeWorkIn": "работа в",
+    "progress": {
+      "title": "Трекер прогресса",
+      "stepPrefix": "Шаг №{{number}}. ",
+      "steps": {
+        "portfolio": "Портфолио на английском",
+        "certificate": "Сертификаты",
+        "linkedin": "LinkedIn",
+        "companies": "Список компаний",
+        "applications": "Поданы заявки"
+      },
+      "uploading": "Загрузка...",
+      "uploadPdf": "Загрузить PDF",
+      "pdfNotSelected": "PDF не выбран",
+      "portfolio": {
+        "description": "Соберите англоязычную версию портфолио: короткое intro, 8+ сильных кейсов, роль в проекте, процесс, результат и ссылки на живые материалы.",
+        "resources": "Примеры и площадки",
+        "linkLabel": "Ссылка на портфолио",
+        "pdfLabel": "PDF-файл портфолио"
+      },
+      "certificates": {
+        "description": "Добавьте сертификаты ссылкой на страницу подтверждения или PDF-файлами. Для каждой ссылки укажите короткое описание: чему учились и какой навык подтверждён.",
+        "linkLabel": "Ссылка на сертификат",
+        "titlePlaceholder": "Название сертификата",
+        "descriptionPlaceholder": "Описание сертификата",
+        "addLink": "Добавить сертификат",
+        "pdfLabel": "PDF-файлы сертификатов",
+        "emptyPdfs": "PDF-сертификаты не загружены"
+      }
+    },
     "backButton": "Назад к профилю"
   },
   "directions": {
@@ -82,6 +116,16 @@
     "dubai": "Дубай",
     "europe": "Европа",
     "other": "Другое"
+  },
+  "relocationCountryMarketNames": {
+    "usa": "США",
+    "canada": "Канаде",
+    "germany": "Германии",
+    "russia": "России",
+    "china": "Китае",
+    "dubai": "Дубае",
+    "europe": "Европе",
+    "other": "другой стране"
   },
   "relocationOrigins": {
     "kazakhstan": "КЗ"

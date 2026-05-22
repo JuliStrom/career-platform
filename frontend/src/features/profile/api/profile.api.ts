@@ -66,9 +66,7 @@ function buildProfileRequestBody(profile: Profile) {
     careerChangeMotivation: track
       ? (profile.careerChangeMotivation ?? null)
       : null,
-    careerChangeTimeline: track
-      ? (profile.careerChangeTimeline ?? null)
-      : null,
+    careerChangeTimeline: track ? (profile.careerChangeTimeline ?? null) : null,
   };
 }
 
@@ -117,6 +115,68 @@ export async function uploadAvatarFile(avatarUri: string): Promise<string> {
   );
 
   return response.data.avatar;
+}
+
+export async function uploadPortfolioPdfFile(
+  file: File
+): Promise<{ portfolioPdfName: string }> {
+  const formData = new FormData();
+  formData.append('portfolio', file, file.name);
+
+  const response = await apiClient.post<{ portfolioPdfName: string }>(
+    '/profile/portfolio/pdf',
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  );
+
+  return response.data;
+}
+
+export async function getPortfolioPdfFile(): Promise<Blob> {
+  const response = await apiClient.get<Blob>('/profile/portfolio/pdf', {
+    responseType: 'blob',
+  });
+
+  return response.data;
+}
+
+export interface CertificatePdfMetadata {
+  _id: string;
+  name: string;
+  contentType?: string;
+  uploadedAt?: string | Date;
+}
+
+export async function uploadCertificatePdfFile(
+  file: File
+): Promise<CertificatePdfMetadata> {
+  const formData = new FormData();
+  formData.append('certificate', file, file.name);
+
+  const response = await apiClient.post<{
+    certificate: CertificatePdfMetadata;
+  }>('/profile/certificates/pdf', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  return response.data.certificate;
+}
+
+export async function getCertificatePdfFile(id: string): Promise<Blob> {
+  const response = await apiClient.get<Blob>(
+    `/profile/certificates/pdf/${id}`,
+    {
+      responseType: 'blob',
+    }
+  );
+
+  return response.data;
 }
 
 export async function getProfile(): Promise<Profile | null> {

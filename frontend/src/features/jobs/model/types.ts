@@ -29,6 +29,8 @@ export interface IJobsFilters {
   /** Подстрока по title, description, company (бэкенд GET /jobs?search=) */
   search?: string;
   isInternational?: boolean;
+  page?: number;
+  limit?: number;
 }
 
 export type DirectionFilterValue = (typeof DIRECTION_FILTER_VALUES)[number];

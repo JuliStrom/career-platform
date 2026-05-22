@@ -62,6 +62,38 @@
         "addLink": "Add certificate",
         "pdfLabel": "Certificate PDF files",
         "emptyPdfs": "No certificate PDFs uploaded"
+      },
+      "linkedin": {
+        "description": "Add your LinkedIn profile link and use the checklist below to make the profile clear for international recruiters.",
+        "linkLabel": "LinkedIn profile link",
+        "openLink": "Open LinkedIn profile",
+        "recommendationsTitle": "Recommendations for filling out your LinkedIn profile",
+        "recommendations": {
+          "photoBanner": {
+            "title": "Photo and banner",
+            "description": "Use a professional photo on a neutral background and a banner related to your field."
+          },
+          "headline": {
+            "title": "Headline",
+            "description": "Use up to 220 characters: specialization + value. Example: Data Analyst | E-commerce growth."
+          },
+          "about": {
+            "title": "About",
+            "description": "Keep it short: who you are, key achievements with numbers, and relocation or remote-work readiness."
+          },
+          "experience": {
+            "title": "Work experience",
+            "description": "Use the formula action + result + metric for each role."
+          },
+          "skills": {
+            "title": "Skills",
+            "description": "Add up to 50 English keywords from your target vacancies."
+          },
+          "openToWork": {
+            "title": "Open to work",
+            "description": "Turn it on and specify relocation countries or Remote."
+          }
+        }
       }
     },
     "backButton": "Back to profile"

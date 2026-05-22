@@ -57,6 +57,7 @@ interface CareerAbroadProgress {
   completed: Record<ProgressChecklistItemId, boolean>;
   portfolioUrl: string;
   portfolioPdfName: string;
+  linkedinUrl: string;
   certificateLinks: {
     id: string;
     title: string;
@@ -76,6 +77,7 @@ const DEFAULT_PROGRESS: CareerAbroadProgress = {
   },
   portfolioUrl: '',
   portfolioPdfName: '',
+  linkedinUrl: '',
   certificateLinks: [],
   certificatePdfs: [],
 };
@@ -92,6 +94,7 @@ function normalizeProgress(value: unknown): CareerAbroadProgress {
     },
     portfolioUrl: progress.portfolioUrl ?? '',
     portfolioPdfName: progress.portfolioPdfName ?? '',
+    linkedinUrl: progress.linkedinUrl ?? '',
     certificateLinks: progress.certificateLinks ?? [],
     certificatePdfs: progress.certificatePdfs ?? [],
   };
@@ -167,7 +170,7 @@ export function CareerAbroadScreen() {
   const [progress, setProgress] =
     useState<CareerAbroadProgress>(DEFAULT_PROGRESS);
   const [expandedStepId, setExpandedStepId] =
-    useState<ProgressChecklistItemId | null>('portfolio');
+    useState<ProgressChecklistItemId | null>(null);
   const [hydratedProgressStorageKey, setHydratedProgressStorageKey] = useState<
     string | null
   >(null);
@@ -249,6 +252,24 @@ export function CareerAbroadScreen() {
       ...current,
       portfolioPdfName,
     }));
+  }
+
+  function updateLinkedinUrl(linkedinUrl: string) {
+    setProgress((current) => ({
+      ...current,
+      linkedinUrl,
+    }));
+  }
+
+  function openLinkedinProfile() {
+    const linkedinUrl = progress.linkedinUrl.trim();
+    if (!linkedinUrl) return;
+
+    const normalizedUrl = /^https?:\/\//i.test(linkedinUrl)
+      ? linkedinUrl
+      : `https://${linkedinUrl}`;
+
+    Linking.openURL(normalizedUrl);
   }
 
   function addCertificateLink() {
@@ -515,7 +536,9 @@ export function CareerAbroadScreen() {
               const isCompleted = progress.completed[item.id];
               const isExpanded = expandedStepId === item.id;
               const canExpand =
-                item.id === 'portfolio' || item.id === 'certificate';
+                item.id === 'portfolio' ||
+                item.id === 'certificate' ||
+                item.id === 'linkedin';
 
               return (
                 <View
@@ -535,14 +558,14 @@ export function CareerAbroadScreen() {
                         setExpandedStepId(isExpanded ? null : item.id)
                       }
                       disabled={!canExpand}
-                      className="flex-1"
+                      className="flex-1 flex-row items-center"
                       accessibilityRole={canExpand ? 'button' : undefined}
                       accessibilityState={
                         canExpand ? { expanded: isExpanded } : undefined
                       }
                     >
                       <Text
-                        className={`text-sm font-medium ${
+                        className={`flex-1 text-sm font-medium ${
                           isCompleted
                             ? 'text-gray-500 line-through dark:text-gray-400'
                             : 'text-gray-800 dark:text-gray-100'
@@ -558,16 +581,21 @@ export function CareerAbroadScreen() {
                               number: 2,
                             })
                           : ''}
+                        {item.id === 'linkedin'
+                          ? tProfile('careerAbroad.progress.stepPrefix', {
+                              number: 3,
+                            })
+                          : ''}
                         {tProfile(
                           `careerAbroad.progress.steps.${item.labelKey}`
                         )}
                       </Text>
+                      {canExpand && (
+                        <Text className="ml-3 text-lg text-gray-500 dark:text-gray-400">
+                          {isExpanded ? '−' : '+'}
+                        </Text>
+                      )}
                     </Pressable>
-                    {canExpand && (
-                      <Text className="ml-3 text-lg text-gray-500 dark:text-gray-400">
-                        {isExpanded ? '−' : '+'}
-                      </Text>
-                    )}
                   </View>
                   {item.id === 'portfolio' && isExpanded && (
                     <View className="mt-4 border-t border-gray-200 pt-4 dark:border-gray-700">
@@ -776,6 +804,11 @@ export function CareerAbroadScreen() {
                             : tProfile('careerAbroad.progress.uploadPdf')}
                         </Text>
                       </Pressable>
+                      <Text className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+                        {tProfile(
+                          'careerAbroad.progress.linkedin.recommendationsTitle'
+                        )}
+                      </Text>
                       <View className="gap-2">
                         {progress.certificatePdfs.map((certificate) => (
                           <Pressable
@@ -802,6 +835,80 @@ export function CareerAbroadScreen() {
                           {certificatePdfError}
                         </Text>
                       )}
+                    </View>
+                  )}
+                  {item.id === 'linkedin' && isExpanded && (
+                    <View className="mt-4 border-t border-gray-200 pt-4 dark:border-gray-700">
+                      <Text className="mb-3 text-sm leading-5 text-gray-700 dark:text-gray-200">
+                        {tProfile('careerAbroad.progress.linkedin.description')}
+                      </Text>
+                      <Text className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+                        {tProfile('careerAbroad.progress.linkedin.linkLabel')}
+                      </Text>
+                      <TextInput
+                        value={progress.linkedinUrl}
+                        onChangeText={updateLinkedinUrl}
+                        placeholder="https://www.linkedin.com/in/..."
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        className="mb-4 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+                        placeholderTextColor="#9CA3AF"
+                      />
+                      <Pressable
+                        onPress={openLinkedinProfile}
+                        disabled={!progress.linkedinUrl.trim()}
+                        className={`mb-4 self-start rounded-md px-3 py-2 ${
+                          progress.linkedinUrl.trim()
+                            ? 'bg-indigo-600 active:opacity-70 dark:bg-indigo-400'
+                            : 'bg-gray-300 dark:bg-gray-700'
+                        }`}
+                        accessibilityRole="link"
+                      >
+                        <Text
+                          className={`text-sm font-medium ${
+                            progress.linkedinUrl.trim()
+                              ? 'text-white dark:text-gray-900'
+                              : 'text-gray-600 dark:text-gray-300'
+                          }`}
+                        >
+                          {tProfile('careerAbroad.progress.linkedin.openLink')}
+                        </Text>
+                      </Pressable>
+                      <Text className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+                        {tProfile(
+                          'careerAbroad.progress.linkedin.recommendationsTitle'
+                        )}
+                      </Text>
+                      <View className="gap-2">
+                        {[
+                          'photoBanner',
+                          'headline',
+                          'about',
+                          'experience',
+                          'skills',
+                          'openToWork',
+                        ].map((key) => (
+                          <View
+                            key={key}
+                            className="flex-row items-start"
+                          >
+                            <Text className="mr-2 text-sm leading-5 text-gray-700 dark:text-gray-200">
+                              -
+                            </Text>
+                            <View className="flex-1">
+                              <Text className="text-sm leading-5 text-gray-700 dark:text-gray-200">
+                                {tProfile(
+                                  `careerAbroad.progress.linkedin.recommendations.${key}.title`
+                                )}
+                                :{' '}
+                                {tProfile(
+                                  `careerAbroad.progress.linkedin.recommendations.${key}.description`
+                                )}
+                              </Text>
+                            </View>
+                          </View>
+                        ))}
+                      </View>
                     </View>
                   )}
                 </View>

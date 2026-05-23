@@ -39,13 +39,12 @@ const careerScenarioActionSchema = z.object({
       return s === '' ? undefined : s;
     })
     .pipe(
-      z
-        .union([
-          z.undefined(),
-          z.string().url({
-            message: getCareerValidationMessage('actionLinkInvalid'),
-          }),
-        ])
+      z.union([
+        z.undefined(),
+        z.string().url({
+          message: getCareerValidationMessage('actionLinkInvalid'),
+        }),
+      ])
     ),
 });
 

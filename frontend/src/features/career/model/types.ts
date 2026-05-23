@@ -7,6 +7,7 @@ import {
   Level,
   UserRole,
 } from '@/shared/model';
+import type { CertificatePdfMetadata } from '@/features/profile/api/profile.api';
 import {
   CreateCareerScenarioSchema,
   type CareerScenarioActionSchema,
@@ -15,6 +16,8 @@ import type {
   DIRECTION_FILTER_VALUES,
   IS_ACTIVE_FILTER_VALUES,
   LEVEL_FILTER_VALUES,
+  PROGRESS_CHECKLIST_ITEMS,
+  VISA_OPTIONS,
 } from './constants';
 
 export type CareerScenarioAction = CareerScenarioActionSchema;
@@ -187,3 +190,34 @@ export interface ScenariosListResponse {
 export type DirectionFilterValue = (typeof DIRECTION_FILTER_VALUES)[number];
 export type LevelFilterValue = (typeof LEVEL_FILTER_VALUES)[number];
 export type IsActiveFilterValue = (typeof IS_ACTIVE_FILTER_VALUES)[number];
+
+export type ProgressChecklistItemId =
+  (typeof PROGRESS_CHECKLIST_ITEMS)[number]['id'];
+
+export type VisaOptionId = (typeof VISA_OPTIONS)[number]['id'];
+
+export interface CareerAbroadProgress {
+  completed: Record<ProgressChecklistItemId, boolean>;
+  portfolioUrl: string;
+  portfolioPdfName: string;
+  linkedinUrl: string;
+  certificateLinks: {
+    id: string;
+    title: string;
+    url: string;
+    description: string;
+  }[];
+  certificatePdfs: CertificatePdfMetadata[];
+}
+
+export interface CompanySummary {
+  name: string;
+  vacanciesCount: number;
+  locations: string[];
+}
+
+export interface CertificateDraft {
+  title: string;
+  url: string;
+  description: string;
+}

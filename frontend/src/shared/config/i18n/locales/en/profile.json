@@ -43,7 +43,7 @@
         "certificate": "Certificates",
         "linkedin": "LinkedIn",
         "companies": "Company list",
-        "applications": "Applications submitted"
+        "visa": "Visa"
       },
       "uploading": "Uploading...",
       "uploadPdf": "Upload PDF",
@@ -94,6 +94,23 @@
             "description": "Turn it on and specify relocation countries or Remote."
           }
         }
+      },
+      "companies": {
+        "description": "Companies with matching vacancies in {{targetCountry}} based on your selected direction and level.",
+        "vacanciesCount": "{{count}} vacancies",
+        "empty": "No companies found for the selected country yet.",
+        "loading": "Loading company list..."
+      },
+      "visa": {
+        "description": "Cost calculator: choose a visa option to see estimated expenses and timelines.",
+        "options": {
+          "visaCenter": "Via visa center",
+          "employerSponsored": "Via employer"
+        },
+        "costRange": "Estimated expenses: {{costRange}}",
+        "timeline": "Estimated timeline: {{timeline}}",
+        "note": "This is an estimate: the final cost depends on the country, fees, insurance, medical checks, agency services, and employer requirements.",
+        "centersLink": "Open visa center list"
       }
     },
     "backButton": "Back to profile"

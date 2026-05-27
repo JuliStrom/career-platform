@@ -1,6 +1,5 @@
 import mongoose, { Schema, Model } from 'mongoose';
-import { ICareerRoadmap, RoadmapBranchType } from '../types/careerRoadmap';
-import { Direction, Level } from '../types';
+import {Direction, ICareerRoadmap, Level, RoadmapBranchType} from "../types";
 
 const careerRoadmapSchema = new Schema<ICareerRoadmap>(
   {

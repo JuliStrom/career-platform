@@ -7,7 +7,7 @@ import CareerRoute from '../models/CareerRoute';
 import LearningResource from '../models/LearningResource';
 import Profile from '../models/Profile';
 import AiRiskIndex from '../models/AiRiskIndex';
-import { CAREER_CHANGE_RESOURCE_TAGS } from '../types/careerChangeTrack';
+import { CAREER_CHANGE_RESOURCE_TAGS } from '../types';
 import { getErrorMessage } from '../utils/errorHandlers';
 import { computeYearsInCurrentRole } from '../utils/profileYears';
 import { resolveCareerTrigger } from '../services/careerTriggerResolve';
@@ -615,24 +615,72 @@ export const deleteRoadmap = async (req: AuthRequest<{ id: string }>, res: Respo
 
 export const createLearningResource = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { title, description, url, isInternational, targetCountry, tags, sortOrder, isActive } = req.body as {
+    const {
+      title,
+      provider,
+      type,
+      direction,
+      level,
+      description,
+      url,
+      isInternational,
+      durationWeeks,
+      price,
+      locationType,
+      city,
+      country,
+      targetCountry,
+      tags,
+      skillsTags,
+      isFeatured,
+      isReskilling,
+      sortOrder,
+      isActive,
+    } = req.body as {
       title: string;
+      provider?: string | null;
+      type?: string | null;
+      direction?: string | null;
+      level?: string | null;
       description?: string | null;
       url?: string | null;
       isInternational?: boolean;
+      durationWeeks?: number | null;
+      price?: number;
+      locationType?: 'online' | 'offline' | 'hybrid';
+      city?: string | null;
+      country?: string | null;
       targetCountry?: string | null;
-      tags: string[];
+      tags?: string[];
+      skillsTags?: unknown;
+      isFeatured?: boolean;
+      isReskilling?: boolean;
       sortOrder?: number;
       isActive?: boolean;
     };
+    const fallbackTags = Array.isArray(skillsTags)
+      ? skillsTags.filter((tag): tag is string => typeof tag === 'string' && tag.trim().length > 0)
+      : [];
 
     const doc = await LearningResource.create({
       title,
+      provider: provider ?? null,
+      type: type ?? null,
+      direction: direction ?? null,
+      level: level ?? null,
       description: description ?? null,
       url: url || null,
       isInternational: isInternational ?? false,
+      durationWeeks: durationWeeks ?? null,
+      price: price ?? 0,
+      locationType: locationType ?? 'online',
+      city: city ?? null,
+      country: country ?? null,
       targetCountry: targetCountry ?? null,
-      tags,
+      tags: tags ?? fallbackTags,
+      skillsTags: skillsTags ?? [],
+      isFeatured: isFeatured ?? false,
+      isReskilling: isReskilling ?? false,
       sortOrder: sortOrder ?? 0,
       isActive: isActive ?? true,
     });
@@ -645,18 +693,50 @@ export const createLearningResource = async (req: AuthRequest, res: Response): P
 
 export const getLearningResources = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { isActive, tag, isInternational, targetCountry } = req.query;
+    const {
+      isActive,
+      tag,
+      isInternational,
+      targetCountry,
+      direction,
+      level,
+      provider,
+      type,
+      locationType,
+      city,
+      country,
+      isFeatured,
+      isReskilling,
+    } = req.query;
     const filter: {
       isActive?: boolean;
       tags?: string;
       isInternational?: boolean;
       targetCountry?: string;
+      direction?: string;
+      level?: string;
+      provider?: string;
+      type?: string;
+      locationType?: string;
+      city?: string;
+      country?: string;
+      isFeatured?: boolean;
+      isReskilling?: boolean;
     } = {};
     if (isActive !== undefined) filter.isActive = isActive === 'true';
     if (isInternational !== undefined) filter.isInternational = isInternational === 'true';
+    if (isFeatured !== undefined) filter.isFeatured = isFeatured === 'true';
+    if (isReskilling !== undefined) filter.isReskilling = isReskilling === 'true';
     if (typeof targetCountry === 'string' && targetCountry.trim()) {
       filter.targetCountry = targetCountry.trim();
     }
+    if (typeof direction === 'string' && direction.trim()) filter.direction = direction.trim();
+    if (typeof level === 'string' && level.trim()) filter.level = level.trim();
+    if (typeof provider === 'string' && provider.trim()) filter.provider = provider.trim();
+    if (typeof type === 'string' && type.trim()) filter.type = type.trim();
+    if (typeof locationType === 'string' && locationType.trim()) filter.locationType = locationType.trim();
+    if (typeof city === 'string' && city.trim()) filter.city = city.trim();
+    if (typeof country === 'string' && country.trim()) filter.country = country.trim();
     if (typeof tag === 'string' && tag.trim()) {
       filter.tags = tag.trim();
     }

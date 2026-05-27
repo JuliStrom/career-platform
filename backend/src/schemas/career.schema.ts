@@ -184,6 +184,9 @@ const learningTagsSchema = z
   .min(1, 'Нужен хотя бы один тег')
   .max(50);
 
+const locationTypeValues = ['online', 'offline', 'hybrid'] as const;
+const skillsTagsSchema = z.unknown().optional();
+
 export const learningResourceIdParamsSchema = z.object({
   params: z.object({
     id: objectIdSchema,
@@ -193,14 +196,31 @@ export const learningResourceIdParamsSchema = z.object({
 export const createLearningResourceSchema = z.object({
   body: z.object({
     title: z.string().min(1).trim(),
+    provider: z.string().trim().min(1).max(100).optional().nullable(),
+    type: z.string().trim().min(1).max(100).optional().nullable(),
+    direction: z.enum(directionValues).optional().nullable(),
+    level: z.enum(levelValues).optional().nullable(),
     description: z.string().trim().optional().nullable(),
     url: z.union([z.literal(''), z.string().url()]).optional().nullable(),
     isInternational: z.boolean().optional(),
+    durationWeeks: z.number().int().min(0).optional().nullable(),
+    price: z.number().int().min(0).optional(),
+    locationType: z.enum(locationTypeValues).optional(),
+    city: z.string().trim().min(1).max(100).optional().nullable(),
+    country: z.string().trim().min(1).max(100).optional().nullable(),
     targetCountry: z.string().trim().min(1).max(100).optional().nullable(),
-    tags: learningTagsSchema,
+    tags: learningTagsSchema.optional(),
+    skillsTags: skillsTagsSchema,
+    isFeatured: z.boolean().optional(),
+    isReskilling: z.boolean().optional(),
     sortOrder: z.number().int().min(0).optional(),
     isActive: z.boolean().optional(),
-  }),
+  }).refine(
+    (b) =>
+      Array.isArray(b.tags) ||
+      (Array.isArray(b.skillsTags) && b.skillsTags.some((tag) => typeof tag === 'string' && tag.trim().length > 0)),
+    { message: 'Укажите tags или skillsTags' }
+  ),
 });
 
 export const updateLearningResourceSchema = z.object({
@@ -210,11 +230,23 @@ export const updateLearningResourceSchema = z.object({
   body: z
     .object({
       title: z.string().min(1).trim().optional(),
+      provider: z.string().trim().min(1).max(100).optional().nullable(),
+      type: z.string().trim().min(1).max(100).optional().nullable(),
+      direction: z.enum(directionValues).optional().nullable(),
+      level: z.enum(levelValues).optional().nullable(),
       description: z.string().trim().optional().nullable(),
       url: z.union([z.literal(''), z.string().url()]).optional().nullable(),
       isInternational: z.boolean().optional(),
+      durationWeeks: z.number().int().min(0).optional().nullable(),
+      price: z.number().int().min(0).optional(),
+      locationType: z.enum(locationTypeValues).optional(),
+      city: z.string().trim().min(1).max(100).optional().nullable(),
+      country: z.string().trim().min(1).max(100).optional().nullable(),
       targetCountry: z.string().trim().min(1).max(100).optional().nullable(),
       tags: learningTagsSchema.optional(),
+      skillsTags: skillsTagsSchema,
+      isFeatured: z.boolean().optional(),
+      isReskilling: z.boolean().optional(),
       sortOrder: z.number().int().min(0).optional(),
       isActive: z.boolean().optional(),
     })

@@ -59,12 +59,24 @@ export interface ICareerRoadmap extends Document {
  */
 export interface ILearningResource extends Document {
   title: string;
+  provider?: string | null;
+  type?: string | null;
+  direction?: Direction | string | null;
+  level?: Level | string | null;
   description?: string | null;
   url?: string | null;
   isInternational: boolean;
+  durationWeeks?: number | null;
+  price: number;
+  locationType: 'online' | 'offline' | 'hybrid';
+  city?: string | null;
+  country?: string | null;
   targetCountry?: string | null;
   /** Теги для матчинга с навыками карты (например "ux research", "figma") */
   tags: string[];
+  skillsTags?: unknown;
+  isFeatured: boolean;
+  isReskilling: boolean;
   isActive: boolean;
   sortOrder: number;
   createdAt?: Date;
@@ -75,11 +87,23 @@ export interface ILearningResource extends Document {
 export type LearningResourceRoadmapDto = {
   id: string;
   title: string;
+  provider: string | null;
+  type: string | null;
+  direction: Direction | string | null;
+  level: Level | string | null;
   description: string | null;
   url: string | null;
   isInternational: boolean;
+  durationWeeks: number | null;
+  price: number;
+  locationType: 'online' | 'offline' | 'hybrid';
+  city: string | null;
+  country: string | null;
   targetCountry: string | null;
   tags: string[];
+  skillsTags: unknown;
+  isFeatured: boolean;
+  isReskilling: boolean;
   /**
    * FRONTEND: какие навыки из skillsToDevelop этой карты совпали с тегами ресурса
    * (после нормализации). Удобно подсветить связь «навык → материал».

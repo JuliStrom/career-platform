@@ -3,11 +3,11 @@
  * Запуск: npx ts-node scripts/seed.ts
  * Требуется MONGODB_URI в .env
  */
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 dotenv.config();
 
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import User from '../src/models/User';
 import Job from '../src/models/Job';
 import CareerScenario from '../src/models/CareerScenario';
@@ -16,12 +16,12 @@ import CareerRoadmap from '../src/models/CareerRoadmap';
 import LearningResource from '../src/models/LearningResource';
 import AiRiskIndex from '../src/models/AiRiskIndex';
 import { buildAiRiskIndexSeedRows } from './seedAiRiskIndexData';
-import { Direction, Level } from '../src/types/profileEnums';
-import { CareerTriggerCta, CareerTriggerSpecialCase } from '../src/types/careerTrigger';
-import { RoadmapBranchType } from '../src/types/careerRoadmap';
-import { WorkFormat } from '../src/types/jobEnums';
-import { ActionType } from '../src/types/careerEnums';
-import { UserRole } from '../src/types/auth';
+import { Direction, Level } from '../src/types';
+import { CareerTriggerCta, CareerTriggerSpecialCase } from '../src/types';
+import { RoadmapBranchType } from '../src/types';
+import { WorkFormat } from '../src/types';
+import { ActionType } from '../src/types';
+import { UserRole } from "../src/types";
 
 const MONGODB_URI = process.env.MONGODB_URI;
 if (!MONGODB_URI) {

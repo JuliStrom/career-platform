@@ -21,6 +21,7 @@
   "adminRecommendationsTitle": "Управление рекомендациями",
   "adminRecommendationsDescription": "Создание и редактирование рекомендаций для пользователей (направление, уровень, шаги).",
   "adminInvitesTitle": "Приглашения",
+  "adminEducationsTitle": "Образование",
   "adminInvitesDescription": "Создание и управление invite-ссылками",
   "adminAnalyticsTitle": "Аналитика",
   "adminAnalyticsDescription": "KPI и воронка приглашений",
@@ -64,6 +65,81 @@
     "deactivatedSuccess": "Приглашение деактивировано",
     "inactive": "Неактивно",
     "goToList": "К списку приглашений"
+  },
+  "educations": {
+    "create": "Создать карточку образования",
+    "createTitle": "Новая обучающая программа",
+    "listTitle": "Список обучающих программ",
+    "copyLink": "Копировать ссылку",
+    "edit": "Редактировать",
+    "editTitle": "Редактирование обучающей программы",
+    "delete": "Удалить",
+    "title": "Название",
+    "empty": "Нет обучающих программ",
+    "emptyValue": "-",
+    "provider": "Провайдер / организатор",
+    "type": "Тип",
+    "direction": "Направление",
+    "level": "Для кого",
+    "city": "Город",
+    "country": "Страна",
+    "url": "Ссылка на программу",
+    "skillsTags": "Навыки",
+    "durationWeeks": "Длительность в неделях",
+    "price": "Стоимость, ₸",
+    "free": "Бесплатно",
+    "locationType": "Формат",
+    "isFeatured": "Приоритетный показ",
+    "isReskilling": "Подходит для трека переквалификации",
+    "isInternational": "Зарубежная программа",
+    "yes": "Да",
+    "no": "Нет",
+    "titleRequired": "Укажите название",
+    "skillsTagsInvalid": "JSON навыков должен быть валидным массивом",
+    "skillsTagsRequired": "Добавьте хотя бы один навык",
+    "filters": {
+      "title": "Фильтры",
+      "hint": "Фильтруйте обучающие программы по направлению, типу, формату, локации, стоимости и уровню.",
+      "direction": "Направление",
+      "type": "Тип",
+      "format": "Формат",
+      "location": "Локация",
+      "price": "Стоимость",
+      "level": "Уровень",
+      "apply": "Применить",
+      "reset": "Сбросить"
+    },
+    "filterTypes": {
+      "All": "Все типы",
+      "course": "Курс",
+      "internship": "Стажировка",
+      "grant": "Грант",
+      "event": "Событие"
+    },
+    "filterFormats": {
+      "All": "Все форматы",
+      "online": "Онлайн",
+      "offline": "Офлайн",
+      "hybrid": "Гибрид"
+    },
+    "filterLocations": {
+      "All": "Все локации",
+      "kz": "Казахстан",
+      "abroad": "Зарубеж",
+      "online": "Онлайн"
+    },
+    "filterPrices": {
+      "All": "Любая стоимость",
+      "free": "Бесплатно",
+      "paid": "Платно"
+    },
+    "filterLevels": {
+      "All": "Все уровни",
+      "Beginner": "Beginner",
+      "Middle": "Middle",
+      "Advanced": "Advanced",
+      "Любой": "Любой"
+    }
   },
   "analytics": {
     "summaryTitle": "Ключевые показатели",

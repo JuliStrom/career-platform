@@ -21,6 +21,7 @@
   "adminRecommendationsTitle": "Recommendations management",
   "adminRecommendationsDescription": "Create and edit recommendations for users (direction, level, action steps).",
   "adminInvitesTitle": "Invites",
+  "adminEducationsTitle": "Educations",
   "adminInvitesDescription": "Create and manage invite links",
   "adminAnalyticsTitle": "Analytics",
   "adminAnalyticsDescription": "KPI and invite funnel",
@@ -64,6 +65,81 @@
     "deactivatedSuccess": "Invite deactivated",
     "inactive": "Inactive",
     "goToList": "Go to invite list"
+  },
+  "educations": {
+    "create": "Create education card",
+    "createTitle": "New education program",
+    "listTitle": "Education programs",
+    "copyLink": "Copy link",
+    "edit": "Edit",
+    "editTitle": "Edit education program",
+    "delete": "Delete",
+    "title": "Title",
+    "empty": "No education programs",
+    "emptyValue": "-",
+    "provider": "Provider / organizer",
+    "type": "Type",
+    "direction": "Direction",
+    "level": "For whom",
+    "city": "City",
+    "country": "Country",
+    "url": "Program link",
+    "skillsTags": "Skills",
+    "durationWeeks": "Duration in weeks",
+    "price": "Price, KZT",
+    "free": "Free",
+    "locationType": "Format",
+    "isFeatured": "Priority display",
+    "isReskilling": "Suitable for reskilling track",
+    "isInternational": "International program",
+    "yes": "Yes",
+    "no": "No",
+    "titleRequired": "Title is required",
+    "skillsTagsInvalid": "Skills JSON must be a valid JSON array",
+    "skillsTagsRequired": "Add at least one skill",
+    "filters": {
+      "title": "Filters",
+      "hint": "Filter education programs by direction, type, format, location, price, and level.",
+      "direction": "Direction",
+      "type": "Type",
+      "format": "Format",
+      "location": "Location",
+      "price": "Price",
+      "level": "Level",
+      "apply": "Apply",
+      "reset": "Reset"
+    },
+    "filterTypes": {
+      "All": "All types",
+      "course": "Course",
+      "internship": "Internship",
+      "grant": "Grant",
+      "event": "Event"
+    },
+    "filterFormats": {
+      "All": "All formats",
+      "online": "Online",
+      "offline": "Offline",
+      "hybrid": "Hybrid"
+    },
+    "filterLocations": {
+      "All": "All locations",
+      "kz": "Kazakhstan",
+      "abroad": "Abroad",
+      "online": "Online"
+    },
+    "filterPrices": {
+      "All": "Any price",
+      "free": "Free",
+      "paid": "Paid"
+    },
+    "filterLevels": {
+      "All": "All levels",
+      "Beginner": "Beginner",
+      "Middle": "Middle",
+      "Advanced": "Advanced",
+      "Любой": "Any"
+    }
   },
   "analytics": {
     "summaryTitle": "Key metrics",

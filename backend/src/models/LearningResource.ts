@@ -111,6 +111,10 @@ const learningResourceSchema = new Schema<ILearningResource>(
       type: Boolean,
       default: false,
     },
+    isAdminEducationCard: {
+      type: Boolean,
+      default: false,
+    },
     isActive: {
       type: Boolean,
       default: true,
@@ -128,6 +132,7 @@ learningResourceSchema.index({ tags: 1 });
 learningResourceSchema.index({ direction: 1, level: 1 });
 learningResourceSchema.index({ isFeatured: 1 });
 learningResourceSchema.index({ isReskilling: 1 });
+learningResourceSchema.index({ isAdminEducationCard: 1, sortOrder: 1 });
 learningResourceSchema.index({ isInternational: 1, targetCountry: 1 });
 
 const LearningResource: Model<ILearningResource> = mongoose.model<ILearningResource>(

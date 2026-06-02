@@ -634,6 +634,7 @@ export const createLearningResource = async (req: AuthRequest, res: Response): P
       skillsTags,
       isFeatured,
       isReskilling,
+      isAdminEducationCard,
       sortOrder,
       isActive,
     } = req.body as {
@@ -655,6 +656,7 @@ export const createLearningResource = async (req: AuthRequest, res: Response): P
       skillsTags?: unknown;
       isFeatured?: boolean;
       isReskilling?: boolean;
+      isAdminEducationCard?: boolean;
       sortOrder?: number;
       isActive?: boolean;
     };
@@ -681,6 +683,7 @@ export const createLearningResource = async (req: AuthRequest, res: Response): P
       skillsTags: skillsTags ?? [],
       isFeatured: isFeatured ?? false,
       isReskilling: isReskilling ?? false,
+      isAdminEducationCard: isAdminEducationCard ?? true,
       sortOrder: sortOrder ?? 0,
       isActive: isActive ?? true,
     });
@@ -707,26 +710,27 @@ export const getLearningResources = async (req: AuthRequest, res: Response): Pro
       country,
       isFeatured,
       isReskilling,
+      isAdminEducationCard,
     } = req.query;
-    const filter: {
-      isActive?: boolean;
-      tags?: string;
-      isInternational?: boolean;
-      targetCountry?: string;
-      direction?: string;
-      level?: string;
-      provider?: string;
-      type?: string;
-      locationType?: string;
-      city?: string;
-      country?: string;
-      isFeatured?: boolean;
-      isReskilling?: boolean;
-    } = {};
+    const filter: Record<string, unknown> = {};
     if (isActive !== undefined) filter.isActive = isActive === 'true';
     if (isInternational !== undefined) filter.isInternational = isInternational === 'true';
     if (isFeatured !== undefined) filter.isFeatured = isFeatured === 'true';
     if (isReskilling !== undefined) filter.isReskilling = isReskilling === 'true';
+    if (isAdminEducationCard !== undefined) {
+      filter.$or =
+        isAdminEducationCard === 'true'
+          ? [
+              { isAdminEducationCard: true },
+              {
+                isAdminEducationCard: { $ne: true },
+                provider: { $nin: [null, ''] },
+                type: { $nin: [null, ''] },
+                direction: { $nin: [null, ''] },
+              },
+            ]
+          : [{ isAdminEducationCard: false }, { isAdminEducationCard: { $exists: false } }];
+    }
     if (typeof targetCountry === 'string' && targetCountry.trim()) {
       filter.targetCountry = targetCountry.trim();
     }

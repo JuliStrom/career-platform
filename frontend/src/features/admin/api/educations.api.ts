@@ -17,6 +17,7 @@ export interface EducationResource {
   locationType?: 'online' | 'offline' | 'hybrid' | string | null;
   isFeatured?: boolean;
   isReskilling?: boolean;
+  isAdminEducationCard?: boolean;
   isInternational?: boolean;
 }
 
@@ -37,6 +38,7 @@ export type UpdateEducationPayload = Partial<
     | 'locationType'
     | 'isFeatured'
     | 'isReskilling'
+    | 'isAdminEducationCard'
     | 'isInternational'
   >
 >;
@@ -54,34 +56,39 @@ export interface EducationsFilters {
   price?: 'free' | 'paid';
 }
 
-interface EducationsResponse {
-  filters: Record<string, string | undefined>;
-  count: number;
-  resources: EducationResource[];
-}
-
 export async function fetchEducations(
   filters: EducationsFilters = {}
 ): Promise<EducationResource[]> {
-  const params: Record<string, string> = {};
+  const params: Record<string, string | boolean> = {
+    isAdminEducationCard: true,
+  };
   if (filters.direction) params.direction = filters.direction;
   if (filters.level) params.level = filters.level;
   if (filters.type) params.type = filters.type;
-  if (filters.locationType) params.location = filters.locationType;
-  if (filters.price === 'free') params.price = '0';
+  if (filters.locationType) params.locationType = filters.locationType;
 
-  const { data } = await apiClient.get<EducationsResponse>('/learning', {
-    params,
-  });
+  const { data } = await apiClient.get<EducationResource[]>(
+    '/career/learning-resources',
+    { params }
+  );
 
-  return data.resources.filter((resource) => {
-    if (filters.price === 'paid' && (resource.price ?? 0) <= 0) return false;
+  return data.filter((resource) => {
+    if (filters.price === 'free' && (resource.price ?? 0) > 0) {
+      return false;
+    }
+
+    if (filters.price === 'paid' && (resource.price ?? 0) <= 0) {
+      return false;
+    }
+
     if (filters.location === 'online') {
       return resource.locationType === 'online';
     }
+
     if (filters.location === 'abroad') {
       return resource.isInternational === true;
     }
+
     if (filters.location === 'kz') {
       return (
         resource.isInternational !== true &&
@@ -125,7 +132,7 @@ export async function createEducation(
 ): Promise<EducationResource> {
   const { data } = await apiClient.post<EducationResource>(
     '/career/learning-resources',
-    payload
+    { ...payload, isAdminEducationCard: true }
   );
   return data;
 }

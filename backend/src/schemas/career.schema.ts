@@ -213,6 +213,7 @@ export const createLearningResourceSchema = z.object({
     skillsTags: skillsTagsSchema,
     isFeatured: z.boolean().optional(),
     isReskilling: z.boolean().optional(),
+    isAdminEducationCard: z.boolean().optional(),
     sortOrder: z.number().int().min(0).optional(),
     isActive: z.boolean().optional(),
   }).refine(
@@ -247,6 +248,7 @@ export const updateLearningResourceSchema = z.object({
       skillsTags: skillsTagsSchema,
       isFeatured: z.boolean().optional(),
       isReskilling: z.boolean().optional(),
+      isAdminEducationCard: z.boolean().optional(),
       sortOrder: z.number().int().min(0).optional(),
       isActive: z.boolean().optional(),
     })

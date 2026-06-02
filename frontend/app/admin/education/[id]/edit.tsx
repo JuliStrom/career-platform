@@ -51,9 +51,7 @@ export default function AdminEditEducationScreen() {
         setDirection(education.direction ?? '');
         setLevel(education.level ?? '');
         setDurationWeeks(
-          education.durationWeeks == null
-            ? ''
-            : String(education.durationWeeks)
+          education.durationWeeks == null ? '' : String(education.durationWeeks)
         );
         setPrice(education.price == null ? '' : String(education.price));
         setLocationType(education.locationType ?? '');
@@ -78,9 +76,7 @@ export default function AdminEditEducationScreen() {
         type: type.trim() || null,
         direction: direction.trim() || null,
         level: level.trim() || null,
-        durationWeeks: durationWeeks.trim()
-          ? Number(durationWeeks)
-          : null,
+        durationWeeks: durationWeeks.trim() ? Number(durationWeeks) : null,
         price: price.trim() ? Number(price) : 0,
         locationType: locationType.trim() || null,
       });

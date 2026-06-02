@@ -43,8 +43,6 @@ export default function AdminLayout() {
       <Stack.Screen name="education/index" />
       <Stack.Screen name="education/create" />
       <Stack.Screen name="education/[id]/edit" />
-      <Stack.Screen name="educations/index" />
-      <Stack.Screen name="educations/create" />
       <Stack.Screen name="users/index" />
       <Stack.Screen name="jobs/index" />
       <Stack.Screen name="jobs/create" />

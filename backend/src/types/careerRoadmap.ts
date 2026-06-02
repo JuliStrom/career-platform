@@ -77,6 +77,7 @@ export interface ILearningResource extends Document {
   skillsTags?: unknown;
   isFeatured: boolean;
   isReskilling: boolean;
+  isAdminEducationCard: boolean;
   isActive: boolean;
   sortOrder: number;
   createdAt?: Date;

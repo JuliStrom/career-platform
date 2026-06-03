@@ -503,7 +503,9 @@ async function seed() {
     console.log(`Обучающие ресурсы уже есть (${lrCount} шт.)`);
   }
 
-  const adminEducationCards = [
+  const educationCount = await LearningResource.countDocuments({ isAdminEducationCard: true });
+  if (educationCount === 0) {
+    const educationCards = [
     {
       title: 'Google Data Analytics Professional Certificate',
       provider: 'Google / Coursera',
@@ -851,14 +853,17 @@ async function seed() {
     },
   ];
 
-  for (const card of adminEducationCards) {
-    await LearningResource.updateOne(
-      { title: card.title },
-      { $set: { ...card, isAdminEducationCard: true } },
-      { upsert: true }
-    );
+    for (const card of educationCards) {
+      await LearningResource.updateOne(
+        { title: card.title },
+        { $set: { ...card, isAdminEducationCard: true } },
+        { upsert: true }
+      );
+    }
+    console.log(`Добавлены/обновлены демо-карточки образования (${educationCards.length} шт.)`);
+  } else {
+    console.log(`Демо-карточки образования уже есть (${educationCount} шт.)`);
   }
-  console.log('Добавлены/обновлены демо-карточки образования (6 шт.)');
 
   const ccHubCount = await LearningResource.countDocuments({ tags: 'career_change' });
   if (ccHubCount === 0) {

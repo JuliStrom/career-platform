@@ -1,5 +1,5 @@
 import mongoose, { Schema, Model } from 'mongoose';
-import { ILearningResource } from '../types/careerRoadmap';
+import {ILearningResource} from "../types";
 
 const learningResourceSchema = new Schema<ILearningResource>(
   {

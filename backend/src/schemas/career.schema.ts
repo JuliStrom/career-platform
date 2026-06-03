@@ -185,6 +185,8 @@ const learningTagsSchema = z
   .max(50);
 
 const locationTypeValues = ['online', 'offline', 'hybrid'] as const;
+const learningResourceDirectionSchema = z.string().trim().min(1).max(100);
+const learningResourceLevelSchema = z.string().trim().min(1).max(100);
 const skillsTagsSchema = z.unknown().optional();
 
 export const learningResourceIdParamsSchema = z.object({
@@ -198,8 +200,8 @@ export const createLearningResourceSchema = z.object({
     title: z.string().min(1).trim(),
     provider: z.string().trim().min(1).max(100).optional().nullable(),
     type: z.string().trim().min(1).max(100).optional().nullable(),
-    direction: z.enum(directionValues).optional().nullable(),
-    level: z.enum(levelValues).optional().nullable(),
+    direction: learningResourceDirectionSchema.optional().nullable(),
+    level: learningResourceLevelSchema.optional().nullable(),
     description: z.string().trim().optional().nullable(),
     url: z.union([z.literal(''), z.string().url()]).optional().nullable(),
     isInternational: z.boolean().optional(),
@@ -233,8 +235,8 @@ export const updateLearningResourceSchema = z.object({
       title: z.string().min(1).trim().optional(),
       provider: z.string().trim().min(1).max(100).optional().nullable(),
       type: z.string().trim().min(1).max(100).optional().nullable(),
-      direction: z.enum(directionValues).optional().nullable(),
-      level: z.enum(levelValues).optional().nullable(),
+      direction: learningResourceDirectionSchema.optional().nullable(),
+      level: learningResourceLevelSchema.optional().nullable(),
       description: z.string().trim().optional().nullable(),
       url: z.union([z.literal(''), z.string().url()]).optional().nullable(),
       isInternational: z.boolean().optional(),

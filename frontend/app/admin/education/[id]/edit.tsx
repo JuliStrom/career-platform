@@ -1,7 +1,7 @@
 import {
   fetchEducationById,
   updateEducation,
-} from '@/features/admin/api/educations.api';
+} from '@/features/education/api/education.api';
 import { AdminHeader } from '@/features/admin/ui/AdminHeader';
 import { useTranslation } from '@/shared/lib/hooks/useTranslation';
 import { PrimaryButton } from '@/shared/ui/buttons/PrimaryButton';
@@ -78,7 +78,7 @@ export default function AdminEditEducationScreen() {
         level: level.trim() || null,
         durationWeeks: durationWeeks.trim() ? Number(durationWeeks) : null,
         price: price.trim() ? Number(price) : 0,
-        locationType: locationType.trim() || null,
+        locationType: locationType.trim() || undefined,
       });
       router.replace('/admin/education' as Href);
     } catch {

@@ -46,7 +46,7 @@ export default function AdminHomeScreen() {
             {tCommon('adminRecommendationsTitle')}
           </PrimaryButton>
           <PrimaryButton
-            onPress={() => router.push('/admin/education' as Href)}
+            onPress={() => router.push('/admin/education')}
             className="mt-1"
           >
             {tCommon('adminEducationsTitle')}

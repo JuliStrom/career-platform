@@ -1,4 +1,4 @@
-import { createEducation } from '@/features/admin/api/educations.api';
+import { createEducation } from '@/features/education/api/education.api';
 import { AdminHeader } from '@/features/admin/ui/AdminHeader';
 import { useTranslation } from '@/shared/lib/hooks/useTranslation';
 import { PrimaryButton } from '@/shared/ui/buttons/PrimaryButton';
@@ -78,6 +78,7 @@ export default function AdminCreateEducationScreen() {
         city: city.trim() || null,
         country: country.trim() || null,
         url: url.trim() || null,
+        tags: parsedSkillsTags,
         skillsTags: parsedSkillsTags,
         isFeatured,
         isReskilling,

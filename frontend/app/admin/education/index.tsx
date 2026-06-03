@@ -3,7 +3,7 @@ import {
   fetchEducations,
   type EducationsFilters,
   type EducationResource,
-} from '@/features/admin/api/educations.api';
+} from '@/features/education/api/education.api';
 import { AdminHeader } from '@/features/admin/ui/AdminHeader';
 import { useTranslation } from '@/shared/lib/hooks/useTranslation';
 import { Direction } from '@/shared/model';

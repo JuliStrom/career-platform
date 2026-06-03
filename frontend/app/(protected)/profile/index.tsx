@@ -230,6 +230,13 @@ export default function ProfileScreen() {
           {tJobs('openJobsButton')}
         </PrimaryButton>
         <PrimaryButton
+          onPress={() => router.push('/education' as Href)}
+          accessibilityLabel={tCommon('tabEducation')}
+          className="mt-3"
+        >
+          {tCommon('tabEducation')}
+        </PrimaryButton>
+        <PrimaryButton
           onPress={() => router.push('/recommendations')}
           accessibilityLabel={tCareer('recommendations.title')}
           className="mt-3"

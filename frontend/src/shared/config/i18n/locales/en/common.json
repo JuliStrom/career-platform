@@ -11,6 +11,7 @@
   "back": "Back",
   "tabProfile": "Profile",
   "tabJobs": "Jobs",
+  "tabEducation": "Education",
   "tabRecommendations": "Recommendations",
   "adminMenu": "Menu",
   "adminExit": "Exit",
@@ -21,7 +22,7 @@
   "adminRecommendationsTitle": "Recommendations management",
   "adminRecommendationsDescription": "Create and edit recommendations for users (direction, level, action steps).",
   "adminInvitesTitle": "Invites",
-  "adminEducationsTitle": "Educations",
+  "adminEducationsTitle": "Education management",
   "adminInvitesDescription": "Create and manage invite links",
   "adminAnalyticsTitle": "Analytics",
   "adminAnalyticsDescription": "KPI and invite funnel",
@@ -67,6 +68,7 @@
     "goToList": "Go to invite list"
   },
   "educations": {
+    "mainTitle": "Education",
     "create": "Create education card",
     "createTitle": "New education program",
     "listTitle": "Education programs",
@@ -76,6 +78,8 @@
     "delete": "Delete",
     "title": "Title",
     "empty": "No education programs",
+    "goHome": "Go home",
+    "openProgram": "Open program",
     "emptyValue": "-",
     "provider": "Provider / organizer",
     "type": "Type",

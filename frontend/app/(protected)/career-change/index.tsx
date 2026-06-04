@@ -125,6 +125,7 @@ export default function CareerChangeHubScreen() {
   }, [load]);
 
   const openLinkLabel = t('recommendations.actions.openLink');
+  const emptyValue = '-';
 
   if (loading && !hub) {
     return <FullScreenLoader message={t('careerChangeHub.loading')} />;
@@ -148,7 +149,11 @@ export default function CareerChangeHubScreen() {
 
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ padding: 24, paddingTop: 16, paddingBottom: 40 }}
+        contentContainerStyle={{
+          padding: 24,
+          paddingTop: 16,
+          paddingBottom: 40,
+        }}
       >
         {forbidden ? (
           <View className="mb-4 gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-900 dark:bg-amber-950/40">
@@ -166,7 +171,9 @@ export default function CareerChangeHubScreen() {
 
         {error ? (
           <View className="mb-4 rounded-lg bg-red-50 p-3 dark:bg-red-900/40">
-            <Text className="text-sm text-red-700 dark:text-red-300">{error}</Text>
+            <Text className="text-sm text-red-700 dark:text-red-300">
+              {error}
+            </Text>
             <PrimaryButton onPress={load} className="mt-3">
               {t('careerChangeHub.retry')}
             </PrimaryButton>
@@ -190,31 +197,31 @@ export default function CareerChangeHubScreen() {
               </Text>
               <Text className="text-sm text-gray-700 dark:text-gray-300">
                 {tProfile('careerChange.currentField')}:{' '}
-                {hub.track.currentField ?? '—'}
+                {hub.track.currentField ?? emptyValue}
               </Text>
               <Text className="mt-1 text-sm text-gray-700 dark:text-gray-300">
                 {tProfile('careerChange.targetDirection')}:{' '}
                 {hub.track.targetDirection
                   ? t(`directions.${hub.track.targetDirection}`)
-                  : '—'}
+                  : emptyValue}
               </Text>
               <Text className="mt-1 text-sm text-gray-700 dark:text-gray-300">
                 {tProfile('careerChange.ageRange')}:{' '}
                 {hub.track.ageRange
                   ? tProfile(`careerChange.ageRanges.${hub.track.ageRange}`)
-                  : '—'}
+                  : emptyValue}
               </Text>
               <Text className="mt-1 text-sm text-gray-700 dark:text-gray-300">
                 {tProfile('careerChange.motivation')}:{' '}
                 {hub.track.motivation
                   ? tProfile(`careerChange.motivations.${hub.track.motivation}`)
-                  : '—'}
+                  : emptyValue}
               </Text>
               <Text className="mt-1 text-sm text-gray-700 dark:text-gray-300">
                 {tProfile('careerChange.timeline')}:{' '}
                 {hub.track.timeline
                   ? tProfile(`careerChange.timelines.${hub.track.timeline}`)
-                  : '—'}
+                  : emptyValue}
               </Text>
             </View>
 

@@ -85,6 +85,17 @@ export default function ProtectedLayout() {
         }}
       />
       <Tabs.Screen
+        name="education/index"
+        options={{
+          title: tCommon('educations.mainTitle'),
+          tabBarLabel: tCommon('tabEducation'),
+          href: '/education' as never,
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="school" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="recommendations/index"
         options={{
           title: tCareer('recommendations.title'),

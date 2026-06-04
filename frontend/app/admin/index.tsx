@@ -1,7 +1,7 @@
 import { AdminHeader } from '@/features/admin/ui/AdminHeader';
 import { useTranslation } from '@/shared/lib/hooks/useTranslation';
 import { PrimaryButton } from '@/shared/ui/buttons/PrimaryButton';
-import { useRouter } from 'expo-router';
+import { type Href, useRouter } from 'expo-router';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -44,6 +44,12 @@ export default function AdminHomeScreen() {
             className="mt-1"
           >
             {tCommon('adminRecommendationsTitle')}
+          </PrimaryButton>
+          <PrimaryButton
+            onPress={() => router.push('/admin/education')}
+            className="mt-1"
+          >
+            {tCommon('adminEducationsTitle')}
           </PrimaryButton>
           <PrimaryButton
             onPress={() => router.push('/admin/analytics')}

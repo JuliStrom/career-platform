@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
+import { Types } from 'mongoose';
+import Company from '../models/Company';
 import Job from '../models/Job';
-import { AuthRequest, CreateJobBody, UpdateJobBody } from '../types';
+import { AuthRequest, CompanyCultureBody, CreateJobBody, ICompany, UpdateJobBody } from '../types';
 import { isMongoDuplicateError, isMongooseValidationError, getErrorMessage } from '../utils/errorHandlers';
 
 /** Поля, разрешённые к обновлению через API (без createdBy и служебных). */
@@ -8,6 +10,7 @@ const JOB_UPDATE_FIELDS = [
   'title',
   'description',
   'company',
+  'companyId',
   'direction',
   'level',
   'workFormat',
@@ -18,6 +21,56 @@ const JOB_UPDATE_FIELDS = [
   'isActive',
 ] as const satisfies readonly (keyof UpdateJobBody)[];
 
+type JobResponseObject = Record<string, unknown> & {
+  companyId?: unknown;
+  companyCulture?: unknown;
+};
+
+const normalizeCompanyCulture = (culture: CompanyCultureBody): CompanyCultureBody => ({
+  ...culture,
+  name: culture.name.trim(),
+  logo: culture.logo?.trim() || null,
+  valuesTags: culture.valuesTags.map((tag) => tag.trim()).filter(Boolean),
+  description: culture.description.trim(),
+});
+
+const isPopulatedCompany = (value: unknown): value is ICompany =>
+  Boolean(value && typeof value === 'object' && 'name' in value);
+
+const serializeJob = (job: { toObject: () => JobResponseObject }): JobResponseObject => {
+  const data = job.toObject();
+  if (isPopulatedCompany(data.companyId)) {
+    data.companyCulture = data.companyId;
+    data.companyId = data.companyId._id;
+  }
+  return data;
+};
+
+const resolveCompanyId = async (
+  companyId: string | undefined,
+  companyCulture: CompanyCultureBody | undefined
+): Promise<Types.ObjectId | undefined> => {
+  if (!companyCulture) {
+    return companyId ? new Types.ObjectId(companyId) : undefined;
+  }
+
+  const culture = normalizeCompanyCulture(companyCulture);
+  if (companyId) {
+    const company = await Company.findByIdAndUpdate(
+      companyId,
+      { $set: culture },
+      { new: true, runValidators: true, upsert: false }
+    ).exec();
+
+    if (company) {
+      return company._id;
+    }
+  }
+
+  const company = await Company.create(culture);
+  return company._id;
+};
+
 // Создание вакансии (только ADMIN)
 export const createJob = async (req: AuthRequest<{}, {}, CreateJobBody>, res: Response): Promise<void> => {
   try {
@@ -27,14 +80,18 @@ export const createJob = async (req: AuthRequest<{}, {}, CreateJobBody>, res: Re
     }
 
     // Валидация выполнена Zod middleware
+    const { companyCulture, companyId, ...jobBody } = req.body;
+    const resolvedCompanyId = await resolveCompanyId(companyId, companyCulture);
     const jobData = {
-      ...req.body,
+      ...jobBody,
+      ...(resolvedCompanyId && { companyId: resolvedCompanyId }),
       createdBy: req.user.userId,
     };
 
     const job = await Job.create(jobData);
+    await job.populate('companyId');
 
-    res.status(201).json(job);
+    res.status(201).json(serializeJob(job));
   } catch (error: unknown) {
     if (isMongooseValidationError(error)) {
       res.status(400).json({ error: error.message });
@@ -127,7 +184,8 @@ export const getJobById = async (req: AuthRequest<{ id: string }>, res: Response
     const isAdmin = req.user?.role === 'ADMIN';
 
     const job = await Job.findById(id)
-      .populate('createdBy', 'email role');
+      .populate('createdBy', 'email role')
+      .populate('companyId');
 
     if (!job) {
       res.status(404).json({ error: 'Вакансия не найдена' });
@@ -140,7 +198,7 @@ export const getJobById = async (req: AuthRequest<{ id: string }>, res: Response
       return;
     }
 
-    res.status(200).json(job);
+    res.status(200).json(serializeJob(job));
   } catch (error: unknown) {
     res.status(500).json({ error: getErrorMessage(error) });
   }
@@ -158,12 +216,17 @@ export const updateJob = async (
     }
 
     const { id } = req.params;
-    const body = req.body as UpdateJobBody & Record<string, unknown>;
+    const { companyCulture, companyId, ...body } = req.body as UpdateJobBody & Record<string, unknown>;
     const $set: Record<string, unknown> = {};
     for (const key of JOB_UPDATE_FIELDS) {
       if (body[key] !== undefined) {
         $set[key] = body[key];
       }
+    }
+
+    const resolvedCompanyId = await resolveCompanyId(companyId, companyCulture);
+    if (resolvedCompanyId) {
+      $set.companyId = resolvedCompanyId;
     }
 
     if (Object.keys($set).length === 0) {
@@ -174,6 +237,7 @@ export const updateJob = async (
     // $set + findByIdAndUpdate: не трогаем createdBy и не вызываем save() на «битом» документе без автора
     const job = await Job.findByIdAndUpdate(id, { $set }, { new: true, runValidators: true })
       .populate('createdBy', 'email role')
+      .populate('companyId')
       .exec();
 
     if (!job) {
@@ -181,7 +245,7 @@ export const updateJob = async (
       return;
     }
 
-    res.status(200).json(job);
+    res.status(200).json(serializeJob(job));
   } catch (error: unknown) {
     if (isMongooseValidationError(error)) {
       res.status(400).json({ error: error.message });

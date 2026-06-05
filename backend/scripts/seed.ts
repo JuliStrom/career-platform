@@ -10,6 +10,7 @@ import mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import User from '../src/models/User';
 import Job from '../src/models/Job';
+import Company from '../src/models/Company';
 import CareerScenario from '../src/models/CareerScenario';
 import CareerTrigger from '../src/models/CareerTrigger';
 import CareerRoadmap from '../src/models/CareerRoadmap';
@@ -51,6 +52,69 @@ async function seed() {
 
   const userId = seedUser._id;
 
+  const seedCompanyCultures = [
+    {
+      name: 'TechStart Inc',
+      logo: null,
+      workFormat: WorkFormat.REMOTE,
+      valuesTags: ['flat hierarchy', 'mentoring', 'fast feedback'],
+      growthSpeed: 'Fast',
+      teamSize: '11-50',
+      languages: ['RU', 'EN'],
+      description: 'Product engineering team with mentoring, async rituals and fast ownership growth.',
+    },
+    {
+      name: 'Creative Studio',
+      logo: null,
+      workFormat: WorkFormat.HYBRID,
+      valuesTags: ['creative freedom', 'portfolio growth', 'feedback culture'],
+      growthSpeed: 'Medium',
+      teamSize: '1-10',
+      languages: ['RU'],
+      description: 'Small design team with regular critique sessions and close collaboration with clients.',
+    },
+    {
+      name: 'ProductLab',
+      logo: null,
+      workFormat: WorkFormat.OFFICE,
+      valuesTags: ['ownership', 'data-driven', 'cross-functional teams'],
+      growthSpeed: 'Fast',
+      teamSize: '51-200',
+      languages: ['RU', 'EN'],
+      description: 'B2B product team focused on ownership, analytics and cross-functional delivery.',
+    },
+    {
+      name: 'FoodSupply Co',
+      logo: null,
+      workFormat: WorkFormat.OFFICE,
+      valuesTags: ['customer focus', 'stable processes', 'team support'],
+      growthSpeed: 'Medium',
+      teamSize: '51-200',
+      languages: ['RU'],
+      description: 'Operations-driven team with structured onboarding and strong customer relationships.',
+    },
+    {
+      name: 'CloudTech',
+      logo: null,
+      workFormat: WorkFormat.REMOTE,
+      valuesTags: ['engineering excellence', 'mentoring', 'work-life balance'],
+      growthSpeed: 'Fast',
+      teamSize: '51-200',
+      languages: ['RU', 'EN'],
+      description: 'Remote engineering culture with peer reviews, mentoring and distributed delivery.',
+    },
+  ] as const;
+
+  const companyByName = new Map<string, mongoose.Types.ObjectId>();
+  for (const companyCulture of seedCompanyCultures) {
+    const company = await Company.findOneAndUpdate(
+      { name: companyCulture.name },
+      { $set: companyCulture },
+      { new: true, upsert: true, runValidators: true }
+    );
+    companyByName.set(companyCulture.name, company._id);
+  }
+
   // Вакансии
   const jobsCount = await Job.countDocuments();
   if (jobsCount === 0) {
@@ -60,6 +124,7 @@ async function seed() {
         description:
           'Ищем опытного frontend-разработчика для работы над веб-приложениями. Работа в команде из 5 человек, современный стек.',
         company: 'TechStart Inc',
+        companyId: companyByName.get('TechStart Inc'),
         direction: Direction.IT,
         level: Level.MIDDLE,
         workFormat: WorkFormat.REMOTE,
@@ -75,6 +140,7 @@ async function seed() {
         description:
           'Присоединяйтесь к дизайн-команде для создания интерфейсов мобильных и веб-приложений.',
         company: 'Creative Studio',
+        companyId: companyByName.get('Creative Studio'),
         direction: Direction.CREATIVE,
         level: Level.JUNIOR,
         workFormat: WorkFormat.HYBRID,
@@ -90,6 +156,7 @@ async function seed() {
         description:
           'Управление продуктом B2B-платформы. Полный цикл от идеи до релиза.',
         company: 'ProductLab',
+        companyId: companyByName.get('ProductLab'),
         direction: Direction.IT,
         level: Level.SENIOR,
         workFormat: WorkFormat.OFFICE,
@@ -105,6 +172,7 @@ async function seed() {
         description:
           'Развитие клиентской базы в сегменте HoReCa. Работа с ключевыми клиентами.',
         company: 'FoodSupply Co',
+        companyId: companyByName.get('FoodSupply Co'),
         direction: Direction.HORECA,
         level: Level.MIDDLE,
         workFormat: WorkFormat.OFFICE,
@@ -120,6 +188,7 @@ async function seed() {
         description:
           'Разработка API и сервисов для высоконагруженных систем.',
         company: 'CloudTech',
+        companyId: companyByName.get('CloudTech'),
         direction: Direction.IT,
         level: Level.SENIOR,
         workFormat: WorkFormat.REMOTE,

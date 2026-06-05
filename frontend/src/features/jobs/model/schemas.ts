@@ -1,6 +1,13 @@
 import { parseSalaryValues } from '@/features/jobs/utils/validation.utils';
 import { getValidationMessage } from '@/shared/lib/utils';
-import { Direction, JobWorkFormat, Level } from '@/shared/model';
+import {
+  Direction,
+  GrowthSpeed,
+  JobWorkFormat,
+  Level,
+  TeamSize,
+  WorkLanguage,
+} from '@/shared/model';
 import { z } from 'zod';
 import {
   DIRECTION_FILTER_VALUES,
@@ -66,7 +73,32 @@ const baseJobSchema = z.object({
   isActive: z.boolean().optional().default(true),
 });
 
+export const companyCultureSchema = z.object({
+  _id: z.string().optional(),
+  name: z
+    .string()
+    .min(1, getJobValidationMessage('companyRequired'))
+    .max(200, getJobValidationMessage('companyMax')),
+  logo: z
+    .string()
+    .url(getJobValidationMessage('logoUrl'))
+    .optional()
+    .or(z.literal(''))
+    .nullable(),
+  workFormat: z.enum(JobWorkFormat),
+  valuesTags: z.array(z.string().min(1).max(80)).default([]),
+  growthSpeed: z.enum(GrowthSpeed),
+  teamSize: z.enum(TeamSize),
+  languages: z.array(z.enum(WorkLanguage)).min(1),
+  description: z
+    .string()
+    .min(1, getJobValidationMessage('cultureDescriptionRequired'))
+    .max(300, getJobValidationMessage('cultureDescriptionMax')),
+});
+
 export const createJobSchema = baseJobSchema.extend({
+  companyId: z.string().optional(),
+  companyCulture: companyCultureSchema.optional(),
   salary: jobSalaryObjectSchema,
   requirements: z
     .array(
@@ -90,6 +122,25 @@ export const createJobSchema = baseJobSchema.extend({
 
 export const createJobFormSchema = baseJobSchema
   .extend({
+    companyId: z.string().optional(),
+    cultureName: z
+      .string()
+      .min(1, getJobValidationMessage('companyRequired'))
+      .max(200, getJobValidationMessage('companyMax')),
+    cultureLogo: z
+      .string()
+      .url(getJobValidationMessage('logoUrl'))
+      .optional()
+      .or(z.literal('')),
+    cultureWorkFormat: z.enum(JobWorkFormat),
+    cultureValuesTagsInput: z.string().optional(),
+    cultureGrowthSpeed: z.enum(GrowthSpeed),
+    cultureTeamSize: z.enum(TeamSize),
+    cultureLanguages: z.array(z.enum(WorkLanguage)).min(1),
+    cultureDescription: z
+      .string()
+      .min(1, getJobValidationMessage('cultureDescriptionRequired'))
+      .max(300, getJobValidationMessage('cultureDescriptionMax')),
     requirementsInput: z.string().refine(
       (val) => {
         const parsed = val
@@ -162,6 +213,7 @@ export const jobsFiltersFormSchema = z.object({
 export type JobsFiltersFormValues = z.infer<typeof jobsFiltersFormSchema>;
 
 export type JobSalary = z.infer<typeof jobSalaryObjectSchema>;
+export type CompanyCulture = z.infer<typeof companyCultureSchema>;
 export type CreateJobSchema = z.infer<typeof createJobSchema>;
 export type CreateJobPayload = CreateJobSchema;
 export type CreateJobFormValues = z.input<typeof createJobFormSchema>;

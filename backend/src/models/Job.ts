@@ -47,8 +47,8 @@ const jobSchema = new Schema<IJob>({
     max: { type: Number },
     currency: { 
       type: String, 
-      default: 'USD',
-      enum: ['USD', 'EUR', 'RUB'],
+      default: 'KZT',
+      enum: ['KZT', 'USD', 'EUR', 'RUB'],
     },
   },
   requirements: {

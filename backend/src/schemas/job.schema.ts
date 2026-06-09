@@ -27,9 +27,9 @@ const workLanguageValues = Object.values(WorkLanguage) as [string, ...string[]];
 const salarySchema = z.object({
   min: z.number().min(0, 'Минимальная зарплата не может быть отрицательной').optional(),
   max: z.number().min(0, 'Максимальная зарплата не может быть отрицательной').optional(),
-  currency: z.enum(['USD', 'EUR', 'RUB'], {
-    message: 'Валюта должна быть USD, EUR или RUB',
-  }).default('USD'),
+  currency: z.enum(['KZT', 'USD', 'EUR', 'RUB'], {
+    message: 'Валюта должна быть KZT, USD, EUR или RUB',
+  }).default('KZT'),
 }).optional().refine((data) => {
   if (data && data.min !== undefined && data.max !== undefined) {
     return data.min <= data.max;

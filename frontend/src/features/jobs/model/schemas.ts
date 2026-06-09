@@ -18,8 +18,8 @@ import {
 const getJobValidationMessage = (key: string) =>
   getValidationMessage(key, 'jobs');
 
-export const CURRENCIES = ['USD', 'EUR', 'RUB'] as const;
-export const DEFAULT_CURRENCY = 'USD' as const;
+export const CURRENCIES = ['KZT', 'USD', 'EUR', 'RUB'] as const;
+export const DEFAULT_CURRENCY = 'KZT' as const;
 export type Currency = (typeof CURRENCIES)[number];
 
 const jobSalaryObjectSchema = z

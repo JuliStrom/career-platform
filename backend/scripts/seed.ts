@@ -55,7 +55,7 @@ async function seed() {
   const seedCompanyCultures = [
     {
       name: 'TechStart Inc',
-      logo: null,
+      logo: 'https://raw.githubusercontent.com/github/explore/main/topics/python/python.png',
       workFormat: WorkFormat.REMOTE,
       valuesTags: ['flat hierarchy', 'mentoring', 'fast feedback'],
       growthSpeed: 'Fast',
@@ -65,7 +65,7 @@ async function seed() {
     },
     {
       name: 'Creative Studio',
-      logo: null,
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png',
       workFormat: WorkFormat.HYBRID,
       valuesTags: ['creative freedom', 'portfolio growth', 'feedback culture'],
       growthSpeed: 'Medium',
@@ -75,7 +75,7 @@ async function seed() {
     },
     {
       name: 'ProductLab',
-      logo: null,
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/a/ad/Figma-1-logo.png',
       workFormat: WorkFormat.OFFICE,
       valuesTags: ['ownership', 'data-driven', 'cross-functional teams'],
       growthSpeed: 'Fast',
@@ -85,7 +85,7 @@ async function seed() {
     },
     {
       name: 'FoodSupply Co',
-      logo: null,
+      logo: 'https://raw.githubusercontent.com/github/explore/main/topics/docker/docker.png',
       workFormat: WorkFormat.OFFICE,
       valuesTags: ['customer focus', 'stable processes', 'team support'],
       growthSpeed: 'Medium',
@@ -95,7 +95,7 @@ async function seed() {
     },
     {
       name: 'CloudTech',
-      logo: null,
+      logo: 'https://raw.githubusercontent.com/github/explore/main/topics/nodejs/nodejs.png',
       workFormat: WorkFormat.REMOTE,
       valuesTags: ['engineering excellence', 'mentoring', 'work-life balance'],
       growthSpeed: 'Fast',
@@ -115,6 +115,12 @@ async function seed() {
     companyByName.set(companyCulture.name, company._id);
   }
 
+  await Promise.all(
+    Array.from(companyByName, ([company, companyId]) =>
+      Job.updateMany({ company }, { $set: { companyId } })
+    )
+  );
+
   // Вакансии
   const jobsCount = await Job.countDocuments();
   if (jobsCount === 0) {
@@ -129,7 +135,7 @@ async function seed() {
         level: Level.MIDDLE,
         workFormat: WorkFormat.REMOTE,
         location: 'Москва (удалённо)',
-        salary: { min: 150000, max: 250000, currency: 'RUB' },
+        salary: { min: 150000, max: 250000, currency: 'KZT' },
         requirements: ['React', 'TypeScript', 'REST API', 'Git'],
         responsibilities: ['Разработка UI', 'Code review', 'Участие в планировании'],
         createdBy: userId,
@@ -145,7 +151,7 @@ async function seed() {
         level: Level.JUNIOR,
         workFormat: WorkFormat.HYBRID,
         location: 'Санкт-Петербург',
-        salary: { min: 80000, max: 120000, currency: 'RUB' },
+        salary: { min: 80000, max: 120000, currency: 'KZT' },
         requirements: ['Figma', 'Adobe XD', 'Базовые знания UX'],
         responsibilities: ['Проектирование интерфейсов', 'Создание прототипов'],
         createdBy: userId,
@@ -161,7 +167,7 @@ async function seed() {
         level: Level.SENIOR,
         workFormat: WorkFormat.OFFICE,
         location: 'Москва',
-        salary: { min: 200000, max: 350000, currency: 'RUB' },
+        salary: { min: 200000, max: 350000, currency: 'KZT' },
         requirements: ['Опыт 3+ года', 'Agile/Scrum', 'Аналитика'],
         responsibilities: ['Roadmap', 'Приоритизация', 'Работа с командой'],
         createdBy: userId,
@@ -177,7 +183,7 @@ async function seed() {
         level: Level.MIDDLE,
         workFormat: WorkFormat.OFFICE,
         location: 'Москва',
-        salary: { min: 100000, max: 150000, currency: 'RUB' },
+        salary: { min: 100000, max: 150000, currency: 'KZT' },
         requirements: ['Опыт продаж', 'Знание HoReCa', 'CRM'],
         responsibilities: ['Поиск клиентов', 'Переговоры', 'Ведение сделок'],
         createdBy: userId,
@@ -193,7 +199,7 @@ async function seed() {
         level: Level.SENIOR,
         workFormat: WorkFormat.REMOTE,
         location: 'Удалённо',
-        salary: { min: 250000, max: 400000, currency: 'RUB' },
+        salary: { min: 250000, max: 400000, currency: 'KZT' },
         requirements: ['Node.js', 'PostgreSQL', 'Redis', 'Docker'],
         responsibilities: ['Проектирование API', 'Оптимизация', 'Менторинг'],
         createdBy: userId,

@@ -8,6 +8,12 @@
   "responsibilities": "Обязанности",
   "salaryRange": "{{min}}–{{max}} {{currency}}",
   "salarySingle": "{{value}} {{currency}}",
+  "currencies": {
+    "KZT": "Казахстанский тенге",
+    "USD": "Доллар США",
+    "EUR": "Евро",
+    "RUB": "Российский рубль"
+  },
   "total": "Всего вакансий: {{count}}",
   "empty": "Подходящих вакансий не найдено",
   "createTitle": "Создать вакансию",
@@ -130,7 +136,7 @@
     "salaryMinNegative": "Минимальная зарплата не может быть отрицательной",
     "salaryMaxNegative": "Максимальная зарплата не может быть отрицательной",
     "salaryMinGreaterThanMax": "Минимальная зарплата не может быть больше максимальной",
-    "currencyInvalid": "Валюта должна быть USD, EUR или RUB",
+    "currencyInvalid": "Валюта должна быть KZT, USD, EUR или RUB",
     "logoUrl": "URL логотипа должен быть корректной ссылкой",
     "cultureDescriptionRequired": "Описание культуры обязательно",
     "cultureDescriptionMax": "Описание культуры не должно превышать 300 символов"

@@ -5,7 +5,7 @@ import { IconNavPressable } from '@/shared/ui';
 import { PrimaryButton } from '@/shared/ui/buttons/PrimaryButton';
 import { FullScreenLoader } from '@/src/shared/ui/common/FullScreenLoader';
 import { ReactNode } from 'react';
-import { ScrollView, Text, View, useColorScheme } from 'react-native';
+import { Image, ScrollView, Text, View, useColorScheme } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface JobDetailsViewProps {
@@ -91,6 +91,66 @@ export function JobDetailsView({
           <Text className="mt-3 text-base font-semibold text-green-700 dark:text-green-400">
             {formatSalary(job.salary, t)}
           </Text>
+        )}
+
+        {job.companyCulture && (
+          <View className="mt-6 rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+            <View className="flex-row items-start gap-3">
+              {job.companyCulture.logo ? (
+                <Image
+                  source={{ uri: job.companyCulture.logo }}
+                  className="h-12 w-12 rounded-lg bg-gray-100 dark:bg-gray-700"
+                  resizeMode="contain"
+                />
+              ) : null}
+              <View className="flex-1">
+                <Text className="text-base font-semibold text-gray-900 dark:text-white">
+                  {job.companyCulture.name}
+                </Text>
+              </View>
+            </View>
+
+            <View className="mt-3 gap-2">
+              <Text className="text-sm text-gray-700 dark:text-gray-300">
+                <Text className="font-medium">
+                  {t('companyCulture.workFormat')} --{' '}
+                </Text>
+                {t(`workFormats.${job.companyCulture.workFormat}`)}
+              </Text>
+              <Text className="text-sm text-gray-700 dark:text-gray-300">
+                <Text className="font-medium">
+                  {t('companyCulture.growthSpeed')} --{' '}
+                </Text>
+                {t(`growthSpeeds.${job.companyCulture.growthSpeed}`)}
+              </Text>
+              <Text className="text-sm text-gray-700 dark:text-gray-300">
+                <Text className="font-medium">
+                  {t('companyCulture.teamSize')} --{' '}
+                </Text>
+                {t(`teamSizes.${job.companyCulture.teamSize}`)}
+              </Text>
+              <Text className="text-sm text-gray-700 dark:text-gray-300">
+                <Text className="font-medium">
+                  {t('companyCulture.languages')} --{' '}
+                </Text>
+                {job.companyCulture.languages
+                  .map((language) => t(`languages.${language}`))
+                  .join(', ')}
+              </Text>
+              <Text className="text-sm text-gray-700 dark:text-gray-300">
+                <Text className="font-medium">
+                  {t('companyCulture.valuesTags')} --{' '}
+                </Text>
+                {job.companyCulture.valuesTags.join(', ')}
+              </Text>
+              <Text className="text-sm leading-5 text-gray-700 dark:text-gray-300">
+                <Text className="font-medium">
+                  {t('companyCulture.description')} --{' '}
+                </Text>
+                {job.companyCulture.description}
+              </Text>
+            </View>
+          </View>
         )}
 
         <View className="mt-6">

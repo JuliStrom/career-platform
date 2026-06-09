@@ -4,6 +4,25 @@ export enum JobWorkFormat {
   Hybrid = 'Hybrid',
 }
 
+export enum GrowthSpeed {
+  Slow = 'Slow',
+  Medium = 'Medium',
+  Fast = 'Fast',
+}
+
+export enum TeamSize {
+  OneToTen = '1-10',
+  ElevenToFifty = '11-50',
+  FiftyOneToTwoHundred = '51-200',
+  TwoHundredPlus = '200+',
+}
+
+export enum WorkLanguage {
+  RU = 'RU',
+  EN = 'EN',
+  KZ = 'KZ',
+}
+
 /** Блок 5 ТЗ — трек «Меняю профессию» */
 export enum CareerChangeAgeRange {
   UpTo30 = 'up_to_30',

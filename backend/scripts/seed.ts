@@ -10,6 +10,7 @@ import mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import User from '../src/models/User';
 import Job from '../src/models/Job';
+import Company from '../src/models/Company';
 import CareerScenario from '../src/models/CareerScenario';
 import CareerTrigger from '../src/models/CareerTrigger';
 import CareerRoadmap from '../src/models/CareerRoadmap';
@@ -51,6 +52,75 @@ async function seed() {
 
   const userId = seedUser._id;
 
+  const seedCompanyCultures = [
+    {
+      name: 'TechStart Inc',
+      logo: 'https://raw.githubusercontent.com/github/explore/main/topics/python/python.png',
+      workFormat: WorkFormat.REMOTE,
+      valuesTags: ['flat hierarchy', 'mentoring', 'fast feedback'],
+      growthSpeed: 'Fast',
+      teamSize: '11-50',
+      languages: ['RU', 'EN'],
+      description: 'Product engineering team with mentoring, async rituals and fast ownership growth.',
+    },
+    {
+      name: 'Creative Studio',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png',
+      workFormat: WorkFormat.HYBRID,
+      valuesTags: ['creative freedom', 'portfolio growth', 'feedback culture'],
+      growthSpeed: 'Medium',
+      teamSize: '1-10',
+      languages: ['RU'],
+      description: 'Small design team with regular critique sessions and close collaboration with clients.',
+    },
+    {
+      name: 'ProductLab',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/a/ad/Figma-1-logo.png',
+      workFormat: WorkFormat.OFFICE,
+      valuesTags: ['ownership', 'data-driven', 'cross-functional teams'],
+      growthSpeed: 'Fast',
+      teamSize: '51-200',
+      languages: ['RU', 'EN'],
+      description: 'B2B product team focused on ownership, analytics and cross-functional delivery.',
+    },
+    {
+      name: 'FoodSupply Co',
+      logo: 'https://raw.githubusercontent.com/github/explore/main/topics/docker/docker.png',
+      workFormat: WorkFormat.OFFICE,
+      valuesTags: ['customer focus', 'stable processes', 'team support'],
+      growthSpeed: 'Medium',
+      teamSize: '51-200',
+      languages: ['RU'],
+      description: 'Operations-driven team with structured onboarding and strong customer relationships.',
+    },
+    {
+      name: 'CloudTech',
+      logo: 'https://raw.githubusercontent.com/github/explore/main/topics/nodejs/nodejs.png',
+      workFormat: WorkFormat.REMOTE,
+      valuesTags: ['engineering excellence', 'mentoring', 'work-life balance'],
+      growthSpeed: 'Fast',
+      teamSize: '51-200',
+      languages: ['RU', 'EN'],
+      description: 'Remote engineering culture with peer reviews, mentoring and distributed delivery.',
+    },
+  ] as const;
+
+  const companyByName = new Map<string, mongoose.Types.ObjectId>();
+  for (const companyCulture of seedCompanyCultures) {
+    const company = await Company.findOneAndUpdate(
+      { name: companyCulture.name },
+      { $set: companyCulture },
+      { new: true, upsert: true, runValidators: true }
+    );
+    companyByName.set(companyCulture.name, company._id);
+  }
+
+  await Promise.all(
+    Array.from(companyByName, ([company, companyId]) =>
+      Job.updateMany({ company }, { $set: { companyId } })
+    )
+  );
+
   // Вакансии
   const jobsCount = await Job.countDocuments();
   if (jobsCount === 0) {
@@ -60,11 +130,12 @@ async function seed() {
         description:
           'Ищем опытного frontend-разработчика для работы над веб-приложениями. Работа в команде из 5 человек, современный стек.',
         company: 'TechStart Inc',
+        companyId: companyByName.get('TechStart Inc'),
         direction: Direction.IT,
         level: Level.MIDDLE,
         workFormat: WorkFormat.REMOTE,
         location: 'Москва (удалённо)',
-        salary: { min: 150000, max: 250000, currency: 'RUB' },
+        salary: { min: 150000, max: 250000, currency: 'KZT' },
         requirements: ['React', 'TypeScript', 'REST API', 'Git'],
         responsibilities: ['Разработка UI', 'Code review', 'Участие в планировании'],
         createdBy: userId,
@@ -75,11 +146,12 @@ async function seed() {
         description:
           'Присоединяйтесь к дизайн-команде для создания интерфейсов мобильных и веб-приложений.',
         company: 'Creative Studio',
+        companyId: companyByName.get('Creative Studio'),
         direction: Direction.CREATIVE,
         level: Level.JUNIOR,
         workFormat: WorkFormat.HYBRID,
         location: 'Санкт-Петербург',
-        salary: { min: 80000, max: 120000, currency: 'RUB' },
+        salary: { min: 80000, max: 120000, currency: 'KZT' },
         requirements: ['Figma', 'Adobe XD', 'Базовые знания UX'],
         responsibilities: ['Проектирование интерфейсов', 'Создание прототипов'],
         createdBy: userId,
@@ -90,11 +162,12 @@ async function seed() {
         description:
           'Управление продуктом B2B-платформы. Полный цикл от идеи до релиза.',
         company: 'ProductLab',
+        companyId: companyByName.get('ProductLab'),
         direction: Direction.IT,
         level: Level.SENIOR,
         workFormat: WorkFormat.OFFICE,
         location: 'Москва',
-        salary: { min: 200000, max: 350000, currency: 'RUB' },
+        salary: { min: 200000, max: 350000, currency: 'KZT' },
         requirements: ['Опыт 3+ года', 'Agile/Scrum', 'Аналитика'],
         responsibilities: ['Roadmap', 'Приоритизация', 'Работа с командой'],
         createdBy: userId,
@@ -105,11 +178,12 @@ async function seed() {
         description:
           'Развитие клиентской базы в сегменте HoReCa. Работа с ключевыми клиентами.',
         company: 'FoodSupply Co',
+        companyId: companyByName.get('FoodSupply Co'),
         direction: Direction.HORECA,
         level: Level.MIDDLE,
         workFormat: WorkFormat.OFFICE,
         location: 'Москва',
-        salary: { min: 100000, max: 150000, currency: 'RUB' },
+        salary: { min: 100000, max: 150000, currency: 'KZT' },
         requirements: ['Опыт продаж', 'Знание HoReCa', 'CRM'],
         responsibilities: ['Поиск клиентов', 'Переговоры', 'Ведение сделок'],
         createdBy: userId,
@@ -120,11 +194,12 @@ async function seed() {
         description:
           'Разработка API и сервисов для высоконагруженных систем.',
         company: 'CloudTech',
+        companyId: companyByName.get('CloudTech'),
         direction: Direction.IT,
         level: Level.SENIOR,
         workFormat: WorkFormat.REMOTE,
         location: 'Удалённо',
-        salary: { min: 250000, max: 400000, currency: 'RUB' },
+        salary: { min: 250000, max: 400000, currency: 'KZT' },
         requirements: ['Node.js', 'PostgreSQL', 'Redis', 'Docker'],
         responsibilities: ['Проектирование API', 'Оптимизация', 'Менторинг'],
         createdBy: userId,

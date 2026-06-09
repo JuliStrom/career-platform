@@ -8,6 +8,12 @@
   "responsibilities": "Responsibilities",
   "salaryRange": "{{min}}–{{max}} {{currency}}",
   "salarySingle": "{{value}} {{currency}}",
+  "currencies": {
+    "KZT": "Kazakhstani tenge",
+    "USD": "US dollar",
+    "EUR": "Euro",
+    "RUB": "Russian ruble"
+  },
   "total": "Total jobs: {{count}}",
   "empty": "No matching jobs found",
   "createTitle": "Create Job",
@@ -59,6 +65,36 @@
     "Hybrid": "Hybrid",
     "All": "All formats"
   },
+  "growthSpeeds": {
+    "Slow": "Slow growth",
+    "Medium": "Steady growth",
+    "Fast": "Fast growth"
+  },
+  "teamSizes": {
+    "1-10": "1-10 people",
+    "11-50": "11-50 people",
+    "51-200": "51-200 people",
+    "200+": "200+ people"
+  },
+  "languages": {
+    "RU": "RU",
+    "EN": "EN",
+    "KZ": "KZ"
+  },
+  "companyCulture": {
+    "title": "Company culture",
+    "name": "Company name",
+    "logo": "Logo URL",
+    "logoPlaceholder": "https://example.com/logo.png",
+    "workFormat": "Work format",
+    "valuesTags": "Team values",
+    "valuesTagsPlaceholder": "Flat hierarchy, mentoring, work-life balance",
+    "growthSpeed": "Growth speed",
+    "teamSize": "Team size",
+    "languages": "Work languages",
+    "description": "Culture description",
+    "descriptionPlaceholder": "Short culture description, up to 300 characters"
+  },
   "filters": {
     "title": "Filters",
     "hint": "Select filters and press \"Apply\"",
@@ -100,7 +136,10 @@
     "salaryMinNegative": "Minimum salary cannot be negative",
     "salaryMaxNegative": "Maximum salary cannot be negative",
     "salaryMinGreaterThanMax": "Minimum salary cannot be greater than maximum",
-    "currencyInvalid": "Currency must be USD, EUR or RUB"
+    "currencyInvalid": "Currency must be KZT, USD, EUR or RUB",
+    "logoUrl": "Logo must be a valid URL",
+    "cultureDescriptionRequired": "Culture description is required",
+    "cultureDescriptionMax": "Culture description must not exceed 300 characters"
   },
   "errors": {
     "forbidden": "Access denied. Only administrators can create jobs.",

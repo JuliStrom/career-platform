@@ -5,6 +5,7 @@ export * from './profile';
 export * from './profileEnums';
 export * from './job';
 export * from './jobEnums';
+export * from './company';
 export * from './career';
 export * from './careerEnums';
 export * from './careerTrigger';

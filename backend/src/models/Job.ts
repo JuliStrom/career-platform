@@ -17,6 +17,11 @@ const jobSchema = new Schema<IJob>({
     required: [true, 'Название компании обязательно'],
     trim: true,
   },
+  companyId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Company',
+    required: false,
+  },
   direction: {
     type: String,
     required: [true, 'Направление обязательно'],
@@ -42,8 +47,8 @@ const jobSchema = new Schema<IJob>({
     max: { type: Number },
     currency: { 
       type: String, 
-      default: 'USD',
-      enum: ['USD', 'EUR', 'RUB'],
+      default: 'KZT',
+      enum: ['KZT', 'USD', 'EUR', 'RUB'],
     },
   },
   requirements: {
@@ -85,6 +90,7 @@ jobSchema.index({ direction: 1, level: 1 });
 jobSchema.index({ workFormat: 1 });
 jobSchema.index({ location: 1 });
 jobSchema.index({ isActive: 1 });
+jobSchema.index({ companyId: 1 });
 
 const Job: Model<IJob> = mongoose.model<IJob>('Job', jobSchema);
 

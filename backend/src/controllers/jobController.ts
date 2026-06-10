@@ -1,9 +1,11 @@
-import { Request, Response } from 'express';
-import { Types } from 'mongoose';
+import {Request, Response} from 'express';
+import {Types} from 'mongoose';
 import Company from '../models/Company';
 import Job from '../models/Job';
-import { AuthRequest, CompanyCultureBody, CreateJobBody, ICompany, UpdateJobBody } from '../types';
-import { isMongoDuplicateError, isMongooseValidationError, getErrorMessage } from '../utils/errorHandlers';
+import {AuthRequest, CompanyCultureBody, CreateJobBody, ICompany, NotificationType, UpdateJobBody} from '../types';
+import {getErrorMessage, isMongooseValidationError} from '../utils/errorHandlers';
+import {createNotification} from "../services/notificationDto";
+import Profile from "../models/Profile";
 
 /** Поля, разрешённые к обновлению через API (без createdBy и служебных). */
 const JOB_UPDATE_FIELDS = [
@@ -89,6 +91,27 @@ export const createJob = async (req: AuthRequest<{}, {}, CreateJobBody>, res: Re
     };
 
     const job = await Job.create(jobData);
+    // триггер для генерации уведомления
+    const profiles = await Profile.find({
+      direction: job.direction,
+      level: job.level,
+    }).select('userId');
+
+    await Promise.all(
+        profiles.map((profile) => {
+          createNotification({
+            userId: profile.userId,
+            type: NotificationType.NEW_JOBS,
+            payload: {
+              count: 1,
+              jobIds: [job._id.toString()],
+              route: `/jobs/${job._id}`,
+            },
+            deduplicationKey: `new-job: ${job._id}:${profile.userId}`,
+          })
+        })
+    );
+
     await job.populate('companyId');
 
     res.status(201).json(serializeJob(job));

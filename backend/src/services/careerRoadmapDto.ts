@@ -2,8 +2,8 @@ import { mapLearningResourcesBySkillTags, LeanLearningResource } from './matchLe
 import {
   CareerRoadmapWithResourcesDto,
   RoadmapBranchType,
-} from '../types/careerRoadmap';
-import { Direction, Level } from '../types/profileEnums';
+} from '../types';
+import { Direction, Level } from '../types';
 
 /** Поля карты, нужные для пользовательского ответа (без зависимости от HydratedDocument). */
 export type RoadmapDocShape = {

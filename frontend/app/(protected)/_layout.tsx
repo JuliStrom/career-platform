@@ -1,4 +1,5 @@
 import { useAuthStore } from '@/features/auth/store/auth.store';
+import { useNotificationsStore } from '@/features/notifications/store/notifications-store';
 import { useTranslation } from '@/shared/lib/hooks/useTranslation';
 import { FullScreenLoader } from '@/src/shared/ui/common/FullScreenLoader';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -20,6 +21,10 @@ export default function ProtectedLayout() {
   const revalidateSession = useAuthStore((state) => state.revalidateSession);
   const isInitializing = useAuthStore((state) => state.isInitializing);
   const isLoading = useAuthStore((state) => state.isLoading);
+  const unreadCount = useNotificationsStore((state) => state.unreadCount);
+  const fetchNotifications = useNotificationsStore(
+    (state) => state.fetchNotifications
+  );
   const [isChecking, setIsChecking] = useState(true);
   const [sessionValid, setSessionValid] = useState<boolean | null>(null);
 
@@ -36,6 +41,12 @@ export default function ProtectedLayout() {
       cancelled = true;
     };
   }, [revalidateSession]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      void fetchNotifications();
+    }
+  }, [fetchNotifications, isAuthenticated]);
 
   if (!rootNavigationState?.key) {
     return <FullScreenLoader />;
@@ -84,6 +95,7 @@ export default function ProtectedLayout() {
           ),
         }}
       />
+
       <Tabs.Screen
         name="education/index"
         options={{
@@ -103,6 +115,31 @@ export default function ProtectedLayout() {
           href: '/recommendations',
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="lightbulb-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="notifications/index"
+        options={{
+          title: tCommon('tabNotifications'),
+          tabBarLabel: tCommon('tabNotifications'),
+          href: '/notifications' as never,
+          tabBarBadge:
+            unreadCount > 0
+              ? unreadCount > 99
+                ? '99+'
+                : unreadCount
+              : undefined,
+          tabBarBadgeStyle: {
+            backgroundColor: '#ef4444',
+            color: '#ffffff',
+          },
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons
+              name={unreadCount > 0 ? 'notifications' : 'notifications-none'}
+              size={size}
+              color={color}
+            />
           ),
         }}
       />

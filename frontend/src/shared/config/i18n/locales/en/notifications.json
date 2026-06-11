@@ -7,7 +7,7 @@
   "types": {
     "growth_trigger": {
       "title": "Time for your next step",
-      "message": "You have been at the {{level}} level for {{years}} years — see what comes next."
+      "message": "You have been at the {{level}} level for {{duration}} — see what comes next."
     },
     "new_jobs": {
       "title": "New jobs",

@@ -1,4 +1,5 @@
 import type { Notification } from '@/features/notifications/model';
+import { formatNotificationPayload } from '@/features/notifications/lib/formatNotificationPayload';
 import { useNotificationsStore } from '@/features/notifications/store/notifications-store';
 import { useTranslation } from '@/shared/lib/hooks/useTranslation';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -16,7 +17,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function NotificationsScreen() {
   const router = useRouter();
-  const { t } = useTranslation('notifications');
+  const { t, currentLanguage } = useTranslation('notifications');
   const notifications = useNotificationsStore((state) => state.notifications);
   const unreadCount = useNotificationsStore((state) => state.unreadCount);
   const isLoading = useNotificationsStore((state) => state.isLoading);
@@ -103,7 +104,14 @@ export default function NotificationsScreen() {
                     {t(`types.${item.type}.title`)}
                   </Text>
                   <Text className="mt-1 leading-5 text-gray-600 dark:text-gray-300">
-                    {t(`types.${item.type}.message`, item.payload)}
+                    {t(
+                      `types.${item.type}.message`,
+                      formatNotificationPayload(
+                        item.type,
+                        item.payload,
+                        currentLanguage
+                      )
+                    )}
                   </Text>
                   <Text className="mt-2 text-xs text-gray-400">
                     {new Date(item.sentAt).toLocaleString()}

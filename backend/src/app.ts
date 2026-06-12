@@ -16,6 +16,7 @@ import adminRecommendationsRoutes from './routes/adminRecommendations';
 import { errorHandler } from './middleware/errorHandler';
 import { generalRateLimiter } from './middleware/rateLimiter';
 import learningRoutes from './routes/learning';
+import notificationRoutes from './routes/notification';
 const app: Express = express();
 
 // Security middleware (COOP/COEP отключены для OAuth popup от Google)
@@ -76,6 +77,7 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/admin/analytics', adminAnalyticsRoutes);
 app.use('/api/admin/recommendations', adminRecommendationsRoutes);
 app.use('/api/learning', learningRoutes);
+app.use('/api/notifications', notificationRoutes);
 // Обработка 404 для несуществующих роутов
 app.use((req, res) => {
   res.status(404).json({

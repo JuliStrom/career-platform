@@ -4,7 +4,7 @@ import {
   CareerTriggerCta,
   CareerTriggerSpecialCase,
   CareerTriggerNextStep,
-} from '../types/careerTrigger';
+} from '../types';
 import { Direction, Level } from '../types';
 
 const nextStepSchema = new Schema<CareerTriggerNextStep>(

@@ -1,0 +1,29 @@
+{
+  "title": "Notifications",
+  "open": "Open notifications",
+  "close": "Close notifications",
+  "empty": "No notifications yet",
+  "markAllAsRead": "Mark all as read",
+  "types": {
+    "growth_trigger": {
+      "title": "Time for your next step",
+      "message": "You have been at the {{level}} level for {{duration}} — see what comes next."
+    },
+    "new_jobs": {
+      "title": "New jobs",
+      "message": "There are {{count}} new jobs matching your career direction."
+    },
+    "new_courses": {
+      "title": "New courses",
+      "message": "New courses matching your skills are now available."
+    },
+    "consultation_reminder": {
+      "title": "Consultation reminder",
+      "message": "Your career consultation starts in 24 hours."
+    },
+    "ai_risk_updated": {
+      "title": "AI risk updated",
+      "message": "We updated the AI risk data for your field — check your index."
+    }
+  }
+}

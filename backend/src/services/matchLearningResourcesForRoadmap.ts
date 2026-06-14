@@ -45,10 +45,11 @@ function extractSkillTags(resource: LeanLearningResource): string[] {
 /** Матчинг в памяти: один список ресурсов на все карты одного ответа API */
 export function mapLearningResourcesBySkillTags(
   skillsToDevelop: string[],
-  resources: LeanLearningResource[]
+  resources: LeanLearningResource[],
+  linkedResourceIds: unknown[] = []
 ): LearningResourceRoadmapDto[] {
   const skillIndex = buildSkillIndex(skillsToDevelop || []);
-  if (skillIndex.size === 0) return [];
+  const linkedIds = new Set(linkedResourceIds.map(String));
 
   const out: LearningResourceRoadmapDto[] = [];
 
@@ -58,7 +59,7 @@ export function mapLearningResourcesBySkillTags(
       const nt = normalizeSkillTag(t);
       if (skillIndex.has(nt)) matchedKeys.add(nt);
     }
-    if (matchedKeys.size === 0) continue;
+    if (matchedKeys.size === 0 && !linkedIds.has(String(r._id))) continue;
 
     const matchedSkills = [...matchedKeys].map((k) => skillIndex.get(k)!);
 

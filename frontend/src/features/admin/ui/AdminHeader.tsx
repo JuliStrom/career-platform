@@ -6,10 +6,15 @@ import { useColorScheme, Pressable, Text, View } from 'react-native';
 interface AdminHeaderProps {
   title: string;
   showBack?: boolean;
+  onBack?: () => void;
 }
 
 /** Хедер админ-панели: кнопка «Назад», заголовок, «Меню», «Выйти». */
-export function AdminHeader({ title, showBack = true }: AdminHeaderProps) {
+export function AdminHeader({
+  title,
+  showBack = true,
+  onBack,
+}: AdminHeaderProps) {
   const { t } = useTranslation('common');
   const router = useRouter();
   const pathname = usePathname();
@@ -25,6 +30,10 @@ export function AdminHeader({ title, showBack = true }: AdminHeaderProps) {
         {showBackButton && (
           <Pressable
             onPress={() => {
+              if (onBack) {
+                onBack();
+                return;
+              }
               const path = pathname ?? '';
               if (
                 path.startsWith('/admin/') &&

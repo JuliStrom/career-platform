@@ -1,10 +1,10 @@
 import { useTranslation as useI18nTranslation } from 'react-i18next';
+import { useCallback } from 'react';
 
 export const useTranslation = (namespace?: string) => {
   const { t, i18n, ready } = useI18nTranslation(namespace);
-
-  return {
-    t: (key: string, options?: Record<string, unknown>) => {
+  const translate = useCallback(
+    (key: string, options?: Record<string, unknown>) => {
       try {
         const translation = t(key, options);
         return translation || key;
@@ -13,7 +13,16 @@ export const useTranslation = (namespace?: string) => {
         return key;
       }
     },
-    changeLanguage: (lng: string) => i18n.changeLanguage(lng),
+    [t]
+  );
+  const changeLanguage = useCallback(
+    (lng: string) => i18n.changeLanguage(lng),
+    [i18n]
+  );
+
+  return {
+    t: translate,
+    changeLanguage,
     currentLanguage: i18n.language,
     ready,
   };

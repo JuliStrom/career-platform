@@ -53,6 +53,10 @@ const careerRoadmapSchema = new Schema<ICareerRoadmap>(
       type: [String],
       default: [],
     },
+    learningResourceIds: {
+      type: [{ type: Schema.Types.ObjectId, ref: 'LearningResource' }],
+      default: [],
+    },
     isActive: {
       type: Boolean,
       default: true,
@@ -67,6 +71,7 @@ const careerRoadmapSchema = new Schema<ICareerRoadmap>(
 
 careerRoadmapSchema.index({ direction: 1, fromLevel: 1, isActive: 1, sortOrder: 1 });
 careerRoadmapSchema.index({ branchType: 1 });
+careerRoadmapSchema.index({ learningResourceIds: 1 });
 
 const CareerRoadmap: Model<ICareerRoadmap> = mongoose.model<ICareerRoadmap>(
   'CareerRoadmap',

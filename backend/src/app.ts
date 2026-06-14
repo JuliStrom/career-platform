@@ -14,6 +14,8 @@ import analyticsRoutes from './routes/analytics';
 import adminAnalyticsRoutes from './routes/adminAnalytics';
 import adminRecommendationsRoutes from './routes/adminRecommendations';
 import adminCompaniesRoutes from './routes/adminCompanies';
+import adminAiRiskIndexRoutes from './routes/adminAiRiskIndex';
+import adminCareerTriggersRoutes from './routes/adminCareerTriggers';
 import { errorHandler } from './middleware/errorHandler';
 import { generalRateLimiter } from './middleware/rateLimiter';
 import learningRoutes from './routes/learning';
@@ -78,6 +80,8 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/admin/analytics', adminAnalyticsRoutes);
 app.use('/api/admin/recommendations', adminRecommendationsRoutes);
 app.use('/api/admin/companies', adminCompaniesRoutes);
+app.use('/api/admin/ai-risk-index', adminAiRiskIndexRoutes);
+app.use('/api/admin/career-triggers', adminCareerTriggersRoutes);
 app.use('/api/learning', learningRoutes);
 app.use('/api/notifications', notificationRoutes);
 // Обработка 404 для несуществующих роутов

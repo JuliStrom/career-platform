@@ -5,7 +5,6 @@ import {
   Level,
   WorkFormat,
 } from '../types';
-import { companyCardSchema } from './adminCompanies.schema';
 
 export const jobIdParamsSchema = z.object({
   params: z.object({
@@ -49,7 +48,6 @@ export const createJobSchema = z.object({
       .min(1, 'Название компании обязательно')
       .trim(),
     companyId: objectIdSchema.optional(),
-    companyCulture: companyCardSchema.optional(),
     direction: z.enum(directionValues, {
       message: `Неверное направление. Допустимые значения: ${directionValues.join(', ')}`,
     }),
@@ -94,7 +92,6 @@ export const updateJobSchema = z.object({
       .trim()
       .optional(),
     companyId: objectIdSchema.optional(),
-    companyCulture: companyCardSchema.optional(),
     direction: z.enum(directionValues, {
       message: `Неверное направление. Допустимые значения: ${directionValues.join(', ')}`,
     }).optional(),

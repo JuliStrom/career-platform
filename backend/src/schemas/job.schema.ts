@@ -2,12 +2,10 @@ import { z } from 'zod';
 import { objectIdSchema } from './common.schema';
 import {
   Direction,
-  GrowthSpeed,
   Level,
-  TeamSize,
   WorkFormat,
-  WorkLanguage,
 } from '../types';
+import { companyCardSchema } from './adminCompanies.schema';
 
 export const jobIdParamsSchema = z.object({
   params: z.object({
@@ -19,9 +17,6 @@ export const jobIdParamsSchema = z.object({
 const directionValues = Object.values(Direction) as [string, ...string[]];
 const levelValues = Object.values(Level) as [string, ...string[]];
 const workFormatValues = Object.values(WorkFormat) as [string, ...string[]];
-const growthSpeedValues = Object.values(GrowthSpeed) as [string, ...string[]];
-const teamSizeValues = Object.values(TeamSize) as [string, ...string[]];
-const workLanguageValues = Object.values(WorkLanguage) as [string, ...string[]];
 
 // Схема зарплаты
 const salarySchema = z.object({
@@ -39,40 +34,6 @@ const salarySchema = z.object({
   message: 'Минимальная зарплата не может быть больше максимальной',
 });
 
-// Схема создания вакансии
-const companyCultureSchema = z.object({
-  name: z
-    .string()
-    .min(1, 'Company name is required')
-    .max(200, 'Company name must not exceed 200 characters')
-    .trim(),
-  logo: z
-    .string()
-    .url('Logo must be a valid URL')
-    .trim()
-    .optional()
-    .or(z.literal(''))
-    .nullable(),
-  workFormat: z.enum(workFormatValues, {
-    message: `Invalid work format. Allowed values: ${workFormatValues.join(', ')}`,
-  }),
-  valuesTags: z.array(z.string().min(1).max(80).trim()).default([]),
-  growthSpeed: z.enum(growthSpeedValues, {
-    message: `Invalid growth speed. Allowed values: ${growthSpeedValues.join(', ')}`,
-  }),
-  teamSize: z.enum(teamSizeValues, {
-    message: `Invalid team size. Allowed values: ${teamSizeValues.join(', ')}`,
-  }),
-  languages: z
-    .array(z.enum(workLanguageValues))
-    .min(1, 'At least one work language is required'),
-  description: z
-    .string()
-    .min(1, 'Culture description is required')
-    .max(300, 'Culture description must not exceed 300 characters')
-    .trim(),
-}).optional();
-
 export const createJobSchema = z.object({
   body: z.object({
     title: z
@@ -88,7 +49,7 @@ export const createJobSchema = z.object({
       .min(1, 'Название компании обязательно')
       .trim(),
     companyId: objectIdSchema.optional(),
-    companyCulture: companyCultureSchema,
+    companyCulture: companyCardSchema.optional(),
     direction: z.enum(directionValues, {
       message: `Неверное направление. Допустимые значения: ${directionValues.join(', ')}`,
     }),
@@ -133,7 +94,7 @@ export const updateJobSchema = z.object({
       .trim()
       .optional(),
     companyId: objectIdSchema.optional(),
-    companyCulture: companyCultureSchema,
+    companyCulture: companyCardSchema.optional(),
     direction: z.enum(directionValues, {
       message: `Неверное направление. Допустимые значения: ${directionValues.join(', ')}`,
     }).optional(),

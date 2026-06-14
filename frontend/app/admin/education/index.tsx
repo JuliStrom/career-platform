@@ -379,10 +379,12 @@ function EducationCard({
       : JSON.stringify(education.skillsTags);
 
   return (
-    <View className="mb-3 rounded-xl bg-white p-4 shadow-sm dark:bg-gray-800">
-      <Text className="text-base font-semibold text-gray-900 dark:text-white">
-        {education.title}
-      </Text>
+    <View className="mb-3 rounded-xl border border-gray-100 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+      <View className="mb-3 rounded-lg border-l-4 border-blue-500 bg-blue-50 px-3 py-2.5 dark:bg-blue-950/40">
+        <Text className="text-lg font-bold leading-6 text-blue-950 dark:text-blue-100">
+          {education.title}
+        </Text>
+      </View>
       <EducationField
         label={t('educations.provider')}
         value={education.provider || emptyValue}
@@ -469,9 +471,12 @@ function EducationCard({
 
 function EducationField({ label, value }: { label: string; value: string }) {
   return (
-    <Text className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-      {label}: {value}
-    </Text>
+    <View className="mt-1.5 flex-row flex-wrap">
+      <Text className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+        {label}:{' '}
+      </Text>
+      <Text className="text-sm text-gray-600 dark:text-gray-400">{value}</Text>
+    </View>
   );
 }
 

@@ -142,6 +142,7 @@ export const createCareerRoadmapSchema = z.object({
         message: `branchType: ${branchTypeValues.join(', ')}`,
       }),
       careerBranches: roadmapCareerBranchesSchema,
+      learningResourceIds: z.array(objectIdSchema).max(100).optional(),
       sortOrder: z.number().int().min(0).optional(),
       isActive: z.boolean().optional(),
     })
@@ -166,6 +167,7 @@ export const updateCareerRoadmapSchema = z.object({
       estimatedTimeMonthsMax: z.number().int().min(1).optional().nullable(),
       branchType: z.enum(branchTypeValues).optional(),
       careerBranches: roadmapCareerBranchesSchema,
+      learningResourceIds: z.array(objectIdSchema).max(100).optional(),
       sortOrder: z.number().int().min(0).optional(),
       isActive: z.boolean().optional(),
     })

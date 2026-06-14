@@ -8,6 +8,10 @@ export interface AnalyticsSummary {
   invitesActivated: number;
   profilesCompleted: number;
   jobsViewed: number;
+  careerTriggerUsers: number;
+  careerTriggerRoadmapUsers: number;
+  careerTriggerCoursesUsers: number;
+  careerTriggerConsultationUsers: number;
 }
 
 export interface AnalyticsFunnel {
@@ -15,6 +19,28 @@ export interface AnalyticsFunnel {
   invitesOpened: number;
   registrationsCompleted: number;
   profilesCompleted: number;
+}
+
+export interface AnalyticsDetails {
+  topDirections: { value: string; count: number }[];
+  topLevels: { value: string; count: number }[];
+  careerFunnel: {
+    registered: number;
+    profile: number;
+    trigger: number;
+    action: number;
+  };
+  tracks: {
+    standard: number;
+    reskilling: number;
+    abroad: number;
+  };
+  aiRisk: {
+    low: number;
+    medium: number;
+    high: number;
+    unknown: number;
+  };
 }
 
 export async function fetchAnalyticsSummary(): Promise<AnalyticsSummary> {
@@ -27,6 +53,13 @@ export async function fetchAnalyticsSummary(): Promise<AnalyticsSummary> {
 export async function fetchAnalyticsFunnel(): Promise<AnalyticsFunnel> {
   const { data } = await apiClient.get<AnalyticsFunnel>(
     '/admin/analytics/funnel'
+  );
+  return data;
+}
+
+export async function fetchAnalyticsDetails(): Promise<AnalyticsDetails> {
+  const { data } = await apiClient.get<AnalyticsDetails>(
+    '/admin/analytics/details'
   );
   return data;
 }

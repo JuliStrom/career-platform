@@ -528,6 +528,7 @@ export const createRoadmap = async (req: AuthRequest, res: Response): Promise<vo
             estimatedTimeMonthsMax,
             branchType,
             careerBranches,
+            learningResourceIds,
             sortOrder,
             isActive,
         } = req.body as {
@@ -540,6 +541,7 @@ export const createRoadmap = async (req: AuthRequest, res: Response): Promise<vo
             estimatedTimeMonthsMax?: number | null;
             branchType: RoadmapBranchType;
             careerBranches?: string[];
+            learningResourceIds?: string[];
             sortOrder?: number;
             isActive?: boolean;
         };
@@ -554,6 +556,7 @@ export const createRoadmap = async (req: AuthRequest, res: Response): Promise<vo
             estimatedTimeMonthsMax: estimatedTimeMonthsMax ?? null,
             branchType,
             careerBranches: careerBranches ?? [],
+            learningResourceIds: learningResourceIds ?? [],
             sortOrder: sortOrder ?? 0,
             isActive: isActive ?? true,
         });

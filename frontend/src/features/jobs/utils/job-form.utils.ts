@@ -4,14 +4,7 @@ import {
   type CreateJobFormValues,
   type JobSalary,
 } from '@/features/jobs/model';
-import {
-  Direction,
-  GrowthSpeed,
-  JobWorkFormat,
-  Level,
-  TeamSize,
-  WorkLanguage,
-} from '@/shared/model';
+import { Direction, JobWorkFormat, Level } from '@/shared/model';
 import { formatListInput } from './parse-list.utils';
 
 export function mapJobPayloadToFormValues(
@@ -22,19 +15,6 @@ export function mapJobPayloadToFormValues(
     description: payload?.description ?? '',
     company: payload?.company ?? '',
     companyId: payload?.companyId,
-    cultureName: payload?.companyCulture?.name ?? payload?.company ?? '',
-    cultureLogo: payload?.companyCulture?.logo ?? '',
-    cultureWorkFormat:
-      payload?.companyCulture?.workFormat ?? JobWorkFormat.Office,
-    cultureValuesTagsInput: payload?.companyCulture?.valuesTags
-      ? formatListInput(payload.companyCulture.valuesTags)
-      : '',
-    cultureGrowthSpeed:
-      payload?.companyCulture?.growthSpeed ?? GrowthSpeed.Medium,
-    cultureTeamSize:
-      payload?.companyCulture?.teamSize ?? TeamSize.ElevenToFifty,
-    cultureLanguages: payload?.companyCulture?.languages ?? [WorkLanguage.RU],
-    cultureDescription: payload?.companyCulture?.description ?? '',
     direction: payload?.direction ?? Direction.IT,
     level: payload?.level ?? Level.Junior,
     workFormat: payload?.workFormat ?? JobWorkFormat.Office,

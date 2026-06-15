@@ -1,7 +1,7 @@
 import { Document, Types } from 'mongoose';
 import { Direction, Level } from './profileEnums';
 import { WorkFormat } from './jobEnums';
-import { CompanyCultureBody, ICompany } from './company';
+import { ICompany } from './company';
 
 // Интерфейс для Mongoose модели Job
 export interface IJob extends Document {
@@ -32,7 +32,6 @@ export type CreateJobBody = {
   description: string;
   company: string;
   companyId?: string;
-  companyCulture?: CompanyCultureBody;
   direction: Direction;
   level: Level;
   workFormat: WorkFormat;

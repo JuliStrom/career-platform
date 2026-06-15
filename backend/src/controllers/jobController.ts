@@ -1,8 +1,6 @@
 import {Request, Response} from 'express';
-import {Types} from 'mongoose';
-import Company from '../models/Company';
 import Job from '../models/Job';
-import {AuthRequest, CompanyCultureBody, CreateJobBody, ICompany, NotificationType, UpdateJobBody} from '../types';
+import {AuthRequest, CreateJobBody, ICompany, NotificationType, UpdateJobBody} from '../types';
 import {getErrorMessage, isMongooseValidationError} from '../utils/errorHandlers';
 import {createNotification} from "../services/notificationDto";
 import Profile from "../models/Profile";
@@ -28,14 +26,6 @@ type JobResponseObject = Record<string, unknown> & {
   companyCulture?: unknown;
 };
 
-const normalizeCompanyCulture = (culture: CompanyCultureBody): CompanyCultureBody => ({
-  ...culture,
-  name: culture.name.trim(),
-  logo: culture.logo?.trim() || null,
-  valuesTags: culture.valuesTags.map((tag) => tag.trim()).filter(Boolean),
-  description: culture.description.trim(),
-});
-
 const isPopulatedCompany = (value: unknown): value is ICompany =>
   Boolean(value && typeof value === 'object' && 'name' in value);
 
@@ -48,31 +38,6 @@ const serializeJob = (job: { toObject: () => JobResponseObject }): JobResponseOb
   return data;
 };
 
-const resolveCompanyId = async (
-  companyId: string | undefined,
-  companyCulture: CompanyCultureBody | undefined
-): Promise<Types.ObjectId | undefined> => {
-  if (!companyCulture) {
-    return companyId ? new Types.ObjectId(companyId) : undefined;
-  }
-
-  const culture = normalizeCompanyCulture(companyCulture);
-  if (companyId) {
-    const company = await Company.findByIdAndUpdate(
-      companyId,
-      { $set: culture },
-      { new: true, runValidators: true, upsert: false }
-    ).exec();
-
-    if (company) {
-      return company._id;
-    }
-  }
-
-  const company = await Company.create(culture);
-  return company._id;
-};
-
 // Создание вакансии (только ADMIN)
 export const createJob = async (req: AuthRequest<{}, {}, CreateJobBody>, res: Response): Promise<void> => {
   try {
@@ -82,11 +47,10 @@ export const createJob = async (req: AuthRequest<{}, {}, CreateJobBody>, res: Re
     }
 
     // Валидация выполнена Zod middleware
-    const { companyCulture, companyId, ...jobBody } = req.body;
-    const resolvedCompanyId = await resolveCompanyId(companyId, companyCulture);
+    const { companyId, ...jobBody } = req.body;
     const jobData = {
       ...jobBody,
-      ...(resolvedCompanyId && { companyId: resolvedCompanyId }),
+      ...(companyId && { companyId }),
       createdBy: req.user.userId,
     };
 
@@ -239,7 +203,7 @@ export const updateJob = async (
     }
 
     const { id } = req.params;
-    const { companyCulture, companyId, ...body } = req.body as UpdateJobBody & Record<string, unknown>;
+    const { companyId, ...body } = req.body as UpdateJobBody & Record<string, unknown>;
     const $set: Record<string, unknown> = {};
     for (const key of JOB_UPDATE_FIELDS) {
       if (body[key] !== undefined) {
@@ -247,9 +211,8 @@ export const updateJob = async (
       }
     }
 
-    const resolvedCompanyId = await resolveCompanyId(companyId, companyCulture);
-    if (resolvedCompanyId) {
-      $set.companyId = resolvedCompanyId;
+    if (companyId) {
+      $set.companyId = companyId;
     }
 
     if (Object.keys($set).length === 0) {

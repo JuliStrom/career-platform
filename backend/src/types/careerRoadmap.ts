@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { Direction, Level } from './profileEnums';
 
 /**
@@ -47,6 +47,7 @@ export interface ICareerRoadmap extends Document {
    * Может быть пустым массивом, если в админке не заполняли.
    */
   careerBranches: string[];
+  learningResourceIds: Types.ObjectId[];
   isActive: boolean;
   sortOrder: number;
   createdAt?: Date;

@@ -17,6 +17,7 @@ export type RoadmapDocShape = {
   estimatedTimeMonthsMax?: number | null;
   branchType: RoadmapBranchType;
   careerBranches?: string[] | null;
+  learningResourceIds?: unknown[] | null;
 };
 
 /**
@@ -37,6 +38,10 @@ export function buildCareerRoadmapDtos(
     estimatedTimeMonthsMax: rm.estimatedTimeMonthsMax ?? null,
     branchType: rm.branchType,
     careerBranches: rm.careerBranches ?? [],
-    learningResources: mapLearningResourcesBySkillTags(rm.skillsToDevelop, resourcePool),
+    learningResources: mapLearningResourcesBySkillTags(
+      rm.skillsToDevelop,
+      resourcePool,
+      rm.learningResourceIds ?? []
+    ),
   }));
 }

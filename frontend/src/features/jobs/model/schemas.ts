@@ -123,24 +123,6 @@ export const createJobSchema = baseJobSchema.extend({
 export const createJobFormSchema = baseJobSchema
   .extend({
     companyId: z.string().optional(),
-    cultureName: z
-      .string()
-      .min(1, getJobValidationMessage('companyRequired'))
-      .max(200, getJobValidationMessage('companyMax')),
-    cultureLogo: z
-      .string()
-      .url(getJobValidationMessage('logoUrl'))
-      .optional()
-      .or(z.literal('')),
-    cultureWorkFormat: z.enum(JobWorkFormat),
-    cultureValuesTagsInput: z.string().optional(),
-    cultureGrowthSpeed: z.enum(GrowthSpeed),
-    cultureTeamSize: z.enum(TeamSize),
-    cultureLanguages: z.array(z.enum(WorkLanguage)).min(1),
-    cultureDescription: z
-      .string()
-      .min(1, getJobValidationMessage('cultureDescriptionRequired'))
-      .max(300, getJobValidationMessage('cultureDescriptionMax')),
     requirementsInput: z.string().refine(
       (val) => {
         const parsed = val

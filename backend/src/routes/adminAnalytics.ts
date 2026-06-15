@@ -11,5 +11,6 @@ router.use(roleMiddleware([UserRole.ADMIN]));
 
 router.get('/summary', adminAnalyticsController.getSummary);
 router.get('/funnel', adminAnalyticsController.getFunnel);
+router.get('/details', adminAnalyticsController.getDetails);
 
 export default router;

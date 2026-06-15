@@ -1,0 +1,313 @@
+import {Request, Response} from 'express';
+import {Types} from 'mongoose';
+import Company from '../models/Company';
+import Job from '../models/Job';
+import {AuthRequest, CompanyCultureBody, CreateJobBody, ICompany, NotificationType, UpdateJobBody} from '../types';
+import {getErrorMessage, isMongooseValidationError} from '../utils/errorHandlers';
+import {createNotification} from "../services/notificationDto";
+import Profile from "../models/Profile";
+
+/** Поля, разрешённые к обновлению через API (без createdBy и служебных). */
+const JOB_UPDATE_FIELDS = [
+  'title',
+  'description',
+  'company',
+  'companyId',
+  'direction',
+  'level',
+  'workFormat',
+  'location',
+  'salary',
+  'requirements',
+  'responsibilities',
+  'isActive',
+] as const satisfies readonly (keyof UpdateJobBody)[];
+
+type JobResponseObject = Record<string, unknown> & {
+  companyId?: unknown;
+  companyCulture?: unknown;
+};
+
+const normalizeCompanyCulture = (culture: CompanyCultureBody): CompanyCultureBody => ({
+  ...culture,
+  name: culture.name.trim(),
+  logo: culture.logo?.trim() || null,
+  valuesTags: culture.valuesTags.map((tag) => tag.trim()).filter(Boolean),
+  description: culture.description.trim(),
+});
+
+const isPopulatedCompany = (value: unknown): value is ICompany =>
+  Boolean(value && typeof value === 'object' && 'name' in value);
+
+const serializeJob = (job: { toObject: () => JobResponseObject }): JobResponseObject => {
+  const data = job.toObject();
+  if (isPopulatedCompany(data.companyId)) {
+    data.companyCulture = data.companyId;
+    data.companyId = data.companyId._id;
+  }
+  return data;
+};
+
+const resolveCompanyId = async (
+  companyId: string | undefined,
+  companyCulture: CompanyCultureBody | undefined
+): Promise<Types.ObjectId | undefined> => {
+  if (!companyCulture) {
+    return companyId ? new Types.ObjectId(companyId) : undefined;
+  }
+
+  const culture = normalizeCompanyCulture(companyCulture);
+  if (companyId) {
+    const company = await Company.findByIdAndUpdate(
+      companyId,
+      { $set: culture },
+      { new: true, runValidators: true, upsert: false }
+    ).exec();
+
+    if (company) {
+      return company._id;
+    }
+  }
+
+  const company = await Company.create(culture);
+  return company._id;
+};
+
+// Создание вакансии (только ADMIN)
+export const createJob = async (req: AuthRequest<{}, {}, CreateJobBody>, res: Response): Promise<void> => {
+  try {
+    if (!req.user) {
+      res.status(401).json({ error: 'Пользователь не авторизован' });
+      return;
+    }
+
+    // Валидация выполнена Zod middleware
+    const { companyCulture, companyId, ...jobBody } = req.body;
+    const resolvedCompanyId = await resolveCompanyId(companyId, companyCulture);
+    const jobData = {
+      ...jobBody,
+      ...(resolvedCompanyId && { companyId: resolvedCompanyId }),
+      createdBy: req.user.userId,
+    };
+
+    const job = await Job.create(jobData);
+    // триггер для генерации уведомления
+    const profiles = await Profile.find({
+      direction: job.direction,
+      level: job.level,
+    }).select('userId');
+
+    await Promise.all(
+        profiles.map((profile) => {
+          createNotification({
+            userId: profile.userId,
+            type: NotificationType.NEW_JOBS,
+            payload: {
+              count: 1,
+              jobIds: [job._id.toString()],
+              route: `/jobs/${job._id}`,
+            },
+            deduplicationKey: `new-job: ${job._id}:${profile.userId}`,
+          })
+        })
+    );
+
+    await job.populate('companyId');
+
+    res.status(201).json(serializeJob(job));
+  } catch (error: unknown) {
+    if (isMongooseValidationError(error)) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+};
+
+// Экранирование спецсимволов для безопасного использования в regex
+const escapeRegex = (str: string): string =>
+  str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+// Парсинг page и limit с дефолтами и ограничениями
+const parsePage = (val: unknown): number => {
+  const n = parseInt(String(val || 1), 10);
+  return isNaN(n) || n < 1 ? 1 : n;
+};
+
+const parseLimit = (val: unknown): number => {
+  const n = parseInt(String(val || 10), 10);
+  if (isNaN(n) || n < 1) return 10;
+  return Math.min(n, 100); // максимум 100 на страницу
+};
+
+// Получение списка вакансий с фильтрами, поиском и пагинацией
+export const getJobs = async (req: Request, res: Response): Promise<void> => {
+  try {
+    // Получаем параметры фильтрации, поиска и пагинации из query
+    const { direction, level, workFormat, location, search, page: pageParam, limit: limitParam } = req.query;
+
+    const page = parsePage(pageParam);
+    const limit = parseLimit(limitParam);
+    const skip = (page - 1) * limit;
+
+    // Строим объект фильтров
+    const filters: Record<string, unknown> = {
+      isActive: true, // По умолчанию показываем только активные
+    };
+
+    if (direction) filters.direction = direction;
+    if (level) filters.level = level;
+    if (workFormat) filters.workFormat = workFormat;
+
+    const locationTerm = typeof location === 'string' ? location.trim() : '';
+    if (locationTerm) {
+      filters.location = {
+        $regex: escapeRegex(locationTerm),
+        $options: 'i',
+      };
+    }
+
+    // Поиск по подстроке (регистронезависимый) в title, description, company
+    const searchTerm = typeof search === 'string' ? search.trim() : '';
+    if (searchTerm) {
+      const escaped = escapeRegex(searchTerm);
+      const searchRegex = { $regex: escaped, $options: 'i' };
+      filters.$or = [
+        { title: searchRegex },
+        { description: searchRegex },
+        { company: searchRegex },
+      ];
+    }
+
+    // total — общее количество по фильтрам; jobs — с пагинацией
+    const [total, jobs] = await Promise.all([
+      Job.countDocuments(filters),
+      Job.find(filters)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .populate('createdBy', 'email role'),
+    ]);
+
+    res.status(200).json({
+      total,
+      page,
+      limit,
+      jobs,
+    });
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+};
+
+// Получение одной вакансии по ID
+export const getJobById = async (req: AuthRequest<{ id: string }>, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const isAdmin = req.user?.role === 'ADMIN';
+
+    const job = await Job.findById(id)
+      .populate('createdBy', 'email role')
+      .populate('companyId');
+
+    if (!job) {
+      res.status(404).json({ error: 'Вакансия не найдена' });
+      return;
+    }
+
+    // Обычным пользователям не отдаём неактивные вакансии
+    if (!job.isActive && !isAdmin) {
+      res.status(404).json({ error: 'Вакансия не найдена' });
+      return;
+    }
+
+    res.status(200).json(serializeJob(job));
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+};
+
+// Обновление вакансии (только ADMIN)
+export const updateJob = async (
+  req: AuthRequest<{ id: string }, {}, UpdateJobBody>,
+  res: Response
+): Promise<void> => {
+  try {
+    if (!req.user) {
+      res.status(401).json({ error: 'Пользователь не авторизован' });
+      return;
+    }
+
+    const { id } = req.params;
+    const { companyCulture, companyId, ...body } = req.body as UpdateJobBody & Record<string, unknown>;
+    const $set: Record<string, unknown> = {};
+    for (const key of JOB_UPDATE_FIELDS) {
+      if (body[key] !== undefined) {
+        $set[key] = body[key];
+      }
+    }
+
+    const resolvedCompanyId = await resolveCompanyId(companyId, companyCulture);
+    if (resolvedCompanyId) {
+      $set.companyId = resolvedCompanyId;
+    }
+
+    if (Object.keys($set).length === 0) {
+      res.status(400).json({ error: 'Нет полей для обновления' });
+      return;
+    }
+
+    // $set + findByIdAndUpdate: не трогаем createdBy и не вызываем save() на «битом» документе без автора
+    const job = await Job.findByIdAndUpdate(id, { $set }, { new: true, runValidators: true })
+      .populate('createdBy', 'email role')
+      .populate('companyId')
+      .exec();
+
+    if (!job) {
+      res.status(404).json({ error: 'Вакансия не найдена' });
+      return;
+    }
+
+    res.status(200).json(serializeJob(job));
+  } catch (error: unknown) {
+    if (isMongooseValidationError(error)) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+};
+
+// Удаление вакансии (только ADMIN) - мягкое удаление через isActive
+export const deleteJob = async (req: AuthRequest<{ id: string }>, res: Response): Promise<void> => {
+  try {
+    if (!req.user) {
+      res.status(401).json({ error: 'Пользователь не авторизован' });
+      return;
+    }
+
+    const { id } = req.params;
+
+    const job = await Job.findByIdAndUpdate(
+      id,
+      { $set: { isActive: false } },
+      { new: true, runValidators: false }
+    ).exec();
+
+    if (!job) {
+      res.status(404).json({ error: 'Вакансия не найдена' });
+      return;
+    }
+
+    res.status(200).json({
+      message: 'Вакансия успешно деактивирована',
+      job: {
+        id: job._id,
+        title: job.title,
+        isActive: job.isActive,
+      },
+    });
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+};

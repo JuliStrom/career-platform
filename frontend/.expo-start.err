@@ -1,0 +1,19 @@
+The following packages should be updated for best compatibility with the installed expo version:
+  expo@54.0.33 - expected version: ~54.0.34
+  expo-auth-session@7.0.10 - expected version: ~7.0.11
+  expo-crypto@15.0.8 - expected version: ~15.0.9
+  expo-image-picker@17.0.10 - expected version: ~17.0.11
+  expo-linking@8.0.11 - expected version: ~8.0.12
+  expo-web-browser@15.0.10 - expected version: ~15.0.11
+Your project may not work correctly until you install the expected versions of the packages.
+λ  WARN  props.pointerEvents is deprecated. Use style.pointerEvents 
+  console.warn (E:\startup.Career-platform\career-platform\frontend\node_modules\expo\node_modules\@expo\cli\src\start\server\serverLogLikeMetro.ts:161:21)
+  warnOnce (E:\startup.Career-platform\career-platform\frontend\node_modules\react-native-web\dist\modules\warnOnce\index.js:24:13)
+  createDOMProps (E:\startup.Career-platform\career-platform\frontend\node_modules\react-native-web\dist\modules\createDOMProps\index.js:805:13)
+  createElement (E:\startup.Career-platform\career-platform\frontend\node_modules\react-native-web\dist\exports\createElement\index.js:23:32)
+  Component (E:\startup.Career-platform\career-platform\frontend\node_modules\react-native-web\dist\exports\View\index.js:111:23)
+  Object.callComponentInDEV [as react-stack-bottom-frame] (E:\startup.Career-platform\career-platform\frontend\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:8970:18)
+  renderWithHooks (E:\startup.Career-platform\career-platform\frontend\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:4699:19)
+  run (E:\startup.Career-platform\career-platform\frontend\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:5539:39)
+  retryNode (E:\startup.Career-platform\career-platform\frontend\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:5899:31)
+  renderNodeDestructive (E:\startup.Career-platform\career-platform\frontend\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:5849:11)

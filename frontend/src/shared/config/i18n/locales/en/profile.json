@@ -1,0 +1,286 @@
+{
+  "title": "Specialist Profile",
+  "noProfile": "Profile not created. Create a profile to continue.",
+  "createProfile": "Create Profile",
+  "createProfileButton": "Create Profile",
+  "name": "Name",
+  "avatarUrl": "Profile photo",
+  "deleteAvatarButton": "Delete Avatar",
+  "direction": "Direction",
+  "level": "Level",
+  "skills": "Skills",
+  "skillsPlaceholder": "Skills separated by commas",
+  "experience": "Experience",
+  "careerGoal": "Career Goal",
+  "careerStartDate": "Current role start date",
+  "careerStartDatePlaceholder": "YYYY-MM-DD",
+  "currentCompany": "Current company",
+  "currentCompanyPlaceholder": "Enter company (optional)",
+  "city": "City / region",
+  "relocationFromCity": "From",
+  "relocationToCountry": "Relocate to",
+  "employmentType": "Employment type",
+  "profileLang": "Interface language",
+  "wantsRelocation": "Relocation preference",
+  "yearsInCurrentRole": "Years in current role",
+  "specialistDetails": "Specialist details",
+  "careerAbroad": {
+    "button": "Career abroad",
+    "title": "Career abroad",
+    "description": "Prepare your profile for international opportunities.",
+    "selectedRoute": "Selected route",
+    "marketStats": "Current market stats",
+    "vacanciesNow": "{{count}} vacancies for {{level}} {{direction}} in {{targetCountry}} now",
+    "averageSalary": "Average salary: {{salaryRange}}",
+    "routeTitle": "{{level}} {{direction}} from {{city}} → work in {{targetCountry}}",
+    "routeFrom": "from",
+    "routeWorkIn": "work in",
+    "progress": {
+      "title": "Progress tracker",
+      "stepPrefix": "Step #{{number}}. ",
+      "steps": {
+        "portfolio": "Portfolio in English",
+        "certificate": "Certificates",
+        "linkedin": "LinkedIn",
+        "companies": "Company list",
+        "visa": "Visa"
+      },
+      "uploading": "Uploading...",
+      "uploadPdf": "Upload PDF",
+      "pdfNotSelected": "No PDF selected",
+      "portfolio": {
+        "description": "Prepare an English portfolio: a short intro, 8+ strong cases, your role in each project, process, results, and links to live materials.",
+        "resources": "Examples and platforms",
+        "linkLabel": "Portfolio link",
+        "pdfLabel": "Portfolio PDF file"
+      },
+      "certificates": {
+        "description": "Add certificates using verification links or PDF files. For each link, add a short description of what you studied and which skill it proves.",
+        "linkLabel": "Certificate link",
+        "titlePlaceholder": "Certificate name",
+        "descriptionPlaceholder": "Certificate description",
+        "addLink": "Add certificate",
+        "pdfLabel": "Certificate PDF files",
+        "emptyPdfs": "No certificate PDFs uploaded"
+      },
+      "linkedin": {
+        "description": "Add your LinkedIn profile link and use the checklist below to make the profile clear for international recruiters.",
+        "linkLabel": "LinkedIn profile link",
+        "openLink": "Open LinkedIn profile",
+        "recommendationsTitle": "Recommendations for filling out your LinkedIn profile",
+        "recommendations": {
+          "photoBanner": {
+            "title": "Photo and banner",
+            "description": "Use a professional photo on a neutral background and a banner related to your field."
+          },
+          "headline": {
+            "title": "Headline",
+            "description": "Use up to 220 characters: specialization + value. Example: Data Analyst | E-commerce growth."
+          },
+          "about": {
+            "title": "About",
+            "description": "Keep it short: who you are, key achievements with numbers, and relocation or remote-work readiness."
+          },
+          "experience": {
+            "title": "Work experience",
+            "description": "Use the formula action + result + metric for each role."
+          },
+          "skills": {
+            "title": "Skills",
+            "description": "Add up to 50 English keywords from your target vacancies."
+          },
+          "openToWork": {
+            "title": "Open to work",
+            "description": "Turn it on and specify relocation countries or Remote."
+          }
+        }
+      },
+      "companies": {
+        "description": "Companies with matching vacancies in {{targetCountry}} based on your selected direction and level.",
+        "vacanciesCount": "{{count}} vacancies",
+        "empty": "No companies found for the selected country yet.",
+        "loading": "Loading company list..."
+      },
+      "visa": {
+        "description": "Cost calculator: choose a visa option to see estimated expenses and timelines.",
+        "options": {
+          "visaCenter": "Via visa center",
+          "employerSponsored": "Via employer"
+        },
+        "costRange": "Estimated expenses: {{costRange}}",
+        "timeline": "Estimated timeline: {{timeline}}",
+        "note": "This is an estimate: the final cost depends on the country, fees, insurance, medical checks, agency services, and employer requirements.",
+        "centersLink": "Open visa center list"
+      }
+    },
+    "backButton": "Back to profile"
+  },
+  "directions": {
+    "All": "All directions",
+    "Creative": "Creative",
+    "IT": "IT",
+    "Design": "Design",
+    "E-commerce": "E-commerce",
+    "HoReCa": "HoReCa",
+    "Architecture & Design": "Architecture & Design",
+    "Production": "Production",
+    "Marketing": "Marketing",
+    "Sales & Business Development": "Sales & Business Development",
+    "Finance & Accounting": "Finance & Accounting",
+    "HR & People": "HR & People",
+    "Operations & Logistics": "Operations & Logistics",
+    "Education": "Education",
+    "Legal & Compliance": "Legal & Compliance"
+  },
+  "levels": {
+    "All": "All levels",
+    "Junior": "Junior",
+    "Middle": "Middle",
+    "Senior": "Senior",
+    "Lead": "Lead"
+  },
+  "careerGoals": {
+    "Growth": "Growth",
+    "Leadership": "Leadership",
+    "Freelance": "Freelance",
+    "Product": "Product",
+    "Startup": "Startup",
+    "Expertise": "Expertise",
+    "Career Change": "Career Change",
+    "Skill Development": "Skill Development"
+  },
+  "cities": {
+    "almaty": "Almaty",
+    "astana": "Astana",
+    "shymkent": "Shymkent",
+    "other_kz": "Other city in KZ",
+    "abroad": "Abroad"
+  },
+  "relocationCountries": {
+    "usa": "USA",
+    "canada": "Canada",
+    "germany": "Germany",
+    "russia": "Russia",
+    "china": "China",
+    "dubai": "Dubai",
+    "europe": "Europe",
+    "other": "Other"
+  },
+  "relocationCountryMarketNames": {
+    "usa": "USA",
+    "canada": "Canada",
+    "germany": "Germany",
+    "russia": "Russia",
+    "china": "China",
+    "dubai": "Dubai",
+    "europe": "Europe",
+    "other": "another country"
+  },
+  "relocationOrigins": {
+    "kazakhstan": "KZ"
+  },
+  "employmentTypes": {
+    "fulltime": "Full-time employment",
+    "freelance": "Freelance",
+    "business": "Own business",
+    "searching": "Looking for opportunities",
+    "reskilling": "Reskilling"
+  },
+  "profileLangs": {
+    "ru": "Russian",
+    "en": "English"
+  },
+  "relocationOptions": {
+    "true": "Open to relocation",
+    "false": "Not planning relocation"
+  },
+  "accessibility": {
+    "avatar": "User avatar",
+    "avatarWithName": "User avatar {{name}}",
+    "nameLabel": "Specialist name",
+    "nameValue": "Name: {{name}}",
+    "directionLabel": "Professional direction",
+    "levelLabel": "Specialist level",
+    "skillsList": "Skills list",
+    "skillTag": "Skill: {{skill}}",
+    "experienceLabel": "Work experience",
+    "careerGoalLabel": "Career goal"
+  },
+  "careerChange": {
+    "sectionTitle": "Changing profession (35+)",
+    "sectionHint": "If you’re switching fields, tell us a bit more — we’ll show gentler, starter-focused materials, internships, and official programs.",
+    "toggleLabel": "I’m changing my professional direction",
+    "currentField": "Your current or past field",
+    "currentFieldPlaceholder": "e.g. accounting, restaurant manager, retail…",
+    "targetDirection": "Where you want to grow",
+    "ageRange": "Age (optional)",
+    "motivation": "What matters most right now?",
+    "timeline": "When do you hope to move?",
+    "hubButton": "Open reskilling hub",
+    "ageRanges": {
+      "skip": "Prefer not to say",
+      "up_to_30": "Up to 30",
+      "30_40": "30–40",
+      "40_50": "40–50",
+      "50_plus": "50+"
+    },
+    "motivations": {
+      "ai_threat": "AI is affecting my profession",
+      "earn_more": "I want to earn more",
+      "remote": "I want to work remotely",
+      "burnout": "Burnout / need a change",
+      "other": "Other reason"
+    },
+    "timelines": {
+      "up_to_6_months": "Within 6 months",
+      "6_12_months": "6–12 months",
+      "1_2_years": "1–2 years",
+      "just_studying": "Just learning for now"
+    }
+  },
+  "validation": {
+    "nameMin": "Name must contain at least 2 characters",
+    "nameMax": "Name must not exceed 100 characters",
+    "avatarInvalid": "Invalid avatar value",
+    "avatarValidationType": "Only JPG, PNG or WebP are allowed",
+    "avatarValidationSize": "File size must be at most 5 MB",
+    "skillEmpty": "Skill cannot be empty",
+    "skillMax": "Skill name must not exceed 50 characters",
+    "skillsMin": "At least one skill must be specified",
+    "skillsMax": "Maximum number of skills is 20",
+    "experienceMin": "Experience description must contain at least 10 characters",
+    "experienceMax": "Experience description must not exceed 2000 characters",
+    "careerStartDateInvalid": "Enter a valid start date",
+    "careerChangeCurrentFieldMin": "Describe your current field (at least 2 characters)",
+    "careerChangeTargetRequired": "Choose a target direction",
+    "careerChangeMotivationRequired": "Choose what matters most",
+    "careerChangeTimelineRequired": "Choose your transition horizon"
+  },
+  "editProfile": "Edit Profile",
+  "editProfileButton": "Edit",
+  "updateProfileButton": "Save",
+  "pickAvatarButton": "Choose photo",
+  "avatarPhotoLabel": "Profile photo",
+  "avatarChoosePhoto": "Choose photo",
+  "avatarChangePhoto": "Change photo",
+  "avatarChangePhotoShort": "Change",
+  "avatarRemovePhoto": "Remove photo",
+  "avatarHelperHint": "JPG, PNG or WebP, up to 5 MB",
+  "pickAvatarPermissionDenied": "Photo permission is required",
+  "cancel": "Cancel",
+  "deleteProfile": "Delete Profile",
+  "deleteProfileButton": "Delete",
+  "deleteConfirmTitle": "Delete Profile",
+  "deleteConfirmMessage": "Are you sure you want to delete your profile? This action cannot be undone.",
+  "deleteConfirmCancel": "Cancel",
+  "deleteConfirmDelete": "Delete",
+  "errors": {
+    "validationError": "Profile validation error",
+    "validationUpdateError": "Profile update validation error",
+    "notInitialized": "Profile not initialized",
+    "loadError": "Error loading profile",
+    "createError": "Error creating profile",
+    "updateError": "Error updating profile",
+    "deleteError": "Error deleting profile"
+  }
+}

@@ -1,0 +1,286 @@
+{
+  "title": "Профиль специалиста",
+  "noProfile": "Профиль не создан. Создайте профиль, чтобы продолжить.",
+  "createProfile": "Создание профиля",
+  "createProfileButton": "Создать профиль",
+  "name": "Имя",
+  "avatarUrl": "Фото профиля",
+  "deleteAvatarButton": "Удалить аватар",
+  "direction": "Направление",
+  "level": "Уровень",
+  "skills": "Навыки",
+  "skillsPlaceholder": "Навыки через запятую",
+  "experience": "Опыт",
+  "careerGoal": "Карьерная цель",
+  "careerStartDate": "Дата начала текущей должности",
+  "careerStartDatePlaceholder": "ГГГГ-ММ-ДД",
+  "currentCompany": "Текущая компания",
+  "currentCompanyPlaceholder": "Укажите компанию (необязательно)",
+  "city": "Город / регион",
+  "relocationFromCity": "Откуда ехать",
+  "relocationToCountry": "Куда эмигрировать",
+  "employmentType": "Тип занятости",
+  "profileLang": "Язык интерфейса",
+  "wantsRelocation": "Готовность к релокации",
+  "yearsInCurrentRole": "Лет в текущей роли",
+  "specialistDetails": "Детали специалиста",
+  "careerAbroad": {
+    "button": "Карьера за рубежом",
+    "title": "Карьера за рубежом",
+    "description": "Подготовьте профиль к международным карьерным возможностям.",
+    "selectedRoute": "Выбранный маршрут",
+    "marketStats": "Статистика рынка сейчас",
+    "vacanciesNow": "{{count}} вакансий для {{level}} {{direction}} в {{targetCountry}} сейчас",
+    "averageSalary": "Средняя зарплата: {{salaryRange}}",
+    "routeTitle": "{{level}} {{direction}} из {{city}} → работа в {{targetCountry}}",
+    "routeFrom": "из",
+    "routeWorkIn": "работа в",
+    "progress": {
+      "title": "Трекер прогресса",
+      "stepPrefix": "Шаг №{{number}}. ",
+      "steps": {
+        "portfolio": "Портфолио на английском",
+        "certificate": "Сертификаты",
+        "linkedin": "LinkedIn",
+        "companies": "Список компаний",
+        "visa": "Виза"
+      },
+      "uploading": "Загрузка...",
+      "uploadPdf": "Загрузить PDF",
+      "pdfNotSelected": "PDF не выбран",
+      "portfolio": {
+        "description": "Соберите англоязычную версию портфолио: короткое intro, 8+ сильных кейсов, роль в проекте, процесс, результат и ссылки на живые материалы.",
+        "resources": "Примеры и площадки",
+        "linkLabel": "Ссылка на портфолио",
+        "pdfLabel": "PDF-файл портфолио"
+      },
+      "certificates": {
+        "description": "Добавьте сертификаты ссылкой на страницу подтверждения или PDF-файлами. Для каждой ссылки укажите короткое описание: чему учились и какой навык подтверждён.",
+        "linkLabel": "Ссылка на сертификат",
+        "titlePlaceholder": "Название сертификата",
+        "descriptionPlaceholder": "Описание сертификата",
+        "addLink": "Добавить сертификат",
+        "pdfLabel": "PDF-файлы сертификатов",
+        "emptyPdfs": "PDF-сертификаты не загружены"
+      },
+      "linkedin": {
+        "description": "Добавьте ссылку на профиль LinkedIn и используйте чеклист ниже, чтобы профиль был понятен международным рекрутерам.",
+        "linkLabel": "Ссылка на профиль LinkedIn",
+        "openLink": "Открыть профиль LinkedIn",
+        "recommendationsTitle": "Рекомендации по заполнению профиля на LinkedIn",
+        "recommendations": {
+          "photoBanner": {
+            "title": "Фото и баннер",
+            "description": "Используйте профессиональное фото на нейтральном фоне и баннер по теме вашей сферы."
+          },
+          "headline": {
+            "title": "Заголовок (Headline)",
+            "description": "До 220 символов: специализация + ценность. Пример: Data Analyst | E-commerce growth."
+          },
+          "about": {
+            "title": "Раздел «О себе»",
+            "description": "Коротко: кто вы, главные достижения с цифрами, готовность к релокации или удалёнке."
+          },
+          "experience": {
+            "title": "Опыт работы",
+            "description": "Используйте формулу действие + результат + метрика для каждого места."
+          },
+          "skills": {
+            "title": "Навыки (Skills)",
+            "description": "Добавьте до 50 ключевых слов на английском из целевых вакансий."
+          },
+          "openToWork": {
+            "title": "Open to work",
+            "description": "Включите статус и укажите страны для переезда или Remote."
+          }
+        }
+      },
+      "companies": {
+        "description": "Компании с подходящими вакансиями в {{targetCountry}} по выбранному направлению и уровню.",
+        "vacanciesCount": "{{count}} вакансий",
+        "empty": "Для выбранной страны пока не найдено компаний.",
+        "loading": "Загружаем список компаний..."
+      },
+      "visa": {
+        "description": "Калькулятор стоимости: выберите вариант визы, чтобы увидеть примерные расходы и сроки.",
+        "options": {
+          "visaCenter": "Через визовый центр",
+          "employerSponsored": "Через работодателя"
+        },
+        "costRange": "Примерные расходы: {{costRange}}",
+        "timeline": "Ориентировочные сроки: {{timeline}}",
+        "note": "Расчёт ориентировочный: итоговая сумма зависит от страны, сборов, страховки, медосмотра, услуг посредников и требований работодателя.",
+        "centersLink": "Открыть перечень визовых центров"
+      }
+    },
+    "backButton": "Назад к профилю"
+  },
+  "directions": {
+    "All": "Все направления",
+    "Creative": "Креатив",
+    "IT": "IT",
+    "Design": "Дизайн",
+    "E-commerce": "E-commerce",
+    "HoReCa": "HoReCa",
+    "Architecture & Design": "Архитектура и дизайн",
+    "Production": "Производство",
+    "Marketing": "Маркетинг",
+    "Sales & Business Development": "Продажи и развитие бизнеса",
+    "Finance & Accounting": "Финансы и учёт",
+    "HR & People": "HR и люди",
+    "Operations & Logistics": "Операции и логистика",
+    "Education": "Образование",
+    "Legal & Compliance": "Юриспруденция и комплаенс"
+  },
+  "levels": {
+    "All": "Все уровни",
+    "Junior": "Джуниор",
+    "Middle": "Мидл",
+    "Senior": "Сеньор",
+    "Lead": "Лид"
+  },
+  "careerGoals": {
+    "Growth": "Рост",
+    "Leadership": "Лидерство",
+    "Freelance": "Фриланс",
+    "Product": "Продукт",
+    "Startup": "Стартап",
+    "Expertise": "Экспертиза",
+    "Career Change": "Смена карьеры",
+    "Skill Development": "Развитие навыков"
+  },
+  "cities": {
+    "almaty": "Алматы",
+    "astana": "Астана",
+    "shymkent": "Шымкент",
+    "other_kz": "Другой город КЗ",
+    "abroad": "Зарубеж"
+  },
+  "relocationCountries": {
+    "usa": "США",
+    "canada": "Канада",
+    "germany": "Германия",
+    "russia": "Россия",
+    "china": "Китай",
+    "dubai": "Дубай",
+    "europe": "Европа",
+    "other": "Другое"
+  },
+  "relocationCountryMarketNames": {
+    "usa": "США",
+    "canada": "Канаде",
+    "germany": "Германии",
+    "russia": "России",
+    "china": "Китае",
+    "dubai": "Дубае",
+    "europe": "Европе",
+    "other": "другой стране"
+  },
+  "relocationOrigins": {
+    "kazakhstan": "КЗ"
+  },
+  "employmentTypes": {
+    "fulltime": "Найм full-time",
+    "freelance": "Фриланс",
+    "business": "Собственный бизнес",
+    "searching": "В поиске",
+    "reskilling": "Переобучение"
+  },
+  "profileLangs": {
+    "ru": "Русский",
+    "en": "English"
+  },
+  "relocationOptions": {
+    "true": "Готов(а) к релокации",
+    "false": "Не планирую релокацию"
+  },
+  "accessibility": {
+    "avatar": "Аватар пользователя",
+    "avatarWithName": "Аватар пользователя {{name}}",
+    "nameLabel": "Имя специалиста",
+    "nameValue": "Имя: {{name}}",
+    "directionLabel": "Направление деятельности",
+    "levelLabel": "Уровень специалиста",
+    "skillsList": "Список навыков",
+    "skillTag": "Навык: {{skill}}",
+    "experienceLabel": "Опыт работы",
+    "careerGoalLabel": "Карьерная цель"
+  },
+  "careerChange": {
+    "sectionTitle": "Смена профессии (35+)",
+    "sectionHint": "Если вы меняете сферу, расскажите немного о себе — мы покажем более мягкие материалы «с нуля», стажировки и официальные программы.",
+    "toggleLabel": "Хочу сменить профессиональное направление",
+    "currentField": "Текущая или прошлая сфера",
+    "currentFieldPlaceholder": "Например: бухгалтерия, управляющий рестораном, розница…",
+    "targetDirection": "Куда хотите прийти",
+    "ageRange": "Возраст (необязательно)",
+    "motivation": "Что сейчас важнее всего?",
+    "timeline": "Когда планируете переход?",
+    "hubButton": "Хаб переподготовки",
+    "ageRanges": {
+      "skip": "Не указываю",
+      "up_to_30": "До 30",
+      "30_40": "30–40",
+      "40_50": "40–50",
+      "50_plus": "50+"
+    },
+    "motivations": {
+      "ai_threat": "ИИ задевает мою профессию",
+      "earn_more": "Хочу больше зарабатывать",
+      "remote": "Хочу работать удалённо",
+      "burnout": "Выгорание / нужны перемены",
+      "other": "Другая причина"
+    },
+    "timelines": {
+      "up_to_6_months": "До 6 месяцев",
+      "6_12_months": "6–12 месяцев",
+      "1_2_years": "1–2 года",
+      "just_studying": "Пока только учусь"
+    }
+  },
+  "validation": {
+    "nameMin": "Имя должно содержать минимум 2 символа",
+    "nameMax": "Имя не должно превышать 100 символов",
+    "avatarInvalid": "Некорректный путь к аватару",
+    "avatarValidationType": "Допустимы только JPG, PNG или WebP",
+    "avatarValidationSize": "Размер файла не больше 5 МБ",
+    "skillEmpty": "Навык не может быть пустым",
+    "skillMax": "Название навыка не должно превышать 50 символов",
+    "skillsMin": "Необходимо указать хотя бы один навык",
+    "skillsMax": "Максимальное количество навыков - 20",
+    "experienceMin": "Описание опыта должно содержать минимум 10 символов",
+    "experienceMax": "Описание опыта не должно превышать 2000 символов",
+    "careerStartDateInvalid": "Введите корректную дату начала",
+    "careerChangeCurrentFieldMin": "Опишите текущую сферу (минимум 2 символа)",
+    "careerChangeTargetRequired": "Выберите целевое направление",
+    "careerChangeMotivationRequired": "Выберите, что важнее всего",
+    "careerChangeTimelineRequired": "Выберите горизонт перехода"
+  },
+  "editProfile": "Редактирование профиля",
+  "editProfileButton": "Редактировать",
+  "updateProfileButton": "Сохранить",
+  "pickAvatarButton": "Выбрать фото",
+  "avatarPhotoLabel": "Фото профиля",
+  "avatarChoosePhoto": "Выбрать фото",
+  "avatarChangePhoto": "Изменить фото",
+  "avatarChangePhotoShort": "Изменить",
+  "avatarRemovePhoto": "Удалить фото",
+  "avatarHelperHint": "JPG, PNG или WebP, до 5 МБ",
+  "pickAvatarPermissionDenied": "Нужно разрешение на доступ к фото",
+  "cancel": "Отмена",
+  "deleteProfile": "Удалить профиль",
+  "deleteProfileButton": "Удалить",
+  "deleteConfirmTitle": "Удаление профиля",
+  "deleteConfirmMessage": "Вы уверены, что хотите удалить профиль? Это действие нельзя отменить.",
+  "deleteConfirmCancel": "Отмена",
+  "deleteConfirmDelete": "Удалить",
+  "errors": {
+    "validationError": "Ошибка валидации профиля",
+    "validationUpdateError": "Ошибка валидации обновлений профиля",
+    "notInitialized": "Профиль не инициализирован",
+    "loadError": "Ошибка загрузки профиля",
+    "createError": "Ошибка создания профиля",
+    "updateError": "Ошибка обновления профиля",
+    "deleteError": "Ошибка удаления профиля"
+  }
+}

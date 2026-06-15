@@ -1,0 +1,202 @@
+{
+  "createTitle": "Create Career Scenario",
+  "createButton": "Create Scenario",
+  "form": {
+    "title": "Scenario Title",
+    "description": "Description",
+    "direction": "Direction",
+    "level": "Level",
+    "isActive": "Active",
+    "actions": "Actions",
+    "actionType": "Action Type",
+    "actionTitle": "Action Title",
+    "actionDescription": "Action Description",
+    "actionLink": "Link (optional)",
+    "addAction": "Add Action",
+    "removeAction": "Remove Action",
+    "cancel": "Cancel",
+    "submit": "Create",
+    "saveChanges": "Save changes"
+  },
+  "actionTypes": {
+    "lecture": "Lecture",
+    "consultation": "Consultation",
+    "community": "Community",
+    "article": "Article"
+  },
+  "directions": {
+    "All": "All directions",
+    "Creative": "Creative",
+    "IT": "IT",
+    "Design": "Design",
+    "E-commerce": "E-commerce",
+    "HoReCa": "HoReCa",
+    "Architecture & Design": "Architecture & Design",
+    "Production": "Production",
+    "Marketing": "Marketing",
+    "Sales & Business Development": "Sales & Business Development",
+    "Finance & Accounting": "Finance & Accounting",
+    "HR & People": "HR & People",
+    "Operations & Logistics": "Operations & Logistics",
+    "Education": "Education",
+    "Legal & Compliance": "Legal & Compliance"
+  },
+  "levels": {
+    "Junior": "Junior",
+    "Middle": "Middle",
+    "Senior": "Senior",
+    "Lead": "Lead"
+  },
+  "validation": {
+    "titleMin": "Title must be at least 5 characters",
+    "titleMax": "Title must not exceed 200 characters",
+    "descriptionMin": "Description must be at least 20 characters",
+    "descriptionMax": "Description must not exceed 5000 characters",
+    "directionInvalid": "Invalid direction",
+    "levelInvalid": "Invalid level",
+    "actionsRequired": "At least one action is required",
+    "actionTypeInvalid": "Invalid action type",
+    "actionTitleMin": "Action title must be at least 3 characters",
+    "actionTitleMax": "Action title must not exceed 200 characters",
+    "actionDescriptionMin": "Action description must be at least 10 characters",
+    "actionDescriptionMax": "Action description must not exceed 1000 characters",
+    "actionLinkInvalid": "Link must be a valid URL"
+  },
+  "errors": {
+    "forbidden": "Access denied. Only administrators can create career scenarios.",
+    "validationError": "Validation error",
+    "createError": "Error creating scenario",
+    "networkError": "Network error"
+  },
+  "success": {
+    "created": "Career scenario created successfully"
+  },
+  "recommendations": {
+    "title": "Personal Recommendations",
+    "goBack": "Back",
+    "loading": "Loading recommendations…",
+    "empty": "No recommendations available",
+    "profile": {
+      "title": "Your Profile",
+      "direction": "Direction",
+      "level": "Level",
+      "careerGoal": "Career Goal"
+    },
+    "actions": {
+      "openLink": "Open Link",
+      "noLink": "No link available"
+    },
+    "errors": {
+      "fetchError": "Error loading recommendations",
+      "noProfile": "Profile not found. Please create your profile first."
+    }
+  },
+  "trigger": {
+    "badge": "Time to grow",
+    "yearsInRole": "Years at current level: {{years}}",
+    "consultationTitle": "Career consultation",
+    "consultationStub": "Consultation booking will be available in the next release.",
+    "cta": {
+      "consultation": "Book a career consultation",
+      "roadmap": "View development roadmap",
+      "courses": "View transition courses"
+    }
+  },
+  "roadmap": {
+    "title": "Career Roadmap",
+    "loading": "Loading career roadmap…",
+    "empty": "No roadmap is available for your current profile yet",
+    "nextRole": "Next role",
+    "skillsToDevelop": "Skills to develop",
+    "estimatedTime": "Estimated time",
+    "months": "months",
+    "careerBranches": "Career branches",
+    "learningResources": "Recommended learning resources",
+    "branchType": {
+      "technical": "Technical track",
+      "management": "Management track",
+      "entrepreneurship": "Entrepreneurship track"
+    }
+  },
+  "careerChangeHub": {
+    "title": "Reskilling hub",
+    "loading": "Loading your hub…",
+    "introTitle": "You’re not alone on this path",
+    "introBody": "Changing careers after 35 is common. Here you’ll find beginner-friendly materials, internships, and official programs — take it at your own pace and lean on support when you need it.",
+    "trackSummary": "Your track settings",
+    "sectionEmpty": "Nothing here yet — check back after we add more tagged materials.",
+    "forbidden": "This section is available after you turn on “I’m changing my professional direction” in your profile and save.",
+    "forbiddenCta": "Open profile settings",
+    "retry": "Try again",
+    "sections": {
+      "fromScratch": "Start from scratch",
+      "general": "More materials",
+      "govPrograms": "Official programs (Kazakhstan)",
+      "internshipsKz": "Internships in Kazakhstan",
+      "internshipsAbroad": "Internships abroad",
+      "successStories": "Stories of career changes (35–50)",
+      "successStoryResources": "More stories and formats"
+    }
+  },
+  "aiRisk": {
+    "title": "AI sustainability index",
+    "subtitle": "Estimated exposure to automation over the next 3–5 years (lookup by your direction and level). Not ML — reference data.",
+    "riskLow": "Low risk",
+    "riskMedium": "Medium risk",
+    "riskHigh": "High risk",
+    "protectiveSkills": "Protective skills",
+    "ctaCourses": "View courses & materials",
+    "ctaConsultation": "Book a career consultation",
+    "share": "Share my index",
+    "shareText": "My AI sustainability index: {{riskLabel}} ({{score}}/100). Direction: {{direction}}, level: {{level}}.",
+    "copied": "Copied to clipboard",
+    "loading": "Loading index…",
+    "missingSeed": "Index data is missing. Run backend seed: npm run seed (from the backend folder).",
+    "fetchError": "Could not load the index"
+  },
+  "scenarios": {
+    "listTitle": "All Career Scenarios",
+    "empty": "No scenarios found",
+    "total": "Total: {{count}}",
+    "edit": "Edit",
+    "delete": "Delete",
+    "editTitle": "Edit Scenario",
+    "deleteConfirm": "Delete scenario?",
+    "deleteSuccess": "Scenario deleted",
+    "updateSuccess": "Scenario updated",
+    "notFound": "Scenario not found",
+    "back": "Back",
+    "createdBy": "Created by",
+    "createdAt": "Created",
+    "updatedAt": "Updated",
+    "actionsCount": "Actions: {{count}}",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "filters": {
+      "title": "Filters",
+      "hint": "Use filters to search scenarios",
+      "direction": "Direction",
+      "level": "Level",
+      "isActive": "Status",
+      "apply": "Apply",
+      "reset": "Reset"
+    },
+    "details": {
+      "title": "Scenario Details",
+      "description": "Description",
+      "metadata": "Scenario Information"
+    },
+    "errors": {
+      "fetchError": "Error loading scenarios",
+      "updateError": "Error updating scenario",
+      "deleteError": "Error deleting scenario"
+    }
+  },
+  "isActive": {
+    "All": "All",
+    "Active": "Active",
+    "Inactive": "Inactive"
+  }
+}

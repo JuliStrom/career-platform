@@ -13,7 +13,8 @@ export interface ExpoExtra {
 
 const extra = (Constants.expoConfig?.extra ?? {}) as ExpoExtra;
 
-const DEFAULT_WEB_API = 'http://localhost:3000/api';
+const DEFAULT_WEB_API =
+  process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000/api';
 
 /**
  * Убирает ошибочные суффиксы `/api/jobs`, `/api/profile` (когда в env попал путь SPA

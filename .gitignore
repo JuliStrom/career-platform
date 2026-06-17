@@ -5,3 +5,5 @@ frontend/.expo/
 
 backend/.env
 frontend/.env
+.idea/
+**/.idea/

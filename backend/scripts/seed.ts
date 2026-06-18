@@ -37,7 +37,7 @@ async function seed() {
   // Создаём или находим seed-пользователя (admin)
   let seedUser = await User.findOne({ email: 'seed@career-platform.local' });
   if (!seedUser) {
-    const hashedPassword = await bcrypt.hash('seed123', 10);
+    const hashedPassword = await bcrypt.hash('Seed1234', 10);
     seedUser = await User.create({
       name: 'Seed Admin',
       email: 'seed@career-platform.local',
@@ -45,7 +45,7 @@ async function seed() {
       authProvider: 'email',
       role: UserRole.ADMIN,
     });
-    console.log('Создан seed-пользователь: seed@career-platform.local / seed123');
+    console.log('Создан seed-пользователь: seed@career-platform.local / Seed1234');
   } else {
     console.log('Seed-пользователь уже существует');
   }
@@ -272,6 +272,39 @@ async function seed() {
         isActive: true,
       },
       {
+        direction: Direction.IT,
+        level: Level.MIDDLE,
+        translationKey: 'itMiddleSystemDesign',
+        title: 'Middle Engineer system design track',
+        description:
+          'A practical recommendation for a middle IT specialist: improve architecture thinking, delivery ownership, and preparation for senior engineering responsibilities.',
+        actions: [
+          {
+            type: ActionType.ARTICLE,
+            title: 'System design notes',
+            description:
+              'Document one current project architecture: services, data flow, risks, bottlenecks, and tradeoffs.',
+          },
+          {
+            type: ActionType.CONSULTATION,
+            title: 'Senior readiness review',
+            description:
+              'Review current skills with a mentor and define the strongest gap before moving toward Senior level.',
+          },
+          {
+            type: ActionType.COMMUNITY,
+            title: 'Code review practice',
+            description:
+              'Take ownership of regular code reviews and collect examples of architectural feedback you provided.',
+          },
+        ],
+        careerBranches: ['Senior Developer', 'Tech Lead', 'Backend Specialist'],
+        transitionSkills: ['System design', 'Code review', 'Architecture tradeoffs', 'Technical communication'],
+        createdBy: userId,
+        sortOrder: 2,
+        isActive: true,
+      },
+      {
         direction: Direction.CREATIVE,
         level: Level.JUNIOR,
         title: 'Начало карьеры в дизайне',
@@ -293,6 +326,72 @@ async function seed() {
         transitionSkills: ['Figma', 'Прототипирование', 'Исследования'],
         createdBy: userId,
         sortOrder: 2,
+        isActive: true,
+      },
+      {
+        direction: Direction.DESIGN,
+        level: Level.MIDDLE,
+        translationKey: 'designMiddleGrowth',
+        title: 'Middle Designer growth plan',
+        description:
+          'A practical development plan for a middle designer: strengthen product thinking, improve portfolio cases, and prepare for senior-level ownership.',
+        actions: [
+          {
+            type: ActionType.ARTICLE,
+            title: 'Portfolio case audit',
+            description:
+              'Rewrite two strongest portfolio cases with problem, process, constraints, decisions, result, and measurable impact.',
+          },
+          {
+            type: ActionType.CONSULTATION,
+            title: 'Career review session',
+            description:
+              'Discuss the current profile with a mentor and define the gap between Middle and Senior expectations.',
+          },
+          {
+            type: ActionType.COMMUNITY,
+            title: 'Design critique practice',
+            description:
+              'Join regular critique sessions and present one case to collect structured feedback from other designers.',
+          },
+        ],
+        careerBranches: ['Senior Product Designer', 'UX Lead', 'Design Systems Designer'],
+        transitionSkills: ['Product thinking', 'UX research', 'Design systems', 'Stakeholder communication'],
+        createdBy: userId,
+        sortOrder: 3,
+        isActive: true,
+      },
+      {
+        direction: Direction.DESIGN,
+        level: Level.MIDDLE,
+        translationKey: 'designMiddleSystems',
+        title: 'Design systems and product ownership track',
+        description:
+          'A focused recommendation for a middle designer: strengthen design systems work, product ownership, research habits, and cross-functional communication.',
+        actions: [
+          {
+            type: ActionType.ARTICLE,
+            title: 'Design system audit',
+            description:
+              'Audit the current UI patterns and prepare a list of reusable components, gaps, and consistency problems.',
+          },
+          {
+            type: ActionType.LECTURE,
+            title: 'Research practice',
+            description:
+              'Run or review at least one user interview and turn insights into a clear product design decision.',
+          },
+          {
+            type: ActionType.CONSULTATION,
+            title: 'Product ownership plan',
+            description:
+              'Prepare a growth plan for taking ownership of a product area, including metrics and stakeholder map.',
+          },
+        ],
+        careerBranches: ['Senior Product Designer', 'Design Systems Designer', 'UX Researcher'],
+        transitionSkills: ['Design systems', 'UX research', 'Product metrics', 'Cross-functional communication'],
+        createdBy: userId,
+        sortOrder: 4,
         isActive: true,
       },
       {
@@ -344,12 +443,135 @@ async function seed() {
         isActive: true,
       },
     ]);
-    console.log('Создано 5 карьерных сценариев');
+    console.log('Создано 8 карьерных сценариев');
   } else {
     console.log(`Карьерные сценарии уже есть (${scenariosCount} шт.)`);
   }
 
   // Карьерные триггеры «Пора расти» (GET /api/career/trigger)
+  const syncedCareerScenarios = [
+    {
+      direction: Direction.IT,
+      level: Level.MIDDLE,
+      translationKey: 'itMiddleSystemDesign',
+      title: 'Middle Engineer system design track',
+      description:
+        'A practical recommendation for a middle IT specialist: improve architecture thinking, delivery ownership, and preparation for senior engineering responsibilities.',
+      actions: [
+        {
+          type: ActionType.ARTICLE,
+          title: 'System design notes',
+          description:
+            'Document one current project architecture: services, data flow, risks, bottlenecks, and tradeoffs.',
+        },
+        {
+          type: ActionType.CONSULTATION,
+          title: 'Senior readiness review',
+          description:
+            'Review current skills with a mentor and define the strongest gap before moving toward Senior level.',
+        },
+        {
+          type: ActionType.COMMUNITY,
+          title: 'Code review practice',
+          description:
+            'Take ownership of regular code reviews and collect examples of architectural feedback you provided.',
+        },
+      ],
+      careerBranches: ['Senior Developer', 'Tech Lead', 'Backend Specialist'],
+      transitionSkills: ['System design', 'Code review', 'Architecture tradeoffs', 'Technical communication'],
+      createdBy: userId,
+      sortOrder: 2,
+      isActive: true,
+    },
+    {
+      direction: Direction.DESIGN,
+      level: Level.MIDDLE,
+      translationKey: 'designMiddleGrowth',
+      title: 'Middle Designer growth plan',
+      description:
+        'A practical development plan for a middle designer: strengthen product thinking, improve portfolio cases, and prepare for senior-level ownership.',
+      actions: [
+        {
+          type: ActionType.ARTICLE,
+          title: 'Portfolio case audit',
+          description:
+            'Rewrite two strongest portfolio cases with problem, process, constraints, decisions, result, and measurable impact.',
+        },
+        {
+          type: ActionType.CONSULTATION,
+          title: 'Career review session',
+          description:
+            'Discuss the current profile with a mentor and define the gap between Middle and Senior expectations.',
+        },
+        {
+          type: ActionType.COMMUNITY,
+          title: 'Design critique practice',
+          description:
+            'Join regular critique sessions and present one case to collect structured feedback from other designers.',
+        },
+      ],
+      careerBranches: ['Senior Product Designer', 'UX Lead', 'Design Systems Designer'],
+      transitionSkills: ['Product thinking', 'UX research', 'Design systems', 'Stakeholder communication'],
+      createdBy: userId,
+      sortOrder: 3,
+      isActive: true,
+    },
+    {
+      direction: Direction.DESIGN,
+      level: Level.MIDDLE,
+      translationKey: 'designMiddleSystems',
+      title: 'Design systems and product ownership track',
+      description:
+        'A focused recommendation for a middle designer: strengthen design systems work, product ownership, research habits, and cross-functional communication.',
+      actions: [
+        {
+          type: ActionType.ARTICLE,
+          title: 'Design system audit',
+          description:
+            'Audit the current UI patterns and prepare a list of reusable components, gaps, and consistency problems.',
+        },
+        {
+          type: ActionType.LECTURE,
+          title: 'Research practice',
+          description:
+            'Run or review at least one user interview and turn insights into a clear product design decision.',
+        },
+        {
+          type: ActionType.CONSULTATION,
+          title: 'Product ownership plan',
+          description:
+            'Prepare a growth plan for taking ownership of a product area, including metrics and stakeholder map.',
+        },
+      ],
+      careerBranches: ['Senior Product Designer', 'Design Systems Designer', 'UX Researcher'],
+      transitionSkills: ['Design systems', 'UX research', 'Product metrics', 'Cross-functional communication'],
+      createdBy: userId,
+      sortOrder: 4,
+      isActive: true,
+    },
+  ];
+
+  for (const scenario of syncedCareerScenarios) {
+    await CareerScenario.updateOne(
+      {
+        direction: scenario.direction,
+        level: scenario.level,
+        title: scenario.title,
+      },
+      { $set: scenario, $setOnInsert: { createdAt: new Date() } },
+      { upsert: true }
+    );
+  }
+  await CareerScenario.updateOne(
+    {
+      direction: Direction.IT,
+      level: Level.MIDDLE,
+      title: 'Переход с Junior на Middle',
+    },
+    { $set: { translationKey: 'itJuniorToMiddle' } }
+  );
+  console.log('Synced additional career scenarios from seed');
+
   const triggersCount = await CareerTrigger.countDocuments();
   if (triggersCount === 0) {
     await CareerTrigger.insertMany([

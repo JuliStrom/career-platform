@@ -89,6 +89,76 @@
     "errors": {
       "fetchError": "Error loading recommendations",
       "noProfile": "Profile not found. Please create your profile first."
+    },
+    "content": {
+      "itJuniorToMiddle": {
+        "title": "Junior to Middle transition",
+        "description": "Growth recommendations: deepen your expertise, practice mentoring, and participate in architecture decisions.",
+        "actions": [
+          {
+            "title": "Career consultation",
+            "description": "Book a session with a career coach to assess your current level."
+          },
+          {
+            "title": "System design",
+            "description": "Study design patterns and approaches for building scalable systems."
+          }
+        ]
+      },
+      "itMiddleSystemDesign": {
+        "title": "Middle Engineer system design track",
+        "description": "A practical recommendation for a middle IT specialist: improve architecture thinking, delivery ownership, and preparation for senior engineering responsibilities.",
+        "actions": [
+          {
+            "title": "System design notes",
+            "description": "Document one current project architecture: services, data flow, risks, bottlenecks, and tradeoffs."
+          },
+          {
+            "title": "Senior readiness review",
+            "description": "Review current skills with a mentor and define the strongest gap before moving toward Senior level."
+          },
+          {
+            "title": "Code review practice",
+            "description": "Take ownership of regular code reviews and collect examples of architectural feedback you provided."
+          }
+        ]
+      },
+      "designMiddleGrowth": {
+        "title": "Middle Designer growth plan",
+        "description": "A practical development plan for a middle designer: strengthen product thinking, improve portfolio cases, and prepare for senior-level ownership.",
+        "actions": [
+          {
+            "title": "Portfolio case audit",
+            "description": "Rewrite two strongest portfolio cases with problem, process, constraints, decisions, result, and measurable impact."
+          },
+          {
+            "title": "Career review session",
+            "description": "Discuss the current profile with a mentor and define the gap between Middle and Senior expectations."
+          },
+          {
+            "title": "Design critique practice",
+            "description": "Join regular critique sessions and present one case to collect structured feedback from other designers."
+          }
+        ]
+      },
+      "designMiddleSystems": {
+        "title": "Design systems and product ownership track",
+        "description": "A focused recommendation for a middle designer: strengthen design systems work, product ownership, research habits, and cross-functional communication.",
+        "actions": [
+          {
+            "title": "Design system audit",
+            "description": "Audit the current UI patterns and prepare a list of reusable components, gaps, and consistency problems."
+          },
+          {
+            "title": "Research practice",
+            "description": "Run or review at least one user interview and turn insights into a clear product design decision."
+          },
+          {
+            "title": "Product ownership plan",
+            "description": "Prepare a growth plan for taking ownership of a product area, including metrics and stakeholder map."
+          }
+        ]
+      }
     }
   },
   "trigger": {

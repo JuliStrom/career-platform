@@ -82,6 +82,10 @@ export default function RecommendationDetailScreen() {
     );
   }
 
+  const title = recommendation.translationKey
+    ? t(`recommendations.content.${recommendation.translationKey}.title`)
+    : recommendation.title;
+
   return (
     <SafeAreaView
       className="flex-1 bg-gray-50 dark:bg-gray-900"
@@ -97,7 +101,7 @@ export default function RecommendationDetailScreen() {
           className="flex-1 text-xl font-semibold text-gray-900 dark:text-white"
           numberOfLines={1}
         >
-          {recommendation.title}
+          {title}
         </Text>
       </View>
 

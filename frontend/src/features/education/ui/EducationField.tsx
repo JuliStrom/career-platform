@@ -6,7 +6,11 @@ interface EducationFieldProps {
   emptyValue?: string;
 }
 
-export function EducationField({ label, value, emptyValue }: EducationFieldProps) {
+export function EducationField({
+  label,
+  value,
+  emptyValue,
+}: EducationFieldProps) {
   const isFilled = value.trim().length > 0 && value !== emptyValue;
 
   return (
@@ -16,9 +20,7 @@ export function EducationField({ label, value, emptyValue }: EducationFieldProps
       </Text>
       <View
         className={`rounded-md px-2 py-1 ${
-          isFilled
-            ? 'bg-gray-100 dark:bg-gray-700'
-            : 'bg-transparent px-0 py-0'
+          isFilled ? 'bg-gray-100 dark:bg-gray-700' : 'bg-transparent px-0 py-0'
         }`}
       >
         <Text

@@ -1,7 +1,7 @@
 import { AdminHeader } from '@/features/admin/ui/AdminHeader';
 import { useTranslation } from '@/shared/lib/hooks/useTranslation';
 import { PrimaryButton } from '@/shared/ui/buttons/PrimaryButton';
-import { type Href, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -46,10 +46,40 @@ export default function AdminHomeScreen() {
             {tCommon('adminRecommendationsTitle')}
           </PrimaryButton>
           <PrimaryButton
+            onPress={() => router.push('/admin/career-triggers' as never)}
+            className="mt-1"
+          >
+            {tCommon('adminCareerTriggersTitle')}
+          </PrimaryButton>
+          <PrimaryButton
+            onPress={() => router.push('/admin/companies' as never)}
+            className="mt-1"
+          >
+            {tCommon('adminCompaniesTitle')}
+          </PrimaryButton>
+          <PrimaryButton
+            onPress={() => router.push('/admin/career-roadmaps' as never)}
+            className="mt-1"
+          >
+            {tCommon('adminCareerRoadmapsTitle')}
+          </PrimaryButton>
+          <PrimaryButton
+            onPress={() => router.push('/admin/ai-risk-index' as never)}
+            className="mt-1"
+          >
+            {tCommon('adminAiRiskTitle')}
+          </PrimaryButton>
+          <PrimaryButton
             onPress={() => router.push('/admin/education')}
             className="mt-1"
           >
             {tCommon('adminEducationsTitle')}
+          </PrimaryButton>
+          <PrimaryButton
+            onPress={() => router.push('/admin/career-routes' as never)}
+            className="mt-1"
+          >
+            {tCommon('adminCareerRoutesTitle')}
           </PrimaryButton>
           <PrimaryButton
             onPress={() => router.push('/admin/analytics')}

@@ -37,6 +37,11 @@ const careerActionSchema = new Schema({
 
 // Схема карьерного сценария
 const careerScenarioSchema = new Schema<ICareerScenario>({
+  translationKey: {
+    type: String,
+    trim: true,
+    default: null,
+  },
   direction: {
     type: String,
     required: [true, 'Направление обязательно'],

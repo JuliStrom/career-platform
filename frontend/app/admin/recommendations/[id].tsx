@@ -125,6 +125,15 @@ export default function AdminRecommendationDetailsScreen() {
     t(`directions.${selectedScenario.direction}`) || selectedScenario.direction;
   const levelText =
     t(`levels.${selectedScenario.level}`) || selectedScenario.level;
+  const translationBaseKey = selectedScenario.translationKey
+    ? `recommendations.content.${selectedScenario.translationKey}`
+    : null;
+  const title = translationBaseKey
+    ? t(`${translationBaseKey}.title`)
+    : selectedScenario.title;
+  const description = translationBaseKey
+    ? t(`${translationBaseKey}.description`)
+    : selectedScenario.description;
 
   return (
     <SafeAreaView
@@ -170,7 +179,7 @@ export default function AdminRecommendationDetailsScreen() {
         </View>
 
         <Text className="text-2xl font-semibold text-gray-900 dark:text-white">
-          {selectedScenario.title}
+          {title}
         </Text>
 
         <View className="mt-6">
@@ -178,7 +187,7 @@ export default function AdminRecommendationDetailsScreen() {
             {t('scenarios.details.description')}
           </Text>
           <Text className="text-sm leading-5 text-gray-700 dark:text-gray-300">
-            {selectedScenario.description}
+            {description}
           </Text>
         </View>
 
@@ -187,14 +196,25 @@ export default function AdminRecommendationDetailsScreen() {
             <Text className="mb-2 text-base font-semibold text-gray-900 dark:text-white">
               {t('form.actions')}
             </Text>
-            {selectedScenario.actions.map((action, index) => (
-              <View
-                key={index}
-                className="mb-3 rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800"
-              >
-                <RecommendationActionItem action={action} />
-              </View>
-            ))}
+            {selectedScenario.actions.map((action, index) => {
+              const localizedAction = translationBaseKey
+                ? {
+                    ...action,
+                    title: t(`${translationBaseKey}.actions.${index}.title`),
+                    description: t(
+                      `${translationBaseKey}.actions.${index}.description`
+                    ),
+                  }
+                : action;
+              return (
+                <View
+                  key={index}
+                  className="mb-3 rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800"
+                >
+                  <RecommendationActionItem action={localizedAction} />
+                </View>
+              );
+            })}
           </View>
         )}
 

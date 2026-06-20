@@ -14,12 +14,12 @@ export function EducationField({
   const isFilled = value.trim().length > 0 && value !== emptyValue;
 
   return (
-    <View className="mt-2 flex-row flex-wrap items-center gap-2">
+    <View className="mt-2 flex-row items-start gap-2">
       <Text className="text-xs font-medium uppercase text-gray-500 dark:text-gray-400">
         {label}:
       </Text>
       <View
-        className={`rounded-md px-2 py-1 ${
+        className={`min-w-0 flex-1 rounded-md px-2 py-1 ${
           isFilled ? 'bg-gray-100 dark:bg-gray-700' : 'bg-transparent px-0 py-0'
         }`}
       >
@@ -29,6 +29,7 @@ export function EducationField({
               ? 'font-semibold text-gray-900 dark:text-white'
               : 'text-gray-400 dark:text-gray-500'
           }`}
+          style={{ flexShrink: 1 }}
         >
           {value}
         </Text>

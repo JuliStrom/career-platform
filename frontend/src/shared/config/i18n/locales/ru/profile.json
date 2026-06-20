@@ -30,7 +30,7 @@
     "description": "Подготовьте профиль к международным карьерным возможностям.",
     "selectedRoute": "Выбранный маршрут",
     "marketStats": "Статистика рынка сейчас",
-    "vacanciesNow": "{{count}} вакансий для {{level}} {{direction}} в {{targetCountry}} сейчас",
+    "vacanciesNow": "{{count}} вакансий по направлению {{direction}} в {{targetCountry}} сейчас",
     "averageSalary": "Средняя зарплата: {{salaryRange}}",
     "routeTitle": "{{level}} {{direction}} из {{city}} → работа в {{targetCountry}}",
     "routeFrom": "из",

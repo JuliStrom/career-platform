@@ -30,7 +30,7 @@
     "description": "Prepare your profile for international opportunities.",
     "selectedRoute": "Selected route",
     "marketStats": "Current market stats",
-    "vacanciesNow": "{{count}} vacancies for {{level}} {{direction}} in {{targetCountry}} now",
+    "vacanciesNow": "{{count}} vacancies for {{direction}} in {{targetCountry}} now",
     "averageSalary": "Average salary: {{salaryRange}}",
     "routeTitle": "{{level}} {{direction}} from {{city}} → work in {{targetCountry}}",
     "routeFrom": "from",

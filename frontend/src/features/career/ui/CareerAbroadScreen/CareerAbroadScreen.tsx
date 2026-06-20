@@ -114,6 +114,14 @@ function getCompanySummaries(jobs: Job[]): CompanySummary[] {
   );
 }
 
+function matchesRouteLocation(job: Job, targetCountryKey: string) {
+  const terms = COUNTRY_LOCATION_TERMS[targetCountryKey] ?? [];
+  if (terms.length === 0) return true;
+
+  const location = job.location.toLocaleLowerCase();
+  return terms.some((term) => location.includes(term.toLocaleLowerCase()));
+}
+
 export function CareerAbroadScreen() {
   const router = useRouter();
   const profile = useProfileStore((state) => state.profile);
@@ -161,15 +169,11 @@ export function CareerAbroadScreen() {
     ? tProfile(`relocationCountryMarketNames.${profile.relocationToCountry}`)
     : tProfile('relocationCountryMarketNames.canada');
   const jobsFilters = useMemo<IJobsFilters>(() => {
-    const targetCountryKey = profile?.relocationToCountry ?? 'canada';
-
     return {
       direction: profile?.direction,
-      level: profile?.level,
-      location: COUNTRY_LOCATION_TERMS[targetCountryKey],
       limit: 100,
     };
-  }, [profile?.direction, profile?.level, profile?.relocationToCountry]);
+  }, [profile?.direction]);
   const averageSalary = useMemo(() => calculateAverageSalary(jobs), [jobs]);
   const companySummaries = useMemo(() => getCompanySummaries(jobs), [jobs]);
   const salaryRange = averageSalary
@@ -369,8 +373,13 @@ export function CareerAbroadScreen() {
 
         if (!isMounted) return;
 
-        setJobs(response.jobs);
-        setVacanciesCount(response.total);
+        const targetCountryKey = profile?.relocationToCountry ?? 'canada';
+        const routeJobs = response.jobs.filter((job) =>
+          matchesRouteLocation(job, targetCountryKey)
+        );
+
+        setJobs(routeJobs);
+        setVacanciesCount(routeJobs.length);
       } catch (error) {
         if (!isMounted) return;
 
@@ -387,7 +396,7 @@ export function CareerAbroadScreen() {
     return () => {
       isMounted = false;
     };
-  }, [jobsFilters]);
+  }, [jobsFilters, profile?.relocationToCountry]);
 
   useEffect(() => {
     setHydratedProgressStorageKey(null);
@@ -459,7 +468,6 @@ export function CareerAbroadScreen() {
         />
         <MarketStatsCard
           vacanciesValue={vacanciesValue}
-          level={level}
           direction={direction}
           targetCountryMarketName={targetCountryMarketName}
           salaryRange={salaryRange}

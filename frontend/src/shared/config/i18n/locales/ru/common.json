@@ -165,6 +165,8 @@
     "toCountry": "Страна назначения",
     "steps": "Шаги",
     "resources": "Ресурсы",
+    "stepsPlaceholder": "Подготовить резюме, собрать портфолио, подать отклики",
+    "resourcesPlaceholder": "LinkedIn, визовый центр, курсы английского",
     "isFeatured": "Приоритетный маршрут",
     "featured": "Приоритетный",
     "anyCity": "Любой город",

@@ -116,7 +116,7 @@ export function CareerRouteForm({
         multiline
         numberOfLines={3}
         autoCapitalize="none"
-        placeholder="Подготовить резюме, собрать портфолио, подать отклики"
+        placeholder={t('adminRoutes.stepsPlaceholder')}
         editable={!loading}
       />
       <NamedField
@@ -126,7 +126,7 @@ export function CareerRouteForm({
         multiline
         numberOfLines={3}
         autoCapitalize="none"
-        placeholder="LinkedIn, визовый центр, курсы английского"
+        placeholder={t('adminRoutes.resourcesPlaceholder')}
         editable={!loading}
       />
       <View className="mb-5 flex-row items-center justify-between">

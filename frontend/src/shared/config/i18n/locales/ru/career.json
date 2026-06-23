@@ -163,7 +163,7 @@
   },
   "trigger": {
     "badge": "Пора расти",
-    "yearsInRole": "Лет на текущем грейде: {{years}}",
+    "yearsInRole": "На текущем грейде: {{duration}}",
     "consultationTitle": "Карьерная консультация",
     "consultationStub": "Запись на консультацию будет доступна в следующем релизе.",
     "cta": {

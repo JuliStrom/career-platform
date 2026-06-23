@@ -7,6 +7,31 @@ import {
 import { Direction, JobWorkFormat, Level } from '@/shared/model';
 import { formatListInput } from './parse-list.utils';
 
+const JOB_TITLE_TRANSLATION_KEYS: Record<string, string> = {
+  'Frontend-разработчик (React)': 'jobTitles.frontendReact',
+  'UX/UI дизайнер': 'jobTitles.uxUiDesigner',
+  'Product Manager': 'jobTitles.productManager',
+  'Менеджер по продажам в HoReCa': 'jobTitles.horecaSalesManager',
+  'Backend-разработчик (Node.js)': 'jobTitles.backendNode',
+  'Специалист по работе с клиентами в Сбербанке':
+    'jobTitles.sberbankClientSpecialist',
+  'Sales Manager': 'jobTitles.salesManager',
+  'Оператор пищевого производства': 'jobTitles.foodProductionOperator',
+  'Рабочий на строительный объект': 'jobTitles.constructionWorker',
+  'Графический дизайнер': 'jobTitles.graphicDesignerRu',
+  'Software Developer': 'jobTitles.softwareDeveloper',
+  'Graphic Designer': 'jobTitles.graphicDesigner',
+  'Motion Designer': 'jobTitles.motionDesigner',
+  'Full Stack Developer': 'jobTitles.fullStackDeveloper',
+  'Junior Frontend Developer': 'jobTitles.juniorFrontendDeveloper',
+  'E-commerce Manager': 'jobTitles.ecommerceManager',
+  'Digital Marketing Specialist': 'jobTitles.digitalMarketingSpecialist',
+  'HR Generalist': 'jobTitles.hrGeneralist',
+  'Logistics Coordinator': 'jobTitles.logisticsCoordinator',
+  'Instructional Designer': 'jobTitles.instructionalDesigner',
+  'Compliance Specialist': 'jobTitles.complianceSpecialist',
+};
+
 export function mapJobPayloadToFormValues(
   payload?: Partial<CreateJobPayload>
 ): CreateJobFormValues {
@@ -48,4 +73,12 @@ export function formatSalary(
 
   // Если есть оба значения и они разные - через тире
   return t('salaryRange', { min, max, currency });
+}
+
+export function formatJobTitle(
+  title: string,
+  t: (key: string, options?: Record<string, unknown>) => string
+): string {
+  const translationKey = JOB_TITLE_TRANSLATION_KEYS[title];
+  return translationKey ? t(translationKey) : title;
 }

@@ -1,5 +1,8 @@
 import type { Job } from '@/features/jobs/model';
-import { formatSalary } from '@/features/jobs/utils/job-form.utils';
+import {
+  formatJobTitle,
+  formatSalary,
+} from '@/features/jobs/utils/job-form.utils';
 import { useTranslation } from '@/shared/lib/hooks/useTranslation';
 import { IconNavPressable } from '@/shared/ui';
 import { PrimaryButton } from '@/shared/ui/buttons/PrimaryButton';
@@ -57,6 +60,8 @@ export function JobDetailsView({
     );
   }
 
+  const title = formatJobTitle(job.title, t);
+
   return (
     <SafeAreaView
       className="flex-1"
@@ -75,7 +80,7 @@ export function JobDetailsView({
         contentContainerStyle={{ paddingBottom: 24 }}
       >
         <Text className="text-2xl font-semibold text-gray-900 dark:text-white">
-          {job.title}
+          {title}
         </Text>
         <Text className="mt-1 text-base text-gray-700 dark:text-gray-300">
           {job.company}

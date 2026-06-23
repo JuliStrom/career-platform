@@ -115,7 +115,7 @@ async function seed() {
     },
     {
       name: 'US Sales Group',
-      logo: null,
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg',
       workFormat: WorkFormat.OFFICE,
       valuesTags: ['active sales', 'commission growth', 'client ownership'],
       growthSpeed: 'Fast',
@@ -125,7 +125,7 @@ async function seed() {
     },
     {
       name: 'Canada Food Plant',
-      logo: null,
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg',
       workFormat: WorkFormat.OFFICE,
       valuesTags: ['safety first', 'shift discipline', 'quality control'],
       growthSpeed: 'Medium',
@@ -145,7 +145,7 @@ async function seed() {
     },
     {
       name: 'Shanghai Design Hub',
-      logo: null,
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg',
       workFormat: WorkFormat.HYBRID,
       valuesTags: ['visual quality', 'campaign delivery', 'cross-cultural teamwork'],
       growthSpeed: 'Fast',
@@ -155,13 +155,103 @@ async function seed() {
     },
     {
       name: 'Berlin Software GmbH',
-      logo: null,
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg',
       workFormat: WorkFormat.HYBRID,
       valuesTags: ['engineering quality', 'code review', 'cloud delivery'],
       growthSpeed: 'Fast',
       teamSize: '51-200',
       languages: ['EN'],
       description: 'Software engineering team with code reviews, cloud services and structured delivery practices.',
+    },
+    {
+      name: 'Toronto Creative Studio',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Laravel.svg',
+      workFormat: WorkFormat.HYBRID,
+      valuesTags: ['brand craft', 'portfolio growth', 'campaign delivery'],
+      growthSpeed: 'Medium',
+      teamSize: '11-50',
+      languages: ['EN'],
+      description: 'Canadian creative studio focused on brand visuals, social media assets and digital campaign delivery.',
+    },
+    {
+      name: 'Vancouver Motion Lab',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/4/4f/SVG_Logo.svg',
+      workFormat: WorkFormat.REMOTE,
+      valuesTags: ['motion craft', 'creative feedback', 'digital content'],
+      growthSpeed: 'Fast',
+      teamSize: '11-50',
+      languages: ['EN'],
+      description: 'Remote-friendly motion design team producing animations, video ads and visual content for digital platforms.',
+    },
+    {
+      name: 'Toronto Tech Solution',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png',
+      workFormat: WorkFormat.HYBRID,
+      valuesTags: ['mentoring', 'product engineering', 'code review'],
+      growthSpeed: 'Fast',
+      teamSize: '51-200',
+      languages: ['EN'],
+      description: 'Product engineering company in Toronto with mentoring, code reviews and full stack web service delivery.',
+    },
+    {
+      name: 'CommerceWave',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/4/4f/SVG_Logo.svg',
+      workFormat: WorkFormat.HYBRID,
+      valuesTags: ['conversion focus', 'marketplace growth', 'customer analytics'],
+      growthSpeed: 'Fast',
+      teamSize: '51-200',
+      languages: ['RU', 'EN'],
+      description: 'E-commerce team focused on marketplace operations, conversion growth and customer analytics.',
+    },
+    {
+      name: 'Growth Marketing Lab',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/4/4f/SVG_Logo.svg',
+      workFormat: WorkFormat.REMOTE,
+      valuesTags: ['experimentation', 'content quality', 'performance metrics'],
+      growthSpeed: 'Fast',
+      teamSize: '11-50',
+      languages: ['RU', 'EN'],
+      description: 'Marketing team running content, paid acquisition and growth experiments for digital products.',
+    },
+    {
+      name: 'PeopleFirst HR',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png',
+      workFormat: WorkFormat.HYBRID,
+      valuesTags: ['employee care', 'structured hiring', 'feedback culture'],
+      growthSpeed: 'Medium',
+      teamSize: '11-50',
+      languages: ['RU'],
+      description: 'HR team focused on hiring, onboarding, employee support and clear internal communication.',
+    },
+    {
+      name: 'KZ Logistics Hub',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg',
+      workFormat: WorkFormat.OFFICE,
+      valuesTags: ['process discipline', 'route planning', 'service reliability'],
+      growthSpeed: 'Medium',
+      teamSize: '200+',
+      languages: ['RU', 'KZ'],
+      description: 'Operations and logistics company with warehouse coordination, route planning and service control.',
+    },
+    {
+      name: 'EduTech Academy',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg',
+      workFormat: WorkFormat.REMOTE,
+      valuesTags: ['learning outcomes', 'student support', 'practical tasks'],
+      growthSpeed: 'Medium',
+      teamSize: '51-200',
+      languages: ['RU', 'EN'],
+      description: 'Online education team building practical courses, mentoring flows and student progress support.',
+    },
+    {
+      name: 'Legal Compliance Group',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg',
+      workFormat: WorkFormat.HYBRID,
+      valuesTags: ['risk control', 'document accuracy', 'business support'],
+      growthSpeed: 'Medium',
+      teamSize: '11-50',
+      languages: ['RU', 'EN'],
+      description: 'Legal and compliance team supporting contracts, internal policies and regulatory risk reviews.',
     },
   ] as const;
 
@@ -182,9 +272,7 @@ async function seed() {
   );
 
   // Вакансии
-  const jobsCount = await Job.countDocuments();
-  if (jobsCount === 0) {
-    await Job.insertMany([
+  const seedJobs = [
       {
         title: 'Frontend-разработчик (React)',
         description:
@@ -361,13 +449,6 @@ async function seed() {
         createdBy: userId,
         isActive: true,
       },
-    ]);
-    console.log('Создано 11 вакансий');
-  } else {
-    console.log(`Вакансии уже есть (${jobsCount} шт.)`);
-  }
-
-  const abroadSeedJobs = [
     {
       title: 'Специалист по работе с клиентами в Сбербанке',
       description:
@@ -464,10 +545,174 @@ async function seed() {
       createdBy: userId,
       isActive: true,
     },
+    {
+      title: 'Graphic Designer',
+      description:
+          'Работа графическим дизайнером в Канаде: создание визуальных материалов для digital-кампаний, соцсетей, презентаций и бренд-коммуникаций.',
+      company: 'Toronto Creative Studio',
+      companyId: companyByName.get('Toronto Creative Studio'),
+      direction: Direction.CREATIVE,
+      level: Level.LEAD,
+      workFormat: WorkFormat.HYBRID,
+      location: 'Canada, Toronto',
+      salary: { min: 4200, max: 6500, currency: 'USD' },
+      requirements: ['Adobe Photoshop', 'Adobe Illustrator', 'Figma', 'Portfolio', 'English B2'],
+      responsibilities: ['Создание digital-макетов', 'Разработка визуалов для соцсетей', 'Подготовка презентаций и бренд-материалов'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Motion Designer',
+      description:
+          'Работа motion-дизайнером в Канаде: создание анимаций, рекламных роликов, видео-креативов и визуального контента для digital-платформ.',
+      company: 'Vancouver Motion Lab',
+      companyId: companyByName.get('Vancouver Motion Lab'),
+      direction: Direction.CREATIVE,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.REMOTE,
+      location: 'Canada, Vancouver',
+      salary: { min: 5000, max: 8000, currency: 'USD' },
+      requirements: ['After Effects', 'Premiere Pro', 'Cinema 4D', 'Portfolio', 'English B2'],
+      responsibilities: ['Создание motion-графики', 'Монтаж рекламных роликов', 'Разработка видео-креативов для digital-кампаний'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Full Stack Developer',
+      description:
+          'Работа full stack-разработчиком в Канаде: разработка веб-приложений, API, интеграций и внутренних продуктовых сервисов для международной команды.',
+      company: 'Toronto Tech Solution',
+      companyId: companyByName.get('Toronto Tech Solution'),
+      direction: Direction.IT,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.HYBRID,
+      location: 'Canada, Toronto',
+      salary: { min: 5500, max: 8500, currency: 'USD' },
+      requirements: ['TypeScript', 'React', 'Node.js', 'PostgreSQL', 'English B2'],
+      responsibilities: ['Разработка frontend и backend-модулей', 'Интеграции с API', 'Участие в code review и релизах'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Junior Frontend Developer',
+      description:
+          'Junior IT работа в Канаде: участие в разработке интерфейсов, исправление UI-задач, работа с компонентами и поддержка продуктовой команды под руководством опытных разработчиков.',
+      company: 'Toronto Tech Solution',
+      companyId: companyByName.get('Toronto Tech Solution'),
+      direction: Direction.IT,
+      level: Level.JUNIOR,
+      workFormat: WorkFormat.HYBRID,
+      location: 'Canada, Toronto',
+      salary: { min: 3200, max: 4800, currency: 'USD' },
+      requirements: ['JavaScript', 'React basics', 'HTML/CSS', 'Git', 'English B1+'],
+      responsibilities: ['Разработка UI-компонентов', 'Исправление багов в интерфейсе', 'Участие в командных code review'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'E-commerce Manager',
+      description:
+        'Развитие онлайн-продаж: управление карточками товаров, акциями, аналитикой воронки и координация работы с маркетплейсами.',
+      company: 'CommerceWave',
+      companyId: companyByName.get('CommerceWave'),
+      direction: Direction.ECOMMERCE,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.HYBRID,
+      location: 'Алматы',
+      salary: { min: 450000, max: 700000, currency: 'KZT' },
+      requirements: ['Marketplace operations', 'Excel', 'Unit economics', 'Analytics'],
+      responsibilities: ['Управление товарными карточками', 'Планирование акций', 'Анализ конверсии и продаж'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Digital Marketing Specialist',
+      description:
+        'Запуск и оптимизация digital-кампаний: контент, performance-каналы, базовая аналитика и подготовка отчетов по росту.',
+      company: 'Growth Marketing Lab',
+      companyId: companyByName.get('Growth Marketing Lab'),
+      direction: Direction.MARKETING,
+      level: Level.JUNIOR,
+      workFormat: WorkFormat.REMOTE,
+      location: 'Удалённо',
+      salary: { min: 300000, max: 500000, currency: 'KZT' },
+      requirements: ['SMM', 'Google Analytics', 'Content planning', 'A/B testing basics'],
+      responsibilities: ['Подготовка контент-плана', 'Запуск рекламных кампаний', 'Сбор маркетинговой аналитики'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'HR Generalist',
+      description:
+        'Поддержка HR-процессов: подбор, адаптация сотрудников, коммуникация с командами и ведение внутренних HR-документов.',
+      company: 'PeopleFirst HR',
+      companyId: companyByName.get('PeopleFirst HR'),
+      direction: Direction.HR,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.HYBRID,
+      location: 'Астана',
+      salary: { min: 350000, max: 550000, currency: 'KZT' },
+      requirements: ['Recruiting', 'Onboarding', 'HR documentation', 'Communication skills'],
+      responsibilities: ['Ведение подбора', 'Организация адаптации', 'Поддержка внутренних коммуникаций'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Logistics Coordinator',
+      description:
+        'Координация логистических операций: маршруты, склады, контроль сроков поставок и коммуникация с подрядчиками.',
+      company: 'KZ Logistics Hub',
+      companyId: companyByName.get('KZ Logistics Hub'),
+      direction: Direction.OPERATIONS,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.OFFICE,
+      location: 'Алматы',
+      salary: { min: 320000, max: 520000, currency: 'KZT' },
+      requirements: ['Route planning', 'Warehouse operations', 'Excel', 'Supplier communication'],
+      responsibilities: ['Планирование маршрутов', 'Контроль поставок', 'Координация склада и подрядчиков'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Instructional Designer',
+      description:
+        'Разработка образовательных программ: структура курса, практические задания, материалы для студентов и обратная связь.',
+      company: 'EduTech Academy',
+      companyId: companyByName.get('EduTech Academy'),
+      direction: Direction.EDUCATION,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.REMOTE,
+      location: 'Удалённо',
+      salary: { min: 400000, max: 650000, currency: 'KZT' },
+      requirements: ['Curriculum design', 'Learning outcomes', 'Student support', 'Content editing'],
+      responsibilities: ['Проектирование программы курса', 'Подготовка учебных материалов', 'Анализ прогресса студентов'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Compliance Specialist',
+      description:
+        'Поддержка юридических и compliance-процессов: проверка документов, контроль внутренних политик и оценка регуляторных рисков.',
+      company: 'Legal Compliance Group',
+      companyId: companyByName.get('Legal Compliance Group'),
+      direction: Direction.LEGAL,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.HYBRID,
+      location: 'Астана',
+      salary: { min: 450000, max: 750000, currency: 'KZT' },
+      requirements: ['Contract review', 'Compliance basics', 'Legal research', 'Attention to detail'],
+      responsibilities: ['Проверка договоров', 'Поддержка внутренних политик', 'Подготовка compliance-отчетов'],
+      createdBy: userId,
+      isActive: true,
+    },
   ];
 
+  const uniqueSeedJobs = Array.from(
+    new Map(seedJobs.map((job) => [`${job.title}::${job.company}`, job])).values()
+  );
+
   await Promise.all(
-    abroadSeedJobs.map((job) =>
+    uniqueSeedJobs.map((job) =>
       Job.findOneAndUpdate(
         { title: job.title, company: job.company },
         { $set: job },
@@ -475,7 +720,7 @@ async function seed() {
       )
     )
   );
-  console.log(`Синхронизировано зарубежных вакансий: ${abroadSeedJobs.length}`);
+  console.log(`Синхронизировано вакансий: ${uniqueSeedJobs.length}`);
 
   // Карьерные сценарии (рекомендации)
   const scenariosCount = await CareerScenario.countDocuments();

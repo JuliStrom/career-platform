@@ -2,7 +2,7 @@ import { AdminHeader } from '@/features/admin/ui/AdminHeader';
 import { useTranslation } from '@/shared/lib/hooks/useTranslation';
 import { PrimaryButton } from '@/shared/ui/buttons/PrimaryButton';
 import { useRouter } from 'expo-router';
-import { Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function AdminHomeScreen() {
@@ -15,7 +15,11 @@ export default function AdminHomeScreen() {
       edges={['top', 'bottom']}
     >
       <AdminHeader title={tCommon('adminPanel')} showBack={false} />
-      <View className="flex-1 px-6 pb-6 pt-4">
+      <ScrollView
+        className="flex-1"
+        contentContainerClassName="px-6 pb-8 pt-4"
+        keyboardShouldPersistTaps="handled"
+      >
         <Text className="mb-6 text-lg text-gray-600 dark:text-gray-400">
           Выберите раздел
         </Text>
@@ -88,7 +92,7 @@ export default function AdminHomeScreen() {
             {tCommon('adminAnalyticsTitle')}
           </PrimaryButton>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

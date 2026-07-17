@@ -12,3 +12,5 @@ dist/
 .env.local
 *.log
 .expo/
+.idea/
+**/.idea/

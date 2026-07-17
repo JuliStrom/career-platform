@@ -21,6 +21,15 @@ export function ScenarioItem({
 }: ScenarioItemProps) {
   const directionText = t(`directions.${item.direction}`) || item.direction;
   const levelText = t(`levels.${item.level}`) || item.level;
+  const translationBaseKey = item.translationKey
+    ? `recommendations.content.${item.translationKey}`
+    : null;
+  const title = translationBaseKey
+    ? t(`${translationBaseKey}.title`)
+    : item.title;
+  const description = translationBaseKey
+    ? t(`${translationBaseKey}.description`)
+    : item.description;
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -69,14 +78,14 @@ export function ScenarioItem({
       </View>
 
       <Text className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-        {item.title}
+        {title}
       </Text>
 
       <Text
         className="mb-3 text-sm text-gray-600 dark:text-gray-300"
         numberOfLines={2}
       >
-        {item.description}
+        {description}
       </Text>
 
       <View className="mb-2 flex-row items-center justify-between">

@@ -90,7 +90,7 @@ export function OAuthButtons({ inviteCode }: OAuthButtonsProps = {}) {
 
   if (!hasAnyOAuth || iosExpoGoBlocked) {
     return (
-      <View className="mt-6">
+      <View className="mb-6 mt-6">
         <View className="mb-4 flex-row items-center gap-3">
           <View className="h-px flex-1 bg-gray-300 dark:bg-gray-600" />
           <Text className="text-sm text-gray-500 dark:text-gray-400">
@@ -108,7 +108,7 @@ export function OAuthButtons({ inviteCode }: OAuthButtonsProps = {}) {
   }
 
   return (
-    <View className="mt-6">
+    <View className="mb-6 mt-6">
       <View className="mb-4 flex-row items-center gap-3">
         <View className="h-px flex-1 bg-gray-300 dark:bg-gray-600" />
         <Text className="text-sm text-gray-500 dark:text-gray-400">
@@ -279,7 +279,15 @@ function GoogleButtonWeb({
   );
 
   return (
-    <View ref={setRef as (node: unknown) => void} style={{ minHeight: 44 }} />
+    <View
+      ref={setRef as (node: unknown) => void}
+      style={{
+        alignSelf: 'center',
+        minHeight: 44,
+        width: 320,
+        maxWidth: '100%',
+      }}
+    />
   );
 }
 
@@ -329,6 +337,7 @@ function GoogleButtonNative({
       onPress={handlePress}
       disabled={loading}
       className="min-h-[44px] items-center justify-center rounded-xl border border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800"
+      style={{ alignSelf: 'center', width: '100%', maxWidth: 320 }}
     >
       <Text className="text-base font-medium text-gray-700 dark:text-gray-300">
         {loading ? t('loading') : t('oauth.google')}

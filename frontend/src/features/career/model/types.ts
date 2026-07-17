@@ -34,6 +34,7 @@ export interface CareerScenario {
   _id: string;
   direction: Direction;
   level: Level;
+  translationKey?: string | null;
   title: string;
   description: string;
   actions: CareerScenarioAction[];

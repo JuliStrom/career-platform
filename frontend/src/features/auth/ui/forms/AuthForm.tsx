@@ -19,7 +19,7 @@ import type {
   LoginFormData,
   RegisterBasicFormData,
 } from '../../model';
-import { useAuthStore } from '../../store/auth.store';
+import { useAuthStore } from '../../store';
 import { LanguageSwitcher } from '@/shared/ui';
 import { OAuthButtons } from '../OAuthButtons';
 import { BaseAuthFields } from './BaseAuthFields';

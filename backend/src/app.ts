@@ -21,7 +21,7 @@ import { generalRateLimiter } from './middleware/rateLimiter';
 import learningRoutes from './routes/learning';
 import notificationRoutes from './routes/notification';
 const app: Express = express();
-
+app.set('trust proxy', 1); // добавила для запуска на railway
 // Security middleware (COOP/COEP отключены для OAuth popup от Google)
 app.use(
   helmet({

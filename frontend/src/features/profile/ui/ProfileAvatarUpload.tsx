@@ -46,6 +46,7 @@ export function ProfileAvatarUpload({
   const [pickError, setPickError] = useState<string | null>(null);
   const [isPicking, setIsPicking] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [avatarLoadFailed, setAvatarLoadFailed] = useState(false);
 
   const blobToRevokeRef = useRef<string | null>(null);
 
@@ -86,12 +87,19 @@ export function ProfileAvatarUpload({
     .slice(0, 2);
 
   const trimmed = value.trim();
-  const showImage = Boolean(trimmed && imageSource != null);
+  const showImage = Boolean(
+    trimmed && imageSource != null && !avatarLoadFailed
+  );
   const loadingServerAvatar =
     Boolean(trimmed) &&
     isServerStoredAvatar(value) &&
     !isLocalPickUri(value) &&
-    imageSource === null;
+    imageSource === null &&
+    !avatarLoadFailed;
+
+  useEffect(() => {
+    setAvatarLoadFailed(false);
+  }, [value]);
 
   const busy = disabled || isPicking || isDeleting;
   const showRemove =
@@ -205,6 +213,7 @@ export function ProfileAvatarUpload({
                 cachePolicy="none"
                 accessibilityLabel={avatarLabel}
                 accessibilityRole="image"
+                onError={() => setAvatarLoadFailed(true)}
               />
             ) : loadingServerAvatar ? (
               <View className="h-full w-full items-center justify-center">

@@ -13,6 +13,15 @@ export function RecommendationCard({
   onPress,
 }: RecommendationCardProps) {
   const { t } = useTranslation('career');
+  const translationBaseKey = recommendation.translationKey
+    ? `recommendations.content.${recommendation.translationKey}`
+    : null;
+  const recommendationTitle = translationBaseKey
+    ? t(`${translationBaseKey}.title`)
+    : recommendation.title;
+  const recommendationDescription = translationBaseKey
+    ? t(`${translationBaseKey}.description`)
+    : recommendation.description;
   const directionText =
     t(`directions.${recommendation.direction}`) || recommendation.direction;
   const levelText = t(`levels.${recommendation.level}`) || recommendation.level;
@@ -33,11 +42,11 @@ export function RecommendationCard({
       </View>
 
       <Text className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-        {recommendation.title}
+        {recommendationTitle}
       </Text>
 
       <Text className="mb-4 text-sm text-gray-600 dark:text-gray-300">
-        {recommendation.description}
+        {recommendationDescription}
       </Text>
 
       {recommendation.actions.length > 0 && (
@@ -45,9 +54,20 @@ export function RecommendationCard({
           <Text className="mb-2 text-xs font-medium text-gray-500 dark:text-gray-400">
             {t('form.actions')}
           </Text>
-          {recommendation.actions.map((action, index) => (
-            <RecommendationActionItem key={index} action={action} />
-          ))}
+          {recommendation.actions.map((action, index) => {
+            const localizedAction = translationBaseKey
+              ? {
+                  ...action,
+                  title: t(`${translationBaseKey}.actions.${index}.title`),
+                  description: t(
+                    `${translationBaseKey}.actions.${index}.description`
+                  ),
+                }
+              : action;
+            return (
+              <RecommendationActionItem key={index} action={localizedAction} />
+            );
+          })}
         </View>
       )}
     </>

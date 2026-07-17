@@ -7,7 +7,7 @@ import { EducationBadge } from '@/features/education/ui/EducationBadge';
 import { EducationField } from '@/features/education/ui/EducationField';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import * as WebBrowser from 'expo-web-browser';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, Text, useWindowDimensions, View } from 'react-native';
 
 interface EducationCardProps {
   education: EducationResource;
@@ -20,6 +20,8 @@ export function EducationCard({
   t,
   translateDirection,
 }: EducationCardProps) {
+  const { width } = useWindowDimensions();
+  const isDesktop = width >= 768;
   const emptyValue = t('educations.emptyValue');
   const price =
     education.price === 0
@@ -35,25 +37,28 @@ export function EducationCard({
 
   return (
     <View className="mb-3 rounded-lg border border-gray-100 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-      <View className="flex-row items-start justify-between gap-3">
-        <View className="min-w-0 flex-1">
-          <View className="self-start rounded-md bg-emerald-50 px-2 py-1 dark:bg-emerald-900/30">
-            <Text className="text-lg font-bold text-gray-900 dark:text-white">
-              {education.title}
-            </Text>
-          </View>
-          {education.provider ? (
-            <Text className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              {education.provider}
-            </Text>
-          ) : null}
-        </View>
+      <View className="items-center">
         {education.isFeatured ? (
-          <View className="rounded-full bg-blue-100 px-2 py-1 dark:bg-blue-900/40">
+          <View className="mb-2 self-end rounded-full bg-blue-100 px-2 py-1 dark:bg-blue-900/40">
             <Text className="text-xs font-semibold text-blue-700 dark:text-blue-200">
               {t('educations.isFeatured')}
             </Text>
           </View>
+        ) : null}
+
+        <View className="w-full rounded-md bg-emerald-50 px-2 py-1 dark:bg-emerald-900/30">
+          <Text
+            className={`text-lg font-bold text-gray-900 dark:text-white ${
+              isDesktop ? 'text-left' : 'text-center'
+            }`}
+          >
+            {education.title}
+          </Text>
+        </View>
+        {education.provider ? (
+          <Text className="mt-1 text-center text-sm text-gray-500 dark:text-gray-400">
+            {education.provider}
+          </Text>
         ) : null}
       </View>
 

@@ -25,6 +25,7 @@ import {
   parseSkillsInput,
 } from '@/features/profile/utils/skills.utils';
 import { ProfileAvatarUpload } from '@/features/profile/ui/ProfileAvatarUpload';
+import { setLanguage } from '@/shared/config/i18n';
 import { useTranslation } from '@/shared/lib/hooks/useTranslation';
 import { PrimaryButton } from '@/shared/ui/buttons/PrimaryButton';
 import { NamedField } from '@/shared/ui/inputs/NamedField';
@@ -491,7 +492,11 @@ export function ProfileForm({
                 label={t('profileLang')}
                 options={PROFILE_LANG_VALUES}
                 selectedValue={(value ?? ProfileLang.RU) as ProfileLang}
-                onSelect={onChange}
+                onSelect={(selected) => {
+                  const lang = selected as ProfileLang;
+                  onChange(lang);
+                  void setLanguage(lang);
+                }}
                 translationKey="profileLangs"
               />
             )}

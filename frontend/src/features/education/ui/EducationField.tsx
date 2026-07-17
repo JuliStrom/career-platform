@@ -6,19 +6,21 @@ interface EducationFieldProps {
   emptyValue?: string;
 }
 
-export function EducationField({ label, value, emptyValue }: EducationFieldProps) {
+export function EducationField({
+  label,
+  value,
+  emptyValue,
+}: EducationFieldProps) {
   const isFilled = value.trim().length > 0 && value !== emptyValue;
 
   return (
-    <View className="mt-2 flex-row flex-wrap items-center gap-2">
+    <View className="mt-2 flex-row items-start gap-2">
       <Text className="text-xs font-medium uppercase text-gray-500 dark:text-gray-400">
         {label}:
       </Text>
       <View
-        className={`rounded-md px-2 py-1 ${
-          isFilled
-            ? 'bg-gray-100 dark:bg-gray-700'
-            : 'bg-transparent px-0 py-0'
+        className={`min-w-0 flex-1 rounded-md px-2 py-1 ${
+          isFilled ? 'bg-gray-100 dark:bg-gray-700' : 'bg-transparent px-0 py-0'
         }`}
       >
         <Text

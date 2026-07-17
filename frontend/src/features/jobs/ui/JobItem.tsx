@@ -1,5 +1,8 @@
 import type { Job } from '@/features/jobs/model';
-import { formatSalary } from '@/features/jobs/utils/job-form.utils';
+import {
+  formatJobTitle,
+  formatSalary,
+} from '@/features/jobs/utils/job-form.utils';
 import { useColorScheme, Pressable, Text, View } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
@@ -20,6 +23,7 @@ export function JobItem({
 }: JobItemProps) {
   const colorScheme = useColorScheme();
   const iconColor = colorScheme === 'dark' ? '#9CA3AF' : '#6B7280';
+  const title = formatJobTitle(item.title, t);
 
   return (
     <Pressable
@@ -29,7 +33,7 @@ export function JobItem({
       <View className="flex-row items-start justify-between">
         <View className="flex-1">
           <Text className="text-base font-semibold text-gray-900 dark:text-white">
-            {item.title}
+            {title}
           </Text>
           <Text className="mt-1 text-sm text-gray-600 dark:text-gray-300">
             {item.company}

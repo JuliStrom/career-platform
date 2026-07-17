@@ -39,7 +39,7 @@ interface JobsState {
   resetFavorites: () => void;
 }
 
-const defaultFilters: IJobsFilters = {};
+const defaultFilters: IJobsFilters = { limit: 100 };
 
 export const useJobsStore = create<JobsState>((set, get) => ({
   jobs: [],

@@ -37,7 +37,7 @@ async function seed() {
   // Создаём или находим seed-пользователя (admin)
   let seedUser = await User.findOne({ email: 'seed@career-platform.local' });
   if (!seedUser) {
-    const hashedPassword = await bcrypt.hash('seed123', 10);
+    const hashedPassword = await bcrypt.hash('Seed1234', 10);
     seedUser = await User.create({
       name: 'Seed Admin',
       email: 'seed@career-platform.local',
@@ -45,7 +45,7 @@ async function seed() {
       authProvider: 'email',
       role: UserRole.ADMIN,
     });
-    console.log('Создан seed-пользователь: seed@career-platform.local / seed123');
+    console.log('Создан seed-пользователь: seed@career-platform.local / Seed1234');
   } else {
     console.log('Seed-пользователь уже существует');
   }
@@ -103,113 +103,528 @@ async function seed() {
       languages: ['RU', 'EN'],
       description: 'Remote engineering culture with peer reviews, mentoring and distributed delivery.',
     },
+    {
+      name: 'Сбербанк',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/9/95/Sberbank_Logo_2020.svg',
+      workFormat: WorkFormat.OFFICE,
+      valuesTags: ['client service', 'structured onboarding', 'stable processes'],
+      growthSpeed: 'Medium',
+      teamSize: '200+',
+      languages: ['RU'],
+      description: 'Large banking environment with formal processes, product training and clear client service standards.',
+    },
+    {
+      name: 'US Sales Group',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg',
+      workFormat: WorkFormat.OFFICE,
+      valuesTags: ['active sales', 'commission growth', 'client ownership'],
+      growthSpeed: 'Fast',
+      teamSize: '51-200',
+      languages: ['EN'],
+      description: 'B2B sales team focused on pipeline growth, negotiation practice and measurable revenue targets.',
+    },
+    {
+      name: 'Canada Food Plant',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg',
+      workFormat: WorkFormat.OFFICE,
+      valuesTags: ['safety first', 'shift discipline', 'quality control'],
+      growthSpeed: 'Medium',
+      teamSize: '200+',
+      languages: ['EN'],
+      description: 'Food production site with strict safety rules, shift-based work and practical onboarding on the line.',
+    },
+    {
+      name: 'Dubai Construction',
+      logo: null,
+      workFormat: WorkFormat.OFFICE,
+      valuesTags: ['site safety', 'team coordination', 'hands-on work'],
+      growthSpeed: 'Medium',
+      teamSize: '51-200',
+      languages: ['EN'],
+      description: 'Construction team with daily site coordination, safety briefings and practical work under supervisors.',
+    },
+    {
+      name: 'Shanghai Design Hub',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg',
+      workFormat: WorkFormat.HYBRID,
+      valuesTags: ['visual quality', 'campaign delivery', 'cross-cultural teamwork'],
+      growthSpeed: 'Fast',
+      teamSize: '11-50',
+      languages: ['EN'],
+      description: 'Design studio combining brand visuals, campaign assets and close collaboration with marketing teams.',
+    },
+    {
+      name: 'Berlin Software GmbH',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg',
+      workFormat: WorkFormat.HYBRID,
+      valuesTags: ['engineering quality', 'code review', 'cloud delivery'],
+      growthSpeed: 'Fast',
+      teamSize: '51-200',
+      languages: ['EN'],
+      description: 'Software engineering team with code reviews, cloud services and structured delivery practices.',
+    },
+    {
+      name: 'Toronto Creative Studio',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Laravel.svg',
+      workFormat: WorkFormat.HYBRID,
+      valuesTags: ['brand craft', 'portfolio growth', 'campaign delivery'],
+      growthSpeed: 'Medium',
+      teamSize: '11-50',
+      languages: ['EN'],
+      description: 'Canadian creative studio focused on brand visuals, social media assets and digital campaign delivery.',
+    },
+    {
+      name: 'Vancouver Motion Lab',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/4/4f/SVG_Logo.svg',
+      workFormat: WorkFormat.REMOTE,
+      valuesTags: ['motion craft', 'creative feedback', 'digital content'],
+      growthSpeed: 'Fast',
+      teamSize: '11-50',
+      languages: ['EN'],
+      description: 'Remote-friendly motion design team producing animations, video ads and visual content for digital platforms.',
+    },
+    {
+      name: 'Toronto Tech Solution',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png',
+      workFormat: WorkFormat.HYBRID,
+      valuesTags: ['mentoring', 'product engineering', 'code review'],
+      growthSpeed: 'Fast',
+      teamSize: '51-200',
+      languages: ['EN'],
+      description: 'Product engineering company in Toronto with mentoring, code reviews and full stack web service delivery.',
+    },
+    {
+      name: 'CommerceWave',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/4/4f/SVG_Logo.svg',
+      workFormat: WorkFormat.HYBRID,
+      valuesTags: ['conversion focus', 'marketplace growth', 'customer analytics'],
+      growthSpeed: 'Fast',
+      teamSize: '51-200',
+      languages: ['RU', 'EN'],
+      description: 'E-commerce team focused on marketplace operations, conversion growth and customer analytics.',
+    },
+    {
+      name: 'Growth Marketing Lab',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/4/4f/SVG_Logo.svg',
+      workFormat: WorkFormat.REMOTE,
+      valuesTags: ['experimentation', 'content quality', 'performance metrics'],
+      growthSpeed: 'Fast',
+      teamSize: '11-50',
+      languages: ['RU', 'EN'],
+      description: 'Marketing team running content, paid acquisition and growth experiments for digital products.',
+    },
+    {
+      name: 'PeopleFirst HR',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png',
+      workFormat: WorkFormat.HYBRID,
+      valuesTags: ['employee care', 'structured hiring', 'feedback culture'],
+      growthSpeed: 'Medium',
+      teamSize: '11-50',
+      languages: ['RU'],
+      description: 'HR team focused on hiring, onboarding, employee support and clear internal communication.',
+    },
+    {
+      name: 'KZ Logistics Hub',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg',
+      workFormat: WorkFormat.OFFICE,
+      valuesTags: ['process discipline', 'route planning', 'service reliability'],
+      growthSpeed: 'Medium',
+      teamSize: '200+',
+      languages: ['RU', 'KZ'],
+      description: 'Operations and logistics company with warehouse coordination, route planning and service control.',
+    },
+    {
+      name: 'EduTech Academy',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg',
+      workFormat: WorkFormat.REMOTE,
+      valuesTags: ['learning outcomes', 'student support', 'practical tasks'],
+      growthSpeed: 'Medium',
+      teamSize: '51-200',
+      languages: ['RU', 'EN'],
+      description: 'Online education team building practical courses, mentoring flows and student progress support.',
+    },
+    {
+      name: 'Legal Compliance Group',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg',
+      workFormat: WorkFormat.HYBRID,
+      valuesTags: ['risk control', 'document accuracy', 'business support'],
+      growthSpeed: 'Medium',
+      teamSize: '11-50',
+      languages: ['RU', 'EN'],
+      description: 'Legal and compliance team supporting contracts, internal policies and regulatory risk reviews.',
+    },
   ] as const;
 
   const companyByName = new Map<string, mongoose.Types.ObjectId>();
   for (const companyCulture of seedCompanyCultures) {
     const company = await Company.findOneAndUpdate(
-      { name: companyCulture.name },
-      { $set: companyCulture },
-      { new: true, upsert: true, runValidators: true }
+        { name: companyCulture.name },
+        { $set: companyCulture },
+        { new: true, upsert: true, runValidators: true }
     );
     companyByName.set(companyCulture.name, company._id);
   }
 
   await Promise.all(
-    Array.from(companyByName, ([company, companyId]) =>
-      Job.updateMany({ company }, { $set: { companyId } })
-    )
+      Array.from(companyByName, ([company, companyId]) =>
+          Job.updateMany({ company }, { $set: { companyId } })
+      )
   );
 
   // Вакансии
-  const jobsCount = await Job.countDocuments();
-  if (jobsCount === 0) {
-    await Job.insertMany([
-      {
-        title: 'Frontend-разработчик (React)',
-        description:
+  const seedJobs = [
+    {
+      title: 'Frontend-разработчик (React)',
+      description:
           'Ищем опытного frontend-разработчика для работы над веб-приложениями. Работа в команде из 5 человек, современный стек.',
-        company: 'TechStart Inc',
-        companyId: companyByName.get('TechStart Inc'),
-        direction: Direction.IT,
-        level: Level.MIDDLE,
-        workFormat: WorkFormat.REMOTE,
-        location: 'Москва (удалённо)',
-        salary: { min: 150000, max: 250000, currency: 'KZT' },
-        requirements: ['React', 'TypeScript', 'REST API', 'Git'],
-        responsibilities: ['Разработка UI', 'Code review', 'Участие в планировании'],
-        createdBy: userId,
-        isActive: true,
-      },
-      {
-        title: 'UX/UI дизайнер',
-        description:
+      company: 'TechStart Inc',
+      companyId: companyByName.get('TechStart Inc'),
+      direction: Direction.IT,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.REMOTE,
+      location: 'Москва (удалённо)',
+      salary: { min: 150000, max: 250000, currency: 'KZT' },
+      requirements: ['React', 'TypeScript', 'REST API', 'Git'],
+      responsibilities: ['Разработка UI', 'Code review', 'Участие в планировании'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'UX/UI дизайнер',
+      description:
           'Присоединяйтесь к дизайн-команде для создания интерфейсов мобильных и веб-приложений.',
-        company: 'Creative Studio',
-        companyId: companyByName.get('Creative Studio'),
-        direction: Direction.CREATIVE,
-        level: Level.JUNIOR,
-        workFormat: WorkFormat.HYBRID,
-        location: 'Санкт-Петербург',
-        salary: { min: 80000, max: 120000, currency: 'KZT' },
-        requirements: ['Figma', 'Adobe XD', 'Базовые знания UX'],
-        responsibilities: ['Проектирование интерфейсов', 'Создание прототипов'],
-        createdBy: userId,
-        isActive: true,
-      },
-      {
-        title: 'Product Manager',
-        description:
+      company: 'Creative Studio',
+      companyId: companyByName.get('Creative Studio'),
+      direction: Direction.CREATIVE,
+      level: Level.JUNIOR,
+      workFormat: WorkFormat.HYBRID,
+      location: 'Санкт-Петербург',
+      salary: { min: 80000, max: 120000, currency: 'KZT' },
+      requirements: ['Figma', 'Adobe XD', 'Базовые знания UX'],
+      responsibilities: ['Проектирование интерфейсов', 'Создание прототипов'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Product Manager',
+      description:
           'Управление продуктом B2B-платформы. Полный цикл от идеи до релиза.',
-        company: 'ProductLab',
-        companyId: companyByName.get('ProductLab'),
-        direction: Direction.IT,
-        level: Level.SENIOR,
-        workFormat: WorkFormat.OFFICE,
-        location: 'Москва',
-        salary: { min: 200000, max: 350000, currency: 'KZT' },
-        requirements: ['Опыт 3+ года', 'Agile/Scrum', 'Аналитика'],
-        responsibilities: ['Roadmap', 'Приоритизация', 'Работа с командой'],
-        createdBy: userId,
-        isActive: true,
-      },
-      {
-        title: 'Менеджер по продажам в HoReCa',
-        description:
+      company: 'ProductLab',
+      companyId: companyByName.get('ProductLab'),
+      direction: Direction.IT,
+      level: Level.SENIOR,
+      workFormat: WorkFormat.OFFICE,
+      location: 'Москва',
+      salary: { min: 200000, max: 350000, currency: 'KZT' },
+      requirements: ['Опыт 3+ года', 'Agile/Scrum', 'Аналитика'],
+      responsibilities: ['Roadmap', 'Приоритизация', 'Работа с командой'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Менеджер по продажам в HoReCa',
+      description:
           'Развитие клиентской базы в сегменте HoReCa. Работа с ключевыми клиентами.',
-        company: 'FoodSupply Co',
-        companyId: companyByName.get('FoodSupply Co'),
-        direction: Direction.HORECA,
-        level: Level.MIDDLE,
-        workFormat: WorkFormat.OFFICE,
-        location: 'Москва',
-        salary: { min: 100000, max: 150000, currency: 'KZT' },
-        requirements: ['Опыт продаж', 'Знание HoReCa', 'CRM'],
-        responsibilities: ['Поиск клиентов', 'Переговоры', 'Ведение сделок'],
-        createdBy: userId,
-        isActive: true,
-      },
-      {
-        title: 'Backend-разработчик (Node.js)',
-        description:
-          'Разработка API и сервисов для высоконагруженных систем.',
-        company: 'CloudTech',
-        companyId: companyByName.get('CloudTech'),
-        direction: Direction.IT,
-        level: Level.SENIOR,
-        workFormat: WorkFormat.REMOTE,
-        location: 'Удалённо',
-        salary: { min: 250000, max: 400000, currency: 'KZT' },
-        requirements: ['Node.js', 'PostgreSQL', 'Redis', 'Docker'],
-        responsibilities: ['Проектирование API', 'Оптимизация', 'Менторинг'],
-        createdBy: userId,
-        isActive: true,
-      },
-    ]);
-    console.log('Создано 5 вакансий');
-  } else {
-    console.log(`Вакансии уже есть (${jobsCount} шт.)`);
-  }
+      company: 'FoodSupply Co',
+      companyId: companyByName.get('FoodSupply Co'),
+      direction: Direction.HORECA,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.OFFICE,
+      location: 'Москва',
+      salary: { min: 100000, max: 150000, currency: 'KZT' },
+      requirements: ['Опыт продаж', 'Знание HoReCa', 'CRM'],
+      responsibilities: ['Поиск клиентов', 'Переговоры', 'Ведение сделок'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Backend-разработчик (Node.js)',
+      description: 'Разработка API и сервисов для высоконагруженных систем.',
+      company: 'CloudTech',
+      companyId: companyByName.get('CloudTech'),
+      direction: Direction.IT,
+      level: Level.SENIOR,
+      workFormat: WorkFormat.REMOTE,
+      location: 'Удалённо',
+      salary: { min: 250000, max: 400000, currency: 'KZT' },
+      requirements: ['Node.js', 'PostgreSQL', 'Redis', 'Docker'],
+      responsibilities: ['Проектирование API', 'Оптимизация', 'Менторинг'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Специалист по работе с клиентами в Сбербанке',
+      description:
+          'Работа в российском банке с клиентскими обращениями, банковскими продуктами и сопровождением операций в отделении.',
+      company: 'Сбербанк',
+      companyId: companyByName.get('Сбербанк'),
+      direction: Direction.FINANCE,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.OFFICE,
+      location: 'Россия, Москва',
+      salary: { min: 90000, max: 140000, currency: 'RUB' },
+      requirements: ['Опыт работы с клиентами', 'Знание банковских продуктов', 'Внимательность'],
+      responsibilities: ['Консультация клиентов', 'Оформление заявок', 'Сопровождение банковских операций'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Sales Manager',
+      description:
+          'Работа менеджером по продажам в США: развитие клиентской базы, активные продажи и ведение переговоров с B2B-клиентами.',
+      company: 'US Sales Group',
+      companyId: companyByName.get('US Sales Group'),
+      direction: Direction.SALES,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.OFFICE,
+      location: 'USA, New York',
+      salary: { min: 4500, max: 7000, currency: 'USD' },
+      requirements: ['English B2+', 'Active sales', 'CRM', 'Negotiation skills'],
+      responsibilities: ['Поиск клиентов', 'Проведение презентаций', 'Закрытие сделок'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Оператор пищевого производства',
+      description:
+          'Работа в Канаде на пищевом производстве: контроль линии, упаковка продукции и соблюдение санитарных стандартов.',
+      company: 'Canada Food Plant',
+      companyId: companyByName.get('Canada Food Plant'),
+      direction: Direction.PRODUCTION,
+      level: Level.JUNIOR,
+      workFormat: WorkFormat.OFFICE,
+      location: 'Канада, Торонто',
+      salary: { min: 3200, max: 4500, currency: 'USD' },
+      requirements: ['Готовность к сменному графику', 'Ответственность', 'Базовый английский'],
+      responsibilities: ['Работа на производственной линии', 'Упаковка продукции', 'Контроль качества'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Рабочий на строительный объект',
+      description:
+          'Работа в Дубае на стройке: помощь строительной бригаде, подготовка материалов и соблюдение техники безопасности.',
+      company: 'Dubai Construction',
+      companyId: companyByName.get('Dubai Construction'),
+      direction: Direction.ARCHITECTURE_DESIGN,
+      level: Level.JUNIOR,
+      workFormat: WorkFormat.OFFICE,
+      location: 'ОАЭ, Дубай',
+      salary: { min: 1800, max: 2800, currency: 'USD' },
+      requirements: ['Физическая выносливость', 'Опыт на стройке будет плюсом', 'Готовность к переезду'],
+      responsibilities: ['Подготовка материалов', 'Помощь мастерам', 'Соблюдение норм безопасности'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Графический дизайнер',
+      description:
+          'Работа дизайнером в Китае: подготовка digital-макетов, рекламных материалов и визуалов для маркетинговых кампаний.',
+      company: 'Shanghai Design Hub',
+      companyId: companyByName.get('Shanghai Design Hub'),
+      direction: Direction.DESIGN,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.HYBRID,
+      location: 'Китай, Шанхай',
+      salary: { min: 3000, max: 5200, currency: 'USD' },
+      requirements: ['Figma', 'Adobe Photoshop', 'Портфолио', 'Английский B1+'],
+      responsibilities: ['Создание макетов', 'Подготовка бренд-материалов', 'Взаимодействие с маркетингом'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Software Developer',
+      description:
+          'Работа программистом в Германии: разработка backend-сервисов, интеграций и поддержка облачной инфраструктуры.',
+      company: 'Berlin Software GmbH',
+      companyId: companyByName.get('Berlin Software GmbH'),
+      direction: Direction.IT,
+      level: Level.SENIOR,
+      workFormat: WorkFormat.HYBRID,
+      location: 'Германия, Берлин',
+      salary: { min: 5000, max: 7500, currency: 'EUR' },
+      requirements: ['TypeScript', 'Node.js', 'SQL', 'English B2'],
+      responsibilities: ['Разработка сервисов', 'Интеграции с API', 'Code review'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Graphic Designer',
+      description:
+          'Работа графическим дизайнером в Канаде: создание визуальных материалов для digital-кампаний, соцсетей, презентаций и бренд-коммуникаций.',
+      company: 'Toronto Creative Studio',
+      companyId: companyByName.get('Toronto Creative Studio'),
+      direction: Direction.CREATIVE,
+      level: Level.LEAD,
+      workFormat: WorkFormat.HYBRID,
+      location: 'Canada, Toronto',
+      salary: { min: 4200, max: 6500, currency: 'USD' },
+      requirements: ['Adobe Photoshop', 'Adobe Illustrator', 'Figma', 'Portfolio', 'English B2'],
+      responsibilities: ['Создание digital-макетов', 'Разработка визуалов для соцсетей', 'Подготовка презентаций и бренд-материалов'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Motion Designer',
+      description:
+          'Работа motion-дизайнером в Канаде: создание анимаций, рекламных роликов, видео-креативов и визуального контента для digital-платформ.',
+      company: 'Vancouver Motion Lab',
+      companyId: companyByName.get('Vancouver Motion Lab'),
+      direction: Direction.CREATIVE,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.REMOTE,
+      location: 'Canada, Vancouver',
+      salary: { min: 5000, max: 8000, currency: 'USD' },
+      requirements: ['After Effects', 'Premiere Pro', 'Cinema 4D', 'Portfolio', 'English B2'],
+      responsibilities: ['Создание motion-графики', 'Монтаж рекламных роликов', 'Разработка видео-креативов для digital-кампаний'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Full Stack Developer',
+      description:
+          'Работа full stack-разработчиком в Канаде: разработка веб-приложений, API, интеграций и внутренних продуктовых сервисов для международной команды.',
+      company: 'Toronto Tech Solution',
+      companyId: companyByName.get('Toronto Tech Solution'),
+      direction: Direction.IT,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.HYBRID,
+      location: 'Canada, Toronto',
+      salary: { min: 5500, max: 8500, currency: 'USD' },
+      requirements: ['TypeScript', 'React', 'Node.js', 'PostgreSQL', 'English B2'],
+      responsibilities: ['Разработка frontend и backend-модулей', 'Интеграции с API', 'Участие в code review и релизах'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Junior Frontend Developer',
+      description:
+          'Junior IT работа в Канаде: участие в разработке интерфейсов, исправление UI-задач, работа с компонентами и поддержка продуктовой команды под руководством опытных разработчиков.',
+      company: 'Toronto Tech Solution',
+      companyId: companyByName.get('Toronto Tech Solution'),
+      direction: Direction.IT,
+      level: Level.JUNIOR,
+      workFormat: WorkFormat.HYBRID,
+      location: 'Canada, Toronto',
+      salary: { min: 3200, max: 4800, currency: 'USD' },
+      requirements: ['JavaScript', 'React basics', 'HTML/CSS', 'Git', 'English B1+'],
+      responsibilities: ['Разработка UI-компонентов', 'Исправление багов в интерфейсе', 'Участие в командных code review'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'E-commerce Manager',
+      description:
+          'Развитие онлайн-продаж: управление карточками товаров, акциями, аналитикой воронки и координация работы с маркетплейсами.',
+      company: 'CommerceWave',
+      companyId: companyByName.get('CommerceWave'),
+      direction: Direction.ECOMMERCE,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.HYBRID,
+      location: 'Алматы',
+      salary: { min: 450000, max: 700000, currency: 'KZT' },
+      requirements: ['Marketplace operations', 'Excel', 'Unit economics', 'Analytics'],
+      responsibilities: ['Управление товарными карточками', 'Планирование акций', 'Анализ конверсии и продаж'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Digital Marketing Specialist',
+      description:
+          'Запуск и оптимизация digital-кампаний: контент, performance-каналы, базовая аналитика и подготовка отчетов по росту.',
+      company: 'Growth Marketing Lab',
+      companyId: companyByName.get('Growth Marketing Lab'),
+      direction: Direction.MARKETING,
+      level: Level.JUNIOR,
+      workFormat: WorkFormat.REMOTE,
+      location: 'Удалённо',
+      salary: { min: 300000, max: 500000, currency: 'KZT' },
+      requirements: ['SMM', 'Google Analytics', 'Content planning', 'A/B testing basics'],
+      responsibilities: ['Подготовка контент-плана', 'Запуск рекламных кампаний', 'Сбор маркетинговой аналитики'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'HR Generalist',
+      description:
+          'Поддержка HR-процессов: подбор, адаптация сотрудников, коммуникация с командами и ведение внутренних HR-документов.',
+      company: 'PeopleFirst HR',
+      companyId: companyByName.get('PeopleFirst HR'),
+      direction: Direction.HR,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.HYBRID,
+      location: 'Астана',
+      salary: { min: 350000, max: 550000, currency: 'KZT' },
+      requirements: ['Recruiting', 'Onboarding', 'HR documentation', 'Communication skills'],
+      responsibilities: ['Ведение подбора', 'Организация адаптации', 'Поддержка внутренних коммуникаций'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Logistics Coordinator',
+      description:
+          'Координация логистических операций: маршруты, склады, контроль сроков поставок и коммуникация с подрядчиками.',
+      company: 'KZ Logistics Hub',
+      companyId: companyByName.get('KZ Logistics Hub'),
+      direction: Direction.OPERATIONS,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.OFFICE,
+      location: 'Алматы',
+      salary: { min: 320000, max: 520000, currency: 'KZT' },
+      requirements: ['Route planning', 'Warehouse operations', 'Excel', 'Supplier communication'],
+      responsibilities: ['Планирование маршрутов', 'Контроль поставок', 'Координация склада и подрядчиков'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Instructional Designer',
+      description:
+          'Разработка образовательных программ: структура курса, практические задания, материалы для студентов и обратная связь.',
+      company: 'EduTech Academy',
+      companyId: companyByName.get('EduTech Academy'),
+      direction: Direction.EDUCATION,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.REMOTE,
+      location: 'Удалённо',
+      salary: { min: 400000, max: 650000, currency: 'KZT' },
+      requirements: ['Curriculum design', 'Learning outcomes', 'Student support', 'Content editing'],
+      responsibilities: ['Проектирование программы курса', 'Подготовка учебных материалов', 'Анализ прогресса студентов'],
+      createdBy: userId,
+      isActive: true,
+    },
+    {
+      title: 'Compliance Specialist',
+      description:
+          'Поддержка юридических и compliance-процессов: проверка документов, контроль внутренних политик и оценка регуляторных рисков.',
+      company: 'Legal Compliance Group',
+      companyId: companyByName.get('Legal Compliance Group'),
+      direction: Direction.LEGAL,
+      level: Level.MIDDLE,
+      workFormat: WorkFormat.HYBRID,
+      location: 'Астана',
+      salary: { min: 450000, max: 750000, currency: 'KZT' },
+      requirements: ['Contract review', 'Compliance basics', 'Legal research', 'Attention to detail'],
+      responsibilities: ['Проверка договоров', 'Поддержка внутренних политик', 'Подготовка compliance-отчетов'],
+      createdBy: userId,
+      isActive: true,
+    },
+  ];
+
+  const uniqueSeedJobs = Array.from(
+      new Map(seedJobs.map((job) => [`${job.title}::${job.company}`, job])).values()
+  );
+
+  await Promise.all(
+      uniqueSeedJobs.map((job) =>
+          Job.findOneAndUpdate(
+              { title: job.title, company: job.company },
+              { $set: job },
+              { new: true, upsert: true, runValidators: true }
+          )
+      )
+  );
+
+  console.log(`Синхронизировано вакансий: ${uniqueSeedJobs.length}`);
 
   // Карьерные сценарии (рекомендации)
   const scenariosCount = await CareerScenario.countDocuments();
@@ -220,7 +635,7 @@ async function seed() {
         level: Level.JUNIOR,
         title: 'Старт в IT: путь Junior Frontend',
         description:
-          'Пошаговый план для входа в IT с нуля. Включает обучение основам, практику и поиск первой работы.',
+            'Пошаговый план для входа в IT с нуля. Включает обучение основам, практику и поиск первой работы.',
         actions: [
           {
             type: ActionType.LECTURE,
@@ -251,7 +666,7 @@ async function seed() {
         level: Level.MIDDLE,
         title: 'Переход с Junior на Middle',
         description:
-          'Рекомендации по росту: углубление экспертизы, менторинг, участие в архитектурных решениях.',
+            'Рекомендации по росту: углубление экспертизы, менторинг, участие в архитектурных решениях.',
         actions: [
           {
             type: ActionType.CONSULTATION,
@@ -272,11 +687,44 @@ async function seed() {
         isActive: true,
       },
       {
+        direction: Direction.IT,
+        level: Level.MIDDLE,
+        translationKey: 'itMiddleSystemDesign',
+        title: 'Middle Engineer system design track',
+        description:
+            'A practical recommendation for a middle IT specialist: improve architecture thinking, delivery ownership, and preparation for senior engineering responsibilities.',
+        actions: [
+          {
+            type: ActionType.ARTICLE,
+            title: 'System design notes',
+            description:
+                'Document one current project architecture: services, data flow, risks, bottlenecks, and tradeoffs.',
+          },
+          {
+            type: ActionType.CONSULTATION,
+            title: 'Senior readiness review',
+            description:
+                'Review current skills with a mentor and define the strongest gap before moving toward Senior level.',
+          },
+          {
+            type: ActionType.COMMUNITY,
+            title: 'Code review practice',
+            description:
+                'Take ownership of regular code reviews and collect examples of architectural feedback you provided.',
+          },
+        ],
+        careerBranches: ['Senior Developer', 'Tech Lead', 'Backend Specialist'],
+        transitionSkills: ['System design', 'Code review', 'Architecture tradeoffs', 'Technical communication'],
+        createdBy: userId,
+        sortOrder: 2,
+        isActive: true,
+      },
+      {
         direction: Direction.CREATIVE,
         level: Level.JUNIOR,
         title: 'Начало карьеры в дизайне',
         description:
-          'План для тех, кто хочет стать UX/UI дизайнером. От основ до первого портфолио.',
+            'План для тех, кто хочет стать UX/UI дизайнером. От основ до первого портфолио.',
         actions: [
           {
             type: ActionType.LECTURE,
@@ -296,11 +744,77 @@ async function seed() {
         isActive: true,
       },
       {
+        direction: Direction.DESIGN,
+        level: Level.MIDDLE,
+        translationKey: 'designMiddleGrowth',
+        title: 'Middle Designer growth plan',
+        description:
+            'A practical development plan for a middle designer: strengthen product thinking, improve portfolio cases, and prepare for senior-level ownership.',
+        actions: [
+          {
+            type: ActionType.ARTICLE,
+            title: 'Portfolio case audit',
+            description:
+                'Rewrite two strongest portfolio cases with problem, process, constraints, decisions, result, and measurable impact.',
+          },
+          {
+            type: ActionType.CONSULTATION,
+            title: 'Career review session',
+            description:
+                'Discuss the current profile with a mentor and define the gap between Middle and Senior expectations.',
+          },
+          {
+            type: ActionType.COMMUNITY,
+            title: 'Design critique practice',
+            description:
+                'Join regular critique sessions and present one case to collect structured feedback from other designers.',
+          },
+        ],
+        careerBranches: ['Senior Product Designer', 'UX Lead', 'Design Systems Designer'],
+        transitionSkills: ['Product thinking', 'UX research', 'Design systems', 'Stakeholder communication'],
+        createdBy: userId,
+        sortOrder: 3,
+        isActive: true,
+      },
+      {
+        direction: Direction.DESIGN,
+        level: Level.MIDDLE,
+        translationKey: 'designMiddleSystems',
+        title: 'Design systems and product ownership track',
+        description:
+            'A focused recommendation for a middle designer: strengthen design systems work, product ownership, research habits, and cross-functional communication.',
+        actions: [
+          {
+            type: ActionType.ARTICLE,
+            title: 'Design system audit',
+            description:
+                'Audit the current UI patterns and prepare a list of reusable components, gaps, and consistency problems.',
+          },
+          {
+            type: ActionType.LECTURE,
+            title: 'Research practice',
+            description:
+                'Run or review at least one user interview and turn insights into a clear product design decision.',
+          },
+          {
+            type: ActionType.CONSULTATION,
+            title: 'Product ownership plan',
+            description:
+                'Prepare a growth plan for taking ownership of a product area, including metrics and stakeholder map.',
+          },
+        ],
+        careerBranches: ['Senior Product Designer', 'Design Systems Designer', 'UX Researcher'],
+        transitionSkills: ['Design systems', 'UX research', 'Product metrics', 'Cross-functional communication'],
+        createdBy: userId,
+        sortOrder: 4,
+        isActive: true,
+      },
+      {
         direction: Direction.ECOMMERCE,
         level: Level.MIDDLE,
         title: 'Рост в E-commerce',
         description:
-          'Как развиваться в онлайн-торговле: аналитика, маркетинг, управление проектами.',
+            'Как развиваться в онлайн-торговле: аналитика, маркетинг, управление проектами.',
         actions: [
           {
             type: ActionType.CONSULTATION,
@@ -324,7 +838,7 @@ async function seed() {
         level: Level.JUNIOR,
         title: 'Карьера в HoReCa: с нуля до менеджера',
         description:
-          'План входа в индустрию гостеприимства: от официанта до управляющего рестораном.',
+            'План входа в индустрию гостеприимства: от официанта до управляющего рестораном.',
         actions: [
           {
             type: ActionType.LECTURE,
@@ -344,12 +858,135 @@ async function seed() {
         isActive: true,
       },
     ]);
-    console.log('Создано 5 карьерных сценариев');
+    console.log('Создано 8 карьерных сценариев');
   } else {
     console.log(`Карьерные сценарии уже есть (${scenariosCount} шт.)`);
   }
 
   // Карьерные триггеры «Пора расти» (GET /api/career/trigger)
+  const syncedCareerScenarios = [
+    {
+      direction: Direction.IT,
+      level: Level.MIDDLE,
+      translationKey: 'itMiddleSystemDesign',
+      title: 'Middle Engineer system design track',
+      description:
+          'A practical recommendation for a middle IT specialist: improve architecture thinking, delivery ownership, and preparation for senior engineering responsibilities.',
+      actions: [
+        {
+          type: ActionType.ARTICLE,
+          title: 'System design notes',
+          description:
+              'Document one current project architecture: services, data flow, risks, bottlenecks, and tradeoffs.',
+        },
+        {
+          type: ActionType.CONSULTATION,
+          title: 'Senior readiness review',
+          description:
+              'Review current skills with a mentor and define the strongest gap before moving toward Senior level.',
+        },
+        {
+          type: ActionType.COMMUNITY,
+          title: 'Code review practice',
+          description:
+              'Take ownership of regular code reviews and collect examples of architectural feedback you provided.',
+        },
+      ],
+      careerBranches: ['Senior Developer', 'Tech Lead', 'Backend Specialist'],
+      transitionSkills: ['System design', 'Code review', 'Architecture tradeoffs', 'Technical communication'],
+      createdBy: userId,
+      sortOrder: 2,
+      isActive: true,
+    },
+    {
+      direction: Direction.DESIGN,
+      level: Level.MIDDLE,
+      translationKey: 'designMiddleGrowth',
+      title: 'Middle Designer growth plan',
+      description:
+          'A practical development plan for a middle designer: strengthen product thinking, improve portfolio cases, and prepare for senior-level ownership.',
+      actions: [
+        {
+          type: ActionType.ARTICLE,
+          title: 'Portfolio case audit',
+          description:
+              'Rewrite two strongest portfolio cases with problem, process, constraints, decisions, result, and measurable impact.',
+        },
+        {
+          type: ActionType.CONSULTATION,
+          title: 'Career review session',
+          description:
+              'Discuss the current profile with a mentor and define the gap between Middle and Senior expectations.',
+        },
+        {
+          type: ActionType.COMMUNITY,
+          title: 'Design critique practice',
+          description:
+              'Join regular critique sessions and present one case to collect structured feedback from other designers.',
+        },
+      ],
+      careerBranches: ['Senior Product Designer', 'UX Lead', 'Design Systems Designer'],
+      transitionSkills: ['Product thinking', 'UX research', 'Design systems', 'Stakeholder communication'],
+      createdBy: userId,
+      sortOrder: 3,
+      isActive: true,
+    },
+    {
+      direction: Direction.DESIGN,
+      level: Level.MIDDLE,
+      translationKey: 'designMiddleSystems',
+      title: 'Design systems and product ownership track',
+      description:
+          'A focused recommendation for a middle designer: strengthen design systems work, product ownership, research habits, and cross-functional communication.',
+      actions: [
+        {
+          type: ActionType.ARTICLE,
+          title: 'Design system audit',
+          description:
+              'Audit the current UI patterns and prepare a list of reusable components, gaps, and consistency problems.',
+        },
+        {
+          type: ActionType.LECTURE,
+          title: 'Research practice',
+          description:
+              'Run or review at least one user interview and turn insights into a clear product design decision.',
+        },
+        {
+          type: ActionType.CONSULTATION,
+          title: 'Product ownership plan',
+          description:
+              'Prepare a growth plan for taking ownership of a product area, including metrics and stakeholder map.',
+        },
+      ],
+      careerBranches: ['Senior Product Designer', 'Design Systems Designer', 'UX Researcher'],
+      transitionSkills: ['Design systems', 'UX research', 'Product metrics', 'Cross-functional communication'],
+      createdBy: userId,
+      sortOrder: 4,
+      isActive: true,
+    },
+  ];
+
+  for (const scenario of syncedCareerScenarios) {
+    await CareerScenario.updateOne(
+        {
+          direction: scenario.direction,
+          level: scenario.level,
+          title: scenario.title,
+        },
+        { $set: scenario, $setOnInsert: { createdAt: new Date() } },
+        { upsert: true }
+    );
+  }
+  await CareerScenario.updateOne(
+      {
+        direction: Direction.IT,
+        level: Level.MIDDLE,
+        title: 'Переход с Junior на Middle',
+      },
+      { $set: { translationKey: 'itJuniorToMiddle' } }
+  );
+  console.log('Synced additional career scenarios from seed');
+
   const triggersCount = await CareerTrigger.countDocuments();
   if (triggersCount === 0) {
     await CareerTrigger.insertMany([
@@ -359,7 +996,7 @@ async function seed() {
         minYears: null,
         triggerTitle: 'Трек 40+',
         triggerDescription:
-          'Вы указали переквалификацию — подключите программу развития 40+ и соберите персональный план перехода.',
+            'Вы указали переквалификацию — подключите программу развития 40+ и соберите персональный план перехода.',
         nextSteps: [
           {
             title: 'Пройти вводную диагностику',
@@ -385,7 +1022,7 @@ async function seed() {
         minYears: null,
         triggerTitle: 'Трек переквалификации',
         triggerDescription:
-          'Карьерная цель «Смена карьеры» — откройте сценарий переквалификации и следующие шаги.',
+            'Карьерная цель «Смена карьеры» — откройте сценарий переквалификации и следующие шаги.',
         nextSteps: [
           {
             title: 'Сузить новое направление',
@@ -411,7 +1048,7 @@ async function seed() {
         minYears: 1,
         triggerTitle: 'Вы больше года на Junior',
         triggerDescription:
-          'Пора усилить трек к Middle: углубите экспертизу и возьмите задачи уровня выше текущего грейда.',
+            'Пора усилить трек к Middle: углубите экспертизу и возьмите задачи уровня выше текущего грейда.',
         nextSteps: [
           {
             title: 'Расширить зону ответственности',
@@ -436,7 +1073,7 @@ async function seed() {
         minYears: 1.5,
         triggerTitle: 'Вы уже готовы к Middle',
         triggerDescription:
-          'Стаж и задачи тянут на следующий грейд — обсудите переход с руководителем и зафиксируйте критерии Middle.',
+            'Стаж и задачи тянут на следующий грейд — обсудите переход с руководителем и зафиксируйте критерии Middle.',
         nextSteps: [
           {
             title: 'Согласовать ожидания Middle',
@@ -461,7 +1098,7 @@ async function seed() {
         minYears: 2,
         triggerTitle: 'Два года на Middle',
         triggerDescription:
-          'Хороший момент планировать рост: экспертиза, архитектура или люди — выберите вектор на ближайший год.',
+            'Хороший момент планировать рост: экспертиза, архитектура или люди — выберите вектор на ближайший год.',
         nextSteps: [
           {
             title: 'Усилить экспертный столб',
@@ -486,7 +1123,7 @@ async function seed() {
         minYears: 2.5,
         triggerTitle: 'Пора думать о Senior',
         triggerDescription:
-          'Стаж на Middle позволяет целиться в Senior — определите, чем вы будете «незаменимы» на следующем уровне.',
+            'Стаж на Middle позволяет целиться в Senior — определите, чем вы будете «незаменимы» на следующем уровне.',
         nextSteps: [
           {
             title: 'Масштаб влияния',
@@ -511,7 +1148,7 @@ async function seed() {
         minYears: 3,
         triggerTitle: 'Lead или своё направление?',
         triggerDescription:
-          'Три года на Senior — логичная развилка: управление людьми, архитектура или собственный продукт/бизнес.',
+            'Три года на Senior — логичная развилка: управление людьми, архитектура или собственный продукт/бизнес.',
         nextSteps: [
           {
             title: 'Путь Engineering / Team Lead',
@@ -581,358 +1218,358 @@ async function seed() {
   const educationCount = await LearningResource.countDocuments({ isAdminEducationCard: true });
   if (educationCount === 0) {
     const educationCards = [
-    {
-      title: 'Google Data Analytics Professional Certificate',
-      provider: 'Google / Coursera',
-      type: 'course',
-      direction: Direction.IT,
-      level: 'Beginner',
-      description:
-          'Международный онлайн-сертификат для старта в аналитике данных: таблицы, SQL, очистка данных, визуализация и базовая бизнес-аналитика.',
-      url: 'https://www.coursera.org/professional-certificates/google-data-analytics',
-      isInternational: true,
-      durationWeeks: 24,
-      price: 0,
-      locationType: 'online',
-      city: null,
-      country: null,
-      targetCountry: null,
-      tags: ['data analytics', 'sql', 'tableau', 'data visualization'],
-      skillsTags: ['data analytics', 'sql', 'tableau', 'data visualization'],
-      isFeatured: true,
-      isReskilling: true,
-      sortOrder: 10,
-      isActive: true,
-    },
-    {
-      title: 'Google Cybersecurity Professional Certificate',
-      provider: 'Google / Coursera',
-      type: 'course',
-      direction: Direction.IT,
-      level: 'Beginner',
-      description:
-          'Онлайн-программа для входа в кибербезопасность: основы security operations, Linux, SQL, SIEM, управление рисками и реагирование на инциденты.',
-      url: 'https://www.coursera.org/professional-certificates/google-cybersecurity',
-      isInternational: true,
-      durationWeeks: 24,
-      price: 0,
-      locationType: 'online',
-      city: null,
-      country: null,
-      targetCountry: null,
-      tags: ['cybersecurity', 'linux', 'sql', 'siem'],
-      skillsTags: ['cybersecurity', 'linux', 'sql', 'siem'],
-      isFeatured: true,
-      isReskilling: true,
-      sortOrder: 11,
-      isActive: true,
-    },
-    {
-      title: 'IBM Data Science Professional Certificate',
-      provider: 'IBM / Coursera',
-      type: 'course',
-      direction: Direction.IT,
-      level: 'Beginner',
-      description:
-          'Международная онлайн-программа по Data Science: Python, SQL, анализ данных, визуализация, машинное обучение и работа с Jupyter.',
-      url: 'https://www.coursera.org/professional-certificates/ibm-data-science',
-      isInternational: true,
-      durationWeeks: 20,
-      price: 0,
-      locationType: 'online',
-      city: null,
-      country: null,
-      targetCountry: null,
-      tags: ['data science', 'python', 'sql', 'machine learning'],
-      skillsTags: ['data science', 'python', 'sql', 'machine learning'],
-      isFeatured: true,
-      isReskilling: true,
-      sortOrder: 12,
-      isActive: true,
-    },
-    {
-      title: 'Аналитик данных',
-      provider: 'Яндекс Практикум Казахстан',
-      type: 'course',
-      direction: Direction.IT,
-      level: 'Beginner',
-      description:
-          'Онлайн-курс для старта в аналитике данных: Python, SQL, статистика, A/B-тесты, визуализация и продуктовая аналитика.',
-      url: 'https://practicum.yandex.kz/data-analyst/',
-      isInternational: false,
-      durationWeeks: 24,
-      price: 0,
-      locationType: 'online',
-      city: null,
-      country: 'Kazakhstan',
-      targetCountry: null,
-      tags: ['python', 'sql', 'a/b testing', 'product analytics'],
-      skillsTags: ['python', 'sql', 'a/b testing', 'product analytics'],
-      isFeatured: true,
-      isReskilling: true,
-      sortOrder: 13,
-      isActive: true,
-    },
-    {
-      title: 'Специалист по Data Science',
-      provider: 'Яндекс Практикум Казахстан',
-      type: 'course',
-      direction: Direction.IT,
-      level: 'Beginner',
-      description:
-          'Длинная онлайн-программа по Data Science: Python, SQL, статистика, машинное обучение, работа с данными и портфолио-проекты.',
-      url: 'https://practicum.yandex.kz/catalog/data-analysis/paid/',
-      isInternational: false,
-      durationWeeks: 44,
-      price: 816000,
-      locationType: 'online',
-      city: null,
-      country: 'Kazakhstan',
-      targetCountry: null,
-      tags: ['data science', 'python', 'machine learning', 'statistics'],
-      skillsTags: ['data science', 'python', 'machine learning', 'statistics'],
-      isFeatured: true,
-      isReskilling: true,
-      sortOrder: 14,
-      isActive: true,
-    },
-    {
-      title: 'Tech Orda: Data Analytics',
-      provider: 'outpeer.kz / Tech Orda',
-      type: 'grant',
-      direction: Direction.IT,
-      level: 'Beginner',
-      description:
-          'Грантовая программа по аналитике данных: SQL, Python, Power BI, дашборды, статистика и практические задачи для входа в IT.',
-      url: 'https://astanahub.com/en/techorda/course/411/',
-      isInternational: false,
-      durationWeeks: 26,
-      price: 850000,
-      locationType: 'online',
-      city: null,
-      country: 'Kazakhstan',
-      targetCountry: null,
-      tags: ['tech orda', 'data analytics', 'sql', 'power bi'],
-      skillsTags: ['tech orda', 'data analytics', 'sql', 'power bi'],
-      isFeatured: true,
-      isReskilling: true,
-      sortOrder: 15,
-      isActive: true,
-    },
-    {
-      title: 'Tech Orda: Data Science',
-      provider: 'outpeer.kz / Tech Orda',
-      type: 'grant',
-      direction: Direction.IT,
-      level: 'Beginner',
-      description:
-          'Грантовый курс по Data Science: Python, Pandas, NumPy, статистика, машинное обучение и построение ML-моделей.',
-      url: 'https://astanahub.com/en/techorda/course/410/',
-      isInternational: false,
-      durationWeeks: 26,
-      price: 950000,
-      locationType: 'online',
-      city: null,
-      country: 'Kazakhstan',
-      targetCountry: null,
-      tags: ['tech orda', 'data science', 'python', 'machine learning'],
-      skillsTags: ['tech orda', 'data science', 'python', 'machine learning'],
-      isFeatured: true,
-      isReskilling: true,
-      sortOrder: 16,
-      isActive: true,
-    },
-    {
-      title: 'Tech Orda: AI Engineering',
-      provider: 'outpeer.kz / Tech Orda',
-      type: 'grant',
-      direction: Direction.IT,
-      level: 'Beginner',
-      description:
-          'Грантовая программа по AI Engineering: Python, машинное обучение, LLM, prompt engineering, оценка моделей и практические AI-инструменты.',
-      url: 'https://astanahub.com/en/techorda/course/681/',
-      isInternational: false,
-      durationWeeks: 26,
-      price: 950000,
-      locationType: 'online',
-      city: null,
-      country: 'Kazakhstan',
-      targetCountry: null,
-      tags: ['ai engineering', 'llm', 'python', 'prompt engineering'],
-      skillsTags: ['ai engineering', 'llm', 'python', 'prompt engineering'],
-      isFeatured: true,
-      isReskilling: true,
-      sortOrder: 17,
-      isActive: true,
-    },
-    {
-      title: 'Tech Orda: Machine Learning Engineer',
-      provider: 'TEST IT / Tech Orda',
-      type: 'grant',
-      direction: Direction.IT,
-      level: 'Beginner',
-      description:
-          'Грантовый курс для будущих ML-инженеров: Python, Scikit-learn, PyTorch, SQL, GitHub и основы деплоя моделей.',
-      url: 'https://astanahub.com/en/techorda/course/644/',
-      isInternational: false,
-      durationWeeks: 26,
-      price: 700000,
-      locationType: 'hybrid',
-      city: 'Astana',
-      country: 'Kazakhstan',
-      targetCountry: null,
-      tags: ['machine learning', 'python', 'pytorch', 'model deployment'],
-      skillsTags: ['machine learning', 'python', 'pytorch', 'model deployment'],
-      isFeatured: true,
-      isReskilling: true,
-      sortOrder: 18,
-      isActive: true,
-    },
-    {
-      title: 'Tech Orda: Strong Junior Product Manager',
-      provider: 'Product Masters / Tech Orda',
-      type: 'grant',
-      direction: Direction.IT,
-      level: 'Любой',
-      description:
-          'Программа для начинающих продуктовых менеджеров: user research, MVP, продуктовые метрики, roadmap, go-to-market и работа над pet-product.',
-      url: 'https://astanahub.com/en/techorda/course/358/',
-      isInternational: false,
-      durationWeeks: 26,
-      price: 600000,
-      locationType: 'hybrid',
-      city: 'Almaty',
-      country: 'Kazakhstan',
-      targetCountry: null,
-      tags: ['product management', 'user research', 'mvp', 'roadmap'],
-      skillsTags: ['product management', 'user research', 'mvp', 'roadmap'],
-      isFeatured: true,
-      isReskilling: true,
-      sortOrder: 19,
-      isActive: true,
-    },
-    {
-      title: 'Tech Orda: ETL Developer',
-      provider: '2дэй академи / Tech Orda',
-      type: 'grant',
-      direction: Direction.IT,
-      level: 'Beginner',
-      description:
-          'Грантовая программа по Data Engineering: ETL-процессы, SQL, базы данных, Python, пайплайны данных и хранилища данных.',
-      url: 'https://astanahub.com/en/techorda/course/',
-      isInternational: false,
-      durationWeeks: 26,
-      price: 400000,
-      locationType: 'online',
-      city: null,
-      country: 'Kazakhstan',
-      targetCountry: null,
-      tags: ['etl', 'sql', 'data engineering', 'data pipelines'],
-      skillsTags: ['etl', 'sql', 'data engineering', 'data pipelines'],
-      isFeatured: false,
-      isReskilling: true,
-      sortOrder: 20,
-      isActive: true,
-    },
-    {
-      title: 'Tech Orda: AI-powered UX/UI',
-      provider: 'IT Bootcamp / Tech Orda',
-      type: 'grant',
-      direction: Direction.DESIGN,
-      level: 'Beginner',
-      description:
-          'Программа по UX/UI-дизайну с использованием AI-инструментов: Figma, UX research, прототипирование, дизайн-системы и презентация решений.',
-      url: 'https://astanahub.com/en/techorda/course/617/',
-      isInternational: false,
-      durationWeeks: 20,
-      price: 400000,
-      locationType: 'hybrid',
-      city: 'Almaty',
-      country: 'Kazakhstan',
-      targetCountry: null,
-      tags: ['ux ui', 'figma', 'ai tools', 'design systems'],
-      skillsTags: ['ux ui', 'figma', 'ai tools', 'design systems'],
-      isFeatured: false,
-      isReskilling: true,
-      sortOrder: 21,
-      isActive: true,
-    },
-    {
-      title: 'Офлайн-школа: Tomorrow School',
-      provider: 'Astana Hub / alem.ai / 01 Edu',
-      type: 'course',
-      direction: Direction.IT,
-      level: 'Beginner',
-      description:
-          'Бесплатная офлайн-школа программирования и AI в Астане с peer-to-peer подходом, проектным обучением и фокусом на инженерные навыки.',
-      url: 'https://tomorrow-school.ai/',
-      isInternational: false,
-      durationWeeks: 78,
-      price: 0,
-      locationType: 'offline',
-      city: 'Astana',
-      country: 'Kazakhstan',
-      targetCountry: null,
-      tags: ['software engineering', 'ai', 'algorithms', 'peer-to-peer'],
-      skillsTags: ['software engineering', 'ai', 'algorithms', 'peer-to-peer'],
-      isFeatured: true,
-      isReskilling: true,
-      sortOrder: 22,
-      isActive: true,
-    },
-    {
-      title: 'Офлайн-школа: alem.school',
-      provider: 'alem.school',
-      type: 'course',
-      direction: Direction.IT,
-      level: 'Beginner',
-      description:
-          'Практическая IT-школа в Казахстане для развития инженерного мышления: алгоритмы, программирование, командная работа и backend-навыки.',
-      url: 'https://alem.school/',
-      isInternational: false,
-      durationWeeks: 52,
-      price: 0,
-      locationType: 'offline',
-      city: 'Astana',
-      country: 'Kazakhstan',
-      targetCountry: null,
-      tags: ['algorithms', 'programming', 'backend', 'teamwork'],
-      skillsTags: ['algorithms', 'programming', 'backend', 'teamwork'],
-      isFeatured: true,
-      isReskilling: true,
-      sortOrder: 23,
-      isActive: true,
-    },
-    {
-      title: 'Стажировка: Cloud & DevOps Internship at EPAM Lab',
-      provider: 'EPAM Kazakhstan',
-      type: 'internship',
-      direction: Direction.IT,
-      level: 'Middle',
-      description:
-          'Онлайн-стажировка EPAM Lab по Cloud & DevOps: Linux, облачная инфраструктура, CI/CD, Docker и практики инженерной разработки.',
-      url: 'https://campus.epam.com/en/training/5694',
-      isInternational: false,
-      durationWeeks: 14,
-      price: 0,
-      locationType: 'online',
-      city: null,
-      country: 'Kazakhstan',
-      targetCountry: null,
-      tags: ['cloud', 'devops', 'linux', 'ci/cd'],
-      skillsTags: ['cloud', 'devops', 'linux', 'ci/cd'],
-      isFeatured: true,
-      isReskilling: false,
-      sortOrder: 24,
-      isActive: true,
-    },
-  ];
+      {
+        title: 'Google Data Analytics Professional Certificate',
+        provider: 'Google / Coursera',
+        type: 'course',
+        direction: Direction.IT,
+        level: 'Beginner',
+        description:
+            'Международный онлайн-сертификат для старта в аналитике данных: таблицы, SQL, очистка данных, визуализация и базовая бизнес-аналитика.',
+        url: 'https://www.coursera.org/professional-certificates/google-data-analytics',
+        isInternational: true,
+        durationWeeks: 24,
+        price: 0,
+        locationType: 'online',
+        city: null,
+        country: null,
+        targetCountry: null,
+        tags: ['data analytics', 'sql', 'tableau', 'data visualization'],
+        skillsTags: ['data analytics', 'sql', 'tableau', 'data visualization'],
+        isFeatured: true,
+        isReskilling: true,
+        sortOrder: 10,
+        isActive: true,
+      },
+      {
+        title: 'Google Cybersecurity Professional Certificate',
+        provider: 'Google / Coursera',
+        type: 'course',
+        direction: Direction.IT,
+        level: 'Beginner',
+        description:
+            'Онлайн-программа для входа в кибербезопасность: основы security operations, Linux, SQL, SIEM, управление рисками и реагирование на инциденты.',
+        url: 'https://www.coursera.org/professional-certificates/google-cybersecurity',
+        isInternational: true,
+        durationWeeks: 24,
+        price: 0,
+        locationType: 'online',
+        city: null,
+        country: null,
+        targetCountry: null,
+        tags: ['cybersecurity', 'linux', 'sql', 'siem'],
+        skillsTags: ['cybersecurity', 'linux', 'sql', 'siem'],
+        isFeatured: true,
+        isReskilling: true,
+        sortOrder: 11,
+        isActive: true,
+      },
+      {
+        title: 'IBM Data Science Professional Certificate',
+        provider: 'IBM / Coursera',
+        type: 'course',
+        direction: Direction.IT,
+        level: 'Beginner',
+        description:
+            'Международная онлайн-программа по Data Science: Python, SQL, анализ данных, визуализация, машинное обучение и работа с Jupyter.',
+        url: 'https://www.coursera.org/professional-certificates/ibm-data-science',
+        isInternational: true,
+        durationWeeks: 20,
+        price: 0,
+        locationType: 'online',
+        city: null,
+        country: null,
+        targetCountry: null,
+        tags: ['data science', 'python', 'sql', 'machine learning'],
+        skillsTags: ['data science', 'python', 'sql', 'machine learning'],
+        isFeatured: true,
+        isReskilling: true,
+        sortOrder: 12,
+        isActive: true,
+      },
+      {
+        title: 'Аналитик данных',
+        provider: 'Яндекс Практикум Казахстан',
+        type: 'course',
+        direction: Direction.IT,
+        level: 'Beginner',
+        description:
+            'Онлайн-курс для старта в аналитике данных: Python, SQL, статистика, A/B-тесты, визуализация и продуктовая аналитика.',
+        url: 'https://practicum.yandex.kz/data-analyst/',
+        isInternational: false,
+        durationWeeks: 24,
+        price: 0,
+        locationType: 'online',
+        city: null,
+        country: 'Kazakhstan',
+        targetCountry: null,
+        tags: ['python', 'sql', 'a/b testing', 'product analytics'],
+        skillsTags: ['python', 'sql', 'a/b testing', 'product analytics'],
+        isFeatured: true,
+        isReskilling: true,
+        sortOrder: 13,
+        isActive: true,
+      },
+      {
+        title: 'Специалист по Data Science',
+        provider: 'Яндекс Практикум Казахстан',
+        type: 'course',
+        direction: Direction.IT,
+        level: 'Beginner',
+        description:
+            'Длинная онлайн-программа по Data Science: Python, SQL, статистика, машинное обучение, работа с данными и портфолио-проекты.',
+        url: 'https://practicum.yandex.kz/catalog/data-analysis/paid/',
+        isInternational: false,
+        durationWeeks: 44,
+        price: 816000,
+        locationType: 'online',
+        city: null,
+        country: 'Kazakhstan',
+        targetCountry: null,
+        tags: ['data science', 'python', 'machine learning', 'statistics'],
+        skillsTags: ['data science', 'python', 'machine learning', 'statistics'],
+        isFeatured: true,
+        isReskilling: true,
+        sortOrder: 14,
+        isActive: true,
+      },
+      {
+        title: 'Tech Orda: Data Analytics',
+        provider: 'outpeer.kz / Tech Orda',
+        type: 'grant',
+        direction: Direction.IT,
+        level: 'Beginner',
+        description:
+            'Грантовая программа по аналитике данных: SQL, Python, Power BI, дашборды, статистика и практические задачи для входа в IT.',
+        url: 'https://astanahub.com/en/techorda/course/411/',
+        isInternational: false,
+        durationWeeks: 26,
+        price: 850000,
+        locationType: 'online',
+        city: null,
+        country: 'Kazakhstan',
+        targetCountry: null,
+        tags: ['tech orda', 'data analytics', 'sql', 'power bi'],
+        skillsTags: ['tech orda', 'data analytics', 'sql', 'power bi'],
+        isFeatured: true,
+        isReskilling: true,
+        sortOrder: 15,
+        isActive: true,
+      },
+      {
+        title: 'Tech Orda: Data Science',
+        provider: 'outpeer.kz / Tech Orda',
+        type: 'grant',
+        direction: Direction.IT,
+        level: 'Beginner',
+        description:
+            'Грантовый курс по Data Science: Python, Pandas, NumPy, статистика, машинное обучение и построение ML-моделей.',
+        url: 'https://astanahub.com/en/techorda/course/410/',
+        isInternational: false,
+        durationWeeks: 26,
+        price: 950000,
+        locationType: 'online',
+        city: null,
+        country: 'Kazakhstan',
+        targetCountry: null,
+        tags: ['tech orda', 'data science', 'python', 'machine learning'],
+        skillsTags: ['tech orda', 'data science', 'python', 'machine learning'],
+        isFeatured: true,
+        isReskilling: true,
+        sortOrder: 16,
+        isActive: true,
+      },
+      {
+        title: 'Tech Orda: AI Engineering',
+        provider: 'outpeer.kz / Tech Orda',
+        type: 'grant',
+        direction: Direction.IT,
+        level: 'Beginner',
+        description:
+            'Грантовая программа по AI Engineering: Python, машинное обучение, LLM, prompt engineering, оценка моделей и практические AI-инструменты.',
+        url: 'https://astanahub.com/en/techorda/course/681/',
+        isInternational: false,
+        durationWeeks: 26,
+        price: 950000,
+        locationType: 'online',
+        city: null,
+        country: 'Kazakhstan',
+        targetCountry: null,
+        tags: ['ai engineering', 'llm', 'python', 'prompt engineering'],
+        skillsTags: ['ai engineering', 'llm', 'python', 'prompt engineering'],
+        isFeatured: true,
+        isReskilling: true,
+        sortOrder: 17,
+        isActive: true,
+      },
+      {
+        title: 'Tech Orda: Machine Learning Engineer',
+        provider: 'TEST IT / Tech Orda',
+        type: 'grant',
+        direction: Direction.IT,
+        level: 'Beginner',
+        description:
+            'Грантовый курс для будущих ML-инженеров: Python, Scikit-learn, PyTorch, SQL, GitHub и основы деплоя моделей.',
+        url: 'https://astanahub.com/en/techorda/course/644/',
+        isInternational: false,
+        durationWeeks: 26,
+        price: 700000,
+        locationType: 'hybrid',
+        city: 'Astana',
+        country: 'Kazakhstan',
+        targetCountry: null,
+        tags: ['machine learning', 'python', 'pytorch', 'model deployment'],
+        skillsTags: ['machine learning', 'python', 'pytorch', 'model deployment'],
+        isFeatured: true,
+        isReskilling: true,
+        sortOrder: 18,
+        isActive: true,
+      },
+      {
+        title: 'Tech Orda: Strong Junior Product Manager',
+        provider: 'Product Masters / Tech Orda',
+        type: 'grant',
+        direction: Direction.IT,
+        level: 'Любой',
+        description:
+            'Программа для начинающих продуктовых менеджеров: user research, MVP, продуктовые метрики, roadmap, go-to-market и работа над pet-product.',
+        url: 'https://astanahub.com/en/techorda/course/358/',
+        isInternational: false,
+        durationWeeks: 26,
+        price: 600000,
+        locationType: 'hybrid',
+        city: 'Almaty',
+        country: 'Kazakhstan',
+        targetCountry: null,
+        tags: ['product management', 'user research', 'mvp', 'roadmap'],
+        skillsTags: ['product management', 'user research', 'mvp', 'roadmap'],
+        isFeatured: true,
+        isReskilling: true,
+        sortOrder: 19,
+        isActive: true,
+      },
+      {
+        title: 'Tech Orda: ETL Developer',
+        provider: '2дэй академи / Tech Orda',
+        type: 'grant',
+        direction: Direction.IT,
+        level: 'Beginner',
+        description:
+            'Грантовая программа по Data Engineering: ETL-процессы, SQL, базы данных, Python, пайплайны данных и хранилища данных.',
+        url: 'https://astanahub.com/en/techorda/course/',
+        isInternational: false,
+        durationWeeks: 26,
+        price: 400000,
+        locationType: 'online',
+        city: null,
+        country: 'Kazakhstan',
+        targetCountry: null,
+        tags: ['etl', 'sql', 'data engineering', 'data pipelines'],
+        skillsTags: ['etl', 'sql', 'data engineering', 'data pipelines'],
+        isFeatured: false,
+        isReskilling: true,
+        sortOrder: 20,
+        isActive: true,
+      },
+      {
+        title: 'Tech Orda: AI-powered UX/UI',
+        provider: 'IT Bootcamp / Tech Orda',
+        type: 'grant',
+        direction: Direction.DESIGN,
+        level: 'Beginner',
+        description:
+            'Программа по UX/UI-дизайну с использованием AI-инструментов: Figma, UX research, прототипирование, дизайн-системы и презентация решений.',
+        url: 'https://astanahub.com/en/techorda/course/617/',
+        isInternational: false,
+        durationWeeks: 20,
+        price: 400000,
+        locationType: 'hybrid',
+        city: 'Almaty',
+        country: 'Kazakhstan',
+        targetCountry: null,
+        tags: ['ux ui', 'figma', 'ai tools', 'design systems'],
+        skillsTags: ['ux ui', 'figma', 'ai tools', 'design systems'],
+        isFeatured: false,
+        isReskilling: true,
+        sortOrder: 21,
+        isActive: true,
+      },
+      {
+        title: 'Офлайн-школа: Tomorrow School',
+        provider: 'Astana Hub / alem.ai / 01 Edu',
+        type: 'course',
+        direction: Direction.IT,
+        level: 'Beginner',
+        description:
+            'Бесплатная офлайн-школа программирования и AI в Астане с peer-to-peer подходом, проектным обучением и фокусом на инженерные навыки.',
+        url: 'https://tomorrow-school.ai/',
+        isInternational: false,
+        durationWeeks: 78,
+        price: 0,
+        locationType: 'offline',
+        city: 'Astana',
+        country: 'Kazakhstan',
+        targetCountry: null,
+        tags: ['software engineering', 'ai', 'algorithms', 'peer-to-peer'],
+        skillsTags: ['software engineering', 'ai', 'algorithms', 'peer-to-peer'],
+        isFeatured: true,
+        isReskilling: true,
+        sortOrder: 22,
+        isActive: true,
+      },
+      {
+        title: 'Офлайн-школа: alem.school',
+        provider: 'alem.school',
+        type: 'course',
+        direction: Direction.IT,
+        level: 'Beginner',
+        description:
+            'Практическая IT-школа в Казахстане для развития инженерного мышления: алгоритмы, программирование, командная работа и backend-навыки.',
+        url: 'https://alem.school/',
+        isInternational: false,
+        durationWeeks: 52,
+        price: 0,
+        locationType: 'offline',
+        city: 'Astana',
+        country: 'Kazakhstan',
+        targetCountry: null,
+        tags: ['algorithms', 'programming', 'backend', 'teamwork'],
+        skillsTags: ['algorithms', 'programming', 'backend', 'teamwork'],
+        isFeatured: true,
+        isReskilling: true,
+        sortOrder: 23,
+        isActive: true,
+      },
+      {
+        title: 'Стажировка: Cloud & DevOps Internship at EPAM Lab',
+        provider: 'EPAM Kazakhstan',
+        type: 'internship',
+        direction: Direction.IT,
+        level: 'Middle',
+        description:
+            'Онлайн-стажировка EPAM Lab по Cloud & DevOps: Linux, облачная инфраструктура, CI/CD, Docker и практики инженерной разработки.',
+        url: 'https://campus.epam.com/en/training/5694',
+        isInternational: false,
+        durationWeeks: 14,
+        price: 0,
+        locationType: 'online',
+        city: null,
+        country: 'Kazakhstan',
+        targetCountry: null,
+        tags: ['cloud', 'devops', 'linux', 'ci/cd'],
+        skillsTags: ['cloud', 'devops', 'linux', 'ci/cd'],
+        isFeatured: true,
+        isReskilling: false,
+        sortOrder: 24,
+        isActive: true,
+      },
+    ];
 
     for (const card of educationCards) {
       await LearningResource.updateOne(
-        { title: card.title },
-        { $set: { ...card, isAdminEducationCard: true } },
-        { upsert: true }
+          { title: card.title },
+          { $set: { ...card, isAdminEducationCard: true } },
+          { upsert: true }
       );
     }
     console.log(`Добавлены/обновлены демо-карточки образования (${educationCards.length} шт.)`);
@@ -946,7 +1583,7 @@ async function seed() {
       {
         title: 'Смена профессии: программа «с нуля» в IT',
         description:
-          'Вводный трек для взрослых карьеристов: основы логики, практика и первое портфолио без опыта в отрасли.',
+            'Вводный трек для взрослых карьеристов: основы логики, практика и первое портфолио без опыта в отрасли.',
         url: 'https://example.com/reskill/it-zero',
         tags: ['career_change', 'from_scratch'],
         sortOrder: 100,
@@ -971,7 +1608,7 @@ async function seed() {
       {
         title: 'История: «В 47 запустила свой сервис после курсов по маркетингу»',
         description:
-          'Как совмещать работу, семью и обучение; ссылки на сообщества выпускников.',
+            'Как совмещать работу, семью и обучение; ссылки на сообщества выпускников.',
         url: 'https://example.com/stories/47-marketing-pivot',
         tags: ['career_change', 'success_story'],
         sortOrder: 103,
@@ -980,7 +1617,7 @@ async function seed() {
       {
         title: 'Мягкий переход: навыки переносимости между отраслями',
         description:
-          'Не поднимая грейд в старой профессии — как упаковать опыт для нового направления.',
+            'Не поднимая грейд в старой профессии — как упаковать опыт для нового направления.',
         url: 'https://example.com/reskill/transferable-skills',
         tags: ['career_change'],
         sortOrder: 104,
@@ -1040,13 +1677,13 @@ async function seed() {
 
   const aiRiskRows = buildAiRiskIndexSeedRows();
   await AiRiskIndex.bulkWrite(
-    aiRiskRows.map((doc) => ({
-      updateOne: {
-        filter: { direction: doc.direction, level: doc.level },
-        update: { $set: doc },
-        upsert: true,
-      },
-    }))
+      aiRiskRows.map((doc) => ({
+        updateOne: {
+          filter: { direction: doc.direction, level: doc.level },
+          update: { $set: doc },
+          upsert: true,
+        },
+      }))
   );
   console.log(`Справочник ai_risk_index: upsert ${aiRiskRows.length} записей`);
 

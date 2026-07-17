@@ -14,6 +14,7 @@ export type CareerAction = {
 export interface ICareerScenario extends Document {
   direction: Direction;
   level: Level;
+  translationKey?: string;
   title: string;
   description: string;
   actions: CareerAction[];
@@ -30,6 +31,7 @@ export interface ICareerScenario extends Document {
 export type CreateCareerScenarioBody = {
   direction: Direction;
   level: Level;
+  translationKey?: string;
   title: string;
   description: string;
   actions: CareerAction[];

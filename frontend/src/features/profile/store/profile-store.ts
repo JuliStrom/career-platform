@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import i18n from '@/shared/config/i18n';
+import i18n, { setLanguage } from '@/shared/config/i18n';
 import { analytics } from '@/features/analytics/lib/track';
 import { useCareerStore } from '@/features/career/store/career-store';
 import * as profileApi from '../api/profile.api';
@@ -19,6 +19,12 @@ function isLocalAvatarUri(avatar: string | undefined): boolean {
 
 /** Дедупликация параллельных fetchProfile (StrictMode, быстрые ремонты экрана). */
 let fetchProfileInFlight: Promise<void> | null = null;
+
+function applyProfileLanguage(profile: Profile): void {
+  if (profile.lang === 'ru' || profile.lang === 'en') {
+    void setLanguage(profile.lang);
+  }
+}
 
 export type FetchProfileOptions = {
   /** Принудительно запросить API даже если ответ GET /profile уже был получен */
@@ -50,7 +56,10 @@ export const useProfileStore = create<ProfileState>((set, get) => ({
   isDeleting: false,
   isDeletingAvatar: false,
   error: null,
-  setProfile: (profile) => set({ profile, error: null, profileHydrated: true }),
+  setProfile: (profile) => {
+    applyProfileLanguage(profile);
+    set({ profile, error: null, profileHydrated: true });
+  },
   resetProfile: () =>
     set({ profile: null, error: null, profileHydrated: false }),
 

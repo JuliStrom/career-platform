@@ -1,7 +1,7 @@
 import { useTranslation } from '@/shared/lib/hooks/useTranslation';
 import { PrimaryButton } from '@/shared/ui/buttons/PrimaryButton';
 import { Checkbox } from '@/shared/ui/checkbox/Checkbox';
-import { NamedField } from '@/shared/ui';
+import { AppHeader, NamedField } from '@/shared/ui';
 import { router } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -60,9 +60,10 @@ export function RegisterWithInviteForm({
     formState: { errors },
   } = form;
 
+  // Форма только для регистрации — новый аккаунт сразу выбирает путь платформы
   useEffect(() => {
     if (isAuthenticated && !isLoading) {
-      router.replace('/profile');
+      router.replace('/choose-path');
     }
   }, [isAuthenticated, isLoading]);
 
@@ -94,121 +95,133 @@ export function RegisterWithInviteForm({
   const error = authError || localError;
 
   return (
-    <SafeAreaView className="flex-1 bg-white dark:bg-gray-900">
+    <SafeAreaView
+      className="flex-1 bg-canvas dark:bg-canvas-dark"
+      edges={['top']}
+    >
+      <AppHeader />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1"
       >
         <ScrollView
           className="flex-1"
-          contentContainerStyle={{ padding: 24 }}
+          contentContainerStyle={{
+            padding: 24,
+            flexGrow: 1,
+            justifyContent: 'center',
+          }}
           keyboardShouldPersistTaps="handled"
         >
-          <View
-            className="mb-8"
-            accessibilityRole="header"
-            accessibilityLabel={t('accessibility.registerLabel')}
-          >
-            <Text className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
-              {t('register.title')}
-            </Text>
-            <Text className="text-base text-gray-600 dark:text-gray-400">
-              {t('register.subtitle')}
-            </Text>
-          </View>
-
-          {error && (
-            <View className="mb-4 rounded-lg bg-red-50 p-4 dark:bg-red-900/20">
-              <Text className="text-sm text-red-600 dark:text-red-400">
-                {error}
+          <View className="w-full max-w-md self-center">
+            <View
+              className="mb-8"
+              accessibilityRole="header"
+              accessibilityLabel={t('accessibility.registerLabel')}
+            >
+              <Text className="mb-2 text-center text-3xl font-bold text-gray-900 dark:text-white">
+                {t('register.title')}
+              </Text>
+              <Text className="text-center text-base text-gray-600 dark:text-gray-400">
+                {t('register.subtitle')}
               </Text>
             </View>
-          )}
 
-          {Object.keys(form.formState.errors).length > 0 && (
-            <View className="mb-4 rounded-lg bg-amber-50 p-3 dark:bg-amber-900/20">
-              <Text className="text-sm text-amber-800 dark:text-amber-200">
-                {t('validation.checkFields')}
-              </Text>
-            </View>
-          )}
-
-          <Controller
-            control={control}
-            name="name"
-            render={({
-              field: { onChange, onBlur, value },
-              fieldState: { isTouched },
-            }) => (
-              <NamedField
-                value={value}
-                error={errors.name?.message}
-                touched={isTouched}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                nativeID="auth-name-label"
-                label={t('register.name')}
-                placeholder={t('register.name')}
-                margin="mb-4"
-              />
+            {error && (
+              <View className="mb-4 rounded-lg bg-red-50 p-4 dark:bg-red-900/20">
+                <Text className="text-sm text-red-600 dark:text-red-400">
+                  {error}
+                </Text>
+              </View>
             )}
-          />
 
-          <BaseAuthFields
-            t={t}
-            control={control as Parameters<typeof BaseAuthFields>[0]['control']}
-            errors={errors}
-          />
+            {Object.keys(form.formState.errors).length > 0 && (
+              <View className="mb-4 rounded-lg bg-amber-50 p-3 dark:bg-amber-900/20">
+                <Text className="text-sm text-amber-800 dark:text-amber-200">
+                  {t('validation.checkFields')}
+                </Text>
+              </View>
+            )}
 
-          <RegisterExtraFields t={t} control={control} errors={errors} />
+            <Controller
+              control={control}
+              name="name"
+              render={({
+                field: { onChange, onBlur, value },
+                fieldState: { isTouched },
+              }) => (
+                <NamedField
+                  value={value}
+                  error={errors.name?.message}
+                  touched={isTouched}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  nativeID="auth-name-label"
+                  label={t('register.name')}
+                  placeholder={t('register.name')}
+                  margin="mb-4"
+                />
+              )}
+            />
 
-          <View className="mb-4 mt-4 flex-row items-start">
-            <Checkbox value={privacyAccepted} onChange={setPrivacyAccepted} />
-            <Text className="ml-3 flex-1 text-sm text-gray-700 dark:text-gray-300">
-              {t('privacy.agree')}
-              <Text
-                className="text-blue-600 dark:text-blue-400"
-                onPress={() =>
-                  router.push({
-                    pathname: '/privacy-policy',
-                    params: { from: '/register' },
-                  })
-                }
-              >
-                {t('privacy.policy')}
+            <BaseAuthFields
+              t={t}
+              control={
+                control as Parameters<typeof BaseAuthFields>[0]['control']
+              }
+              errors={errors}
+            />
+
+            <RegisterExtraFields t={t} control={control} errors={errors} />
+
+            <View className="mb-4 mt-4 flex-row items-start">
+              <Checkbox value={privacyAccepted} onChange={setPrivacyAccepted} />
+              <Text className="ml-3 flex-1 text-sm text-gray-700 dark:text-gray-300">
+                {t('privacy.agree')}
+                <Text
+                  className="text-blue-600 dark:text-blue-400"
+                  onPress={() =>
+                    router.push({
+                      pathname: '/privacy-policy',
+                      params: { from: '/register' },
+                    })
+                  }
+                >
+                  {t('privacy.policy')}
+                </Text>
+                {t('privacy.and')}
+                <Text
+                  className="text-blue-600 dark:text-blue-400"
+                  onPress={() =>
+                    router.push({
+                      pathname: '/terms-of-service',
+                      params: { from: '/register' },
+                    })
+                  }
+                >
+                  {t('privacy.terms')}
+                </Text>
               </Text>
-              {t('privacy.and')}
-              <Text
-                className="text-blue-600 dark:text-blue-400"
-                onPress={() =>
-                  router.push({
-                    pathname: '/terms-of-service',
-                    params: { from: '/register' },
-                  })
-                }
-              >
-                {t('privacy.terms')}
+            </View>
+
+            {!privacyAccepted && (
+              <Text className="mb-3 text-sm text-amber-600 dark:text-amber-400">
+                {t('privacy.requiredHint')}
               </Text>
-            </Text>
+            )}
+            <PrimaryButton
+              onPress={form.handleSubmit(onSubmit)}
+              isLoading={isLoading}
+              disabled={!privacyAccepted}
+              accessibilityLabel={t('accessibility.submitButton')}
+            >
+              {t('register.submit')}
+            </PrimaryButton>
+
+            <OAuthButtons inviteCode={inviteCode} />
+
+            {ToggleAuthMode(true, t, () => router.push('/(auth)/login'))}
           </View>
-
-          {!privacyAccepted && (
-            <Text className="mb-3 text-sm text-amber-600 dark:text-amber-400">
-              {t('privacy.requiredHint')}
-            </Text>
-          )}
-          <PrimaryButton
-            onPress={form.handleSubmit(onSubmit)}
-            isLoading={isLoading}
-            disabled={!privacyAccepted}
-            accessibilityLabel={t('accessibility.submitButton')}
-          >
-            {t('register.submit')}
-          </PrimaryButton>
-
-          <OAuthButtons inviteCode={inviteCode} />
-
-          {ToggleAuthMode(true, t, () => router.push('/(auth)/login'))}
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

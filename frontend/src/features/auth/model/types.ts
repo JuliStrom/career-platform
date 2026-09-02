@@ -1,4 +1,4 @@
-import { UserRole } from '@/shared/model';
+import { UserRole, UserType } from '@/shared/model';
 import { LoginFormData } from './schemas';
 
 export interface User {
@@ -6,6 +6,7 @@ export interface User {
   email: string;
   name?: string;
   role: UserRole;
+  userType?: UserType | null;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -16,6 +17,7 @@ export type RegisterPayload = {
   password: string;
   confirmPassword?: string;
   inviteCode?: string;
+  userType?: UserType;
 };
 
 export interface RegisterWithInvitePayload {
@@ -23,6 +25,7 @@ export interface RegisterWithInvitePayload {
   email: string;
   password: string;
   inviteCode: string;
+  userType?: UserType;
 }
 
 export interface InviteValidationResponse {

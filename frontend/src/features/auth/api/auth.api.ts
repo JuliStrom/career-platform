@@ -1,12 +1,14 @@
 import { secureStorage } from '@/features/auth/lib';
 import { apiClient } from '@/shared/config/api';
 import { Platform } from 'react-native';
+import { UserType } from '@/shared/model';
 import {
   AuthResponse,
   InviteValidationResponse,
   RefreshTokenResponse,
   RegisterWithInvitePayload,
   TelegramAuthPayload,
+  User,
 } from '../model/types';
 
 async function setAccessTokenUniversal(token?: string) {
@@ -33,7 +35,9 @@ async function getRefreshTokenUniversal(): Promise<string | null> {
 }
 
 export async function register(
-  payload: RegisterWithInvitePayload | { email: string; password: string }
+  payload:
+    | RegisterWithInvitePayload
+    | { email: string; password: string; userType?: UserType }
 ): Promise<AuthResponse> {
   const response = await apiClient.post<AuthResponse>(
     '/auth/register',
@@ -78,6 +82,16 @@ export async function refreshToken(): Promise<RefreshTokenResponse> {
     refreshToken ? { refreshToken } : {}
   );
   return response.data;
+}
+
+/** Сохраняет путь и заменяет access token токеном с выбранным userType. */
+export async function setUserType(userType: UserType): Promise<User> {
+  const response = await apiClient.patch<{
+    user: User;
+    accessToken: string;
+  }>('/auth/user-type', { userType });
+  await setAccessTokenUniversal(response.data.accessToken);
+  return response.data.user;
 }
 
 export async function logout(): Promise<void> {

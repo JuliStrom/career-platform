@@ -75,6 +75,12 @@ export enum UserRole {
   ADMIN = 'ADMIN',
 }
 
+/** Путь в продукте: работодатель/заказчик или специалист. */
+export enum UserType {
+  EMPLOYER = 'employer',
+  SPECIALIST = 'specialist',
+}
+
 export enum CareerGoal {
   Growth = 'Growth',
   Leadership = 'Leadership',

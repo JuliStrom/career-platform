@@ -11,6 +11,7 @@ import {
   GoogleAuthBody,
   TelegramAuthPayload,
   UserRole,
+  UserType,
   AuthRequest,
 } from '../types';
 import { isMongoDuplicateError, getErrorMessage } from '../utils/errorHandlers';
@@ -67,20 +68,38 @@ function getRefreshTokenCookieOptions(): {
   };
 }
 
+function toPublicUser(user: InstanceType<typeof User>) {
+  return {
+    id: user._id,
+    email: user.email ?? '',
+    role: user.role,
+    userType: user.userType ?? null,
+  };
+}
+
 /** Выставляет refresh token в cookie и возвращает accessToken + user для JSON-ответа */
 async function issueAuthResponse(
   res: Response,
   user: InstanceType<typeof User>
-): Promise<{ accessToken: string; refreshToken?: string; user: { id: typeof user._id; email: string; role: UserRole } }> {
+): Promise<{
+  accessToken: string;
+  refreshToken?: string;
+  user: ReturnType<typeof toPublicUser>;
+}> {
   const userId = user._id.toString();
   const email = user.email ?? '';
-  const accessToken = generateAccessToken({ userId, email, role: user.role });
+  const accessToken = generateAccessToken({
+    userId,
+    email,
+    role: user.role,
+    ...(user.userType ? { userType: user.userType } : {}),
+  });
   const refreshToken = await generateRefreshToken(userId);
   res.cookie('refreshToken', refreshToken, getRefreshTokenCookieOptions());
   return {
     accessToken,
     ...(ALLOW_REFRESH_TOKEN_JSON ? { refreshToken } : {}),
-    user: { id: user._id, email, role: user.role },
+    user: toPublicUser(user),
   };
 }
 
@@ -94,7 +113,7 @@ function isInviteValid(invite: InstanceType<typeof Invite>): boolean {
 // Регистрация: обычная (email+пароль) или по invite
 export const register = async (req: Request<{}, {}, RegisterBody>, res: Response): Promise<void> => {
   try {
-    const { name, email, password, inviteCode } = req.body;
+    const { name, email, password, inviteCode, userType } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -128,6 +147,7 @@ export const register = async (req: Request<{}, {}, RegisterBody>, res: Response
       password: hashedPassword,
       authProvider: 'email',
       role,
+      userType,
     });
 
     if (inviteDoc) {
@@ -227,6 +247,7 @@ export const refresh = async (req: Request, res: Response): Promise<void> => {
       userId: user._id.toString(),
       email: user.email ?? '',
       role: user.role,
+      ...(user.userType ? { userType: user.userType } : {}),
     });
 
     res.status(200).json({
@@ -432,6 +453,39 @@ export const telegramAuth = async (
 
     const authPayload = await issueAuthResponse(res, user);
     res.status(200).json(authPayload);
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+};
+
+// Выбор пути после регистрации: работодатель или специалист
+export const setUserType = async (
+  req: AuthRequest<{}, {}, { userType: UserType }>,
+  res: Response
+): Promise<void> => {
+  try {
+    if (!req.user) {
+      res.status(401).json({ error: 'Не авторизован' });
+      return;
+    }
+
+    const user = await User.findById(req.user.userId);
+    if (!user || user.isDeleted) {
+      res.status(404).json({ error: 'Пользователь не найден' });
+      return;
+    }
+
+    user.userType = req.body.userType;
+    await user.save();
+
+    const accessToken = generateAccessToken({
+      userId: user._id.toString(),
+      email: user.email ?? '',
+      role: user.role,
+      userType: user.userType,
+    });
+
+    res.status(200).json({ user: toPublicUser(user), accessToken });
   } catch (error: unknown) {
     res.status(500).json({ error: getErrorMessage(error) });
   }

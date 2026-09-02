@@ -1,9 +1,10 @@
+import { surfaceColor } from '@/shared/config/theme/colors';
 import { Stack } from 'expo-router';
 import { useColorScheme } from 'react-native';
 
 export default function AuthLayout() {
   const colorScheme = useColorScheme();
-  const backgroundColor = colorScheme === 'dark' ? '#111827' : '#f9fafb';
+  const backgroundColor = surfaceColor('canvas', colorScheme);
 
   return (
     <Stack

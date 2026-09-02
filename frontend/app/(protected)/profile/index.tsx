@@ -9,11 +9,11 @@ import { ExperienceCard } from '@/features/profile/ui/ExperienceCard';
 import { IdentityBlock } from '@/features/profile/ui/IdentityBlock';
 import { SkillsTagList } from '@/features/profile/ui/SkillsTagList';
 import { useTranslation } from '@/shared/lib/hooks/useTranslation';
-import { UserRole } from '@/shared/model';
+import { UserRole, UserType } from '@/shared/model';
 import { PrimaryButton } from '@/shared/ui/buttons/PrimaryButton';
 import { FullScreenLoader, LanguageSwitcher } from '@/src/shared/ui';
-import { type Href, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { Redirect, type Href, useRouter } from 'expo-router';
+import { useEffect } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -32,8 +32,8 @@ export default function ProfileScreen() {
   const { t: tJobs } = useTranslation('jobs');
   const { t: tCareer } = useTranslation('career');
   const userRole = useAuthStore((state) => state.user?.role);
+  const userType = useAuthStore((state) => state.user?.userType);
   const router = useRouter();
-  const [hasTriedFetchProfile, setHasTriedFetchProfile] = useState(false);
   const emptyValue = '—';
 
   const yearsInCurrentRole = (() => {
@@ -51,24 +51,17 @@ export default function ProfileScreen() {
   })();
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      setHasTriedFetchProfile(false);
+    if (!isAuthenticated || userType === UserType.EMPLOYER) {
       return;
     }
-    setHasTriedFetchProfile(false);
-    fetchProfile()
-      .catch(() => {
-        // store already sets error; redirect logic below relies on hasTriedFetchProfile
-      })
-      .finally(() => setHasTriedFetchProfile(true));
-  }, [fetchProfile, isAuthenticated]);
+    fetchProfile().catch(() => {
+      // store already sets error
+    });
+  }, [fetchProfile, isAuthenticated, userType]);
 
-  useEffect(() => {
-    if (!isAuthenticated) return;
-    if (hasTriedFetchProfile && !isLoading && !profile) {
-      router.replace('/profile/create');
-    }
-  }, [hasTriedFetchProfile, isAuthenticated, isLoading, profile, router]);
+  if (userType === UserType.EMPLOYER) {
+    return <Redirect href={'/employer' as Href} />;
+  }
 
   async function handleLogout() {
     resetFavorites();

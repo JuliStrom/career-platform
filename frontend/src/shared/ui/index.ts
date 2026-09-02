@@ -3,6 +3,7 @@ export { FilterSecondaryButton } from './buttons/FilterSecondaryButton';
 export { IconNavPressable } from './buttons/IconNavPressable';
 export { ErrorBoundary } from './common/ErrorBoundary';
 export { LanguageSwitcher } from './LanguageSwitcher';
+export { AppHeader } from './layout/AppHeader';
 export { FullScreenLoader } from './common/FullScreenLoader';
 export { NamedField } from './inputs/NamedField';
 export { PasswordField } from './inputs/PasswordField';

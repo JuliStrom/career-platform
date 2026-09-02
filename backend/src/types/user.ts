@@ -1,5 +1,5 @@
 import { Document } from 'mongoose';
-import { UserRole } from './auth';
+import { UserRole, UserType } from './auth';
 import type { AuthProvider } from './auth';
 
 // User Model (email и password опциональны для OAuth: Google, Telegram)
@@ -12,6 +12,8 @@ export interface IUser extends Document {
   telegramId?: number;
   telegramUsername?: string;
   role: UserRole;
+  /** Путь платформы, выбранный при регистрации. Пусто у аккаунтов до этого поля. */
+  userType?: UserType;
   isBlocked: boolean;
   isDeleted: boolean;
   isSubscribed: boolean;

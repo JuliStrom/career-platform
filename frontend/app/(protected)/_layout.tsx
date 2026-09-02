@@ -1,9 +1,10 @@
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useNotificationsStore } from '@/features/notifications/store/notifications-store';
 import { useTranslation } from '@/shared/lib/hooks/useTranslation';
+import { UserType } from '@/shared/model';
 import { FullScreenLoader } from '@/src/shared/ui/common/FullScreenLoader';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Redirect, Tabs, useRootNavigationState } from 'expo-router';
+import { Redirect, Tabs, type Href, useRootNavigationState } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 
@@ -16,11 +17,13 @@ export default function ProtectedLayout() {
   const { t: tProfile } = useTranslation('profile');
   const { t: tJobs } = useTranslation('jobs');
   const { t: tCareer } = useTranslation('career');
+  const { t: tAuth } = useTranslation('auth');
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const revalidateSession = useAuthStore((state) => state.revalidateSession);
   const isInitializing = useAuthStore((state) => state.isInitializing);
   const isLoading = useAuthStore((state) => state.isLoading);
+  const userType = useAuthStore((state) => state.user?.userType);
   const unreadCount = useNotificationsStore((state) => state.unreadCount);
   const fetchNotifications = useNotificationsStore(
     (state) => state.fetchNotifications
@@ -60,6 +63,12 @@ export default function ProtectedLayout() {
     return <Redirect href="/(auth)/login" />;
   }
 
+  if (!userType) {
+    return <Redirect href="/choose-path" />;
+  }
+
+  const isEmployer = userType === UserType.EMPLOYER;
+
   return (
     <Tabs
       screenOptions={{
@@ -74,11 +83,22 @@ export default function ProtectedLayout() {
       }}
     >
       <Tabs.Screen
+        name="employer/index"
+        options={{
+          title: tAuth('employerHome.tabTitle'),
+          tabBarLabel: tAuth('employerHome.tabTitle'),
+          href: isEmployer ? ('/employer' as Href) : null,
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="business-center" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="profile/index"
         options={{
           title: tProfile('title'),
           tabBarLabel: tCommon('tabProfile'),
-          href: '/profile',
+          href: isEmployer ? null : '/profile',
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="person" size={size} color={color} />
           ),
@@ -89,7 +109,7 @@ export default function ProtectedLayout() {
         options={{
           title: tJobs('listTitle'),
           tabBarLabel: tCommon('tabJobs'),
-          href: '/jobs',
+          href: isEmployer ? null : '/jobs',
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="work-outline" size={size} color={color} />
           ),
@@ -101,7 +121,7 @@ export default function ProtectedLayout() {
         options={{
           title: tCommon('educations.mainTitle'),
           tabBarLabel: tCommon('tabEducation'),
-          href: '/education' as never,
+          href: isEmployer ? null : ('/education' as never),
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="school" size={size} color={color} />
           ),
@@ -112,7 +132,7 @@ export default function ProtectedLayout() {
         options={{
           title: tCareer('recommendations.title'),
           tabBarLabel: tCommon('tabRecommendations'),
-          href: '/recommendations',
+          href: isEmployer ? null : '/recommendations',
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="lightbulb-outline" size={size} color={color} />
           ),

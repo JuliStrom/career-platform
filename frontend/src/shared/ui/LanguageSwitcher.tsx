@@ -11,7 +11,8 @@ export function LanguageSwitcher() {
       <Text className="text-sm text-gray-600 dark:text-gray-400">
         {t('language')}:
       </Text>
-      <View className="flex-row rounded-lg border border-gray-300 dark:border-gray-600">
+      {/* Своя подложка — чтобы активный язык читался и на цветном хедере */}
+      <View className="flex-row overflow-hidden rounded-lg border border-gray-300 bg-white/70 dark:border-gray-600 dark:bg-white/10">
         <Pressable
           onPress={() => setLanguage('ru')}
           className={`px-3 py-2 ${currentLang === 'ru' ? 'bg-blue-100 dark:bg-blue-900' : ''}`}

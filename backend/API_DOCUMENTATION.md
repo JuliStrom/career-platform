@@ -29,7 +29,8 @@ http://localhost:3000
   "user": {
     "id": "507f1f77bcf86cd799439011",
     "email": "user@example.com",
-    "role": "SPECIALIST"
+    "role": "SPECIALIST",
+    "userType": null
   }
 }
 ```
@@ -43,6 +44,7 @@ refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; HttpOnly; Secure; SameSite
 - Refresh token устанавливается в httpOnly cookie и недоступен для JavaScript
 - SameSite настраивается через переменную окружения `COOKIE_SAME_SITE` (по умолчанию `lax`)
 - Пароль: минимум 8 символов, хотя бы одна заглавная буква и одна цифра
+- `userType` (`employer` | `specialist`) — путь платформы. Поле опционально: обычно выбирается на отдельном экране после регистрации через `PATCH /api/auth/user-type`, у аккаунтов без выбора в ответе `null`.
 
 ---
 
@@ -66,7 +68,8 @@ refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; HttpOnly; Secure; SameSite
   "user": {
     "id": "507f1f77bcf86cd799439011",
     "email": "user@example.com",
-    "role": "SPECIALIST"
+    "role": "SPECIALIST",
+    "userType": "specialist"
   }
 }
 ```
@@ -210,6 +213,48 @@ refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; HttpOnly; Secure; SameSite
 - Refresh token удаляется из БД и cookie
 - Access token продолжит работать до истечения (максимум 20 минут)
 - Клиент должен удалить access token из памяти/storage
+
+---
+
+### 7. Выбор пути платформы
+
+**Endpoint:** `PATCH /api/auth/user-type`
+
+**Описание:** Сохраняет путь, выбранный на экране после регистрации: работодатель или специалист.
+
+**Заголовки:**
+```
+Authorization: Bearer <accessToken>
+```
+
+**Тело запроса:**
+```json
+{
+  "userType": "employer"
+}
+```
+
+`userType` — обязательное поле, допустимые значения: `employer`, `specialist`.
+
+**Успешный ответ (200):**
+```json
+{
+  "user": {
+    "id": "6a91b166a0a815c5d1a2b690",
+    "email": "user@example.com",
+    "role": "SPECIALIST",
+    "userType": "employer"
+  },
+  "accessToken": "eyJhbGciOiJIUzI1NiIs..."
+}
+```
+
+Новый access token содержит выбранный `userType`; клиент должен заменить им текущий access token.
+
+**Ошибки:**
+- `400` — недопустимое значение `userType`
+- `401` — отсутствует или недействителен access token
+- `404` — пользователь не найден
 
 ---
 

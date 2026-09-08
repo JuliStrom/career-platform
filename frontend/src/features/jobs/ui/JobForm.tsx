@@ -36,23 +36,47 @@ import { SalaryField } from './SalaryField';
 const WORK_FORMAT_OPTIONS: JobWorkFormat[] = JOB_WORK_FORMATS;
 
 interface CreateJobFormProps {
-  onSubmit: (values: CreateJobPayload) => Promise<void>;
   onCancel: () => void;
   isLoading?: boolean;
   error?: string | null;
   initialValues?: Partial<CreateJobPayload>;
   titleKey?: string;
+  hideActiveToggle?: boolean;
 }
 
-export function JobForm({
-  onSubmit,
-  onCancel,
-  isLoading = false,
-  error: externalError,
-  initialValues,
-  titleKey = 'createTitle',
-}: CreateJobFormProps) {
+export type EmployerJobFormPayload = Omit<
+  CreateJobPayload,
+  'company' | 'companyId' | 'companyCulture'
+>;
+
+type JobFormProps = CreateJobFormProps &
+  (
+    | {
+        employerMode: true;
+        companyName: string;
+        onSubmit: (values: EmployerJobFormPayload) => Promise<void>;
+      }
+    | {
+        employerMode?: false;
+        companyName?: never;
+        onSubmit: (values: CreateJobPayload) => Promise<void>;
+      }
+  );
+
+export function JobForm(props: JobFormProps) {
+  const {
+    onCancel,
+    isLoading = false,
+    error: externalError,
+    initialValues,
+    titleKey = 'createTitle',
+    hideActiveToggle = false,
+  } = props;
   const { t } = useTranslation('jobs');
+  const companyName = props.employerMode ? props.companyName : undefined;
+  const formInitialValues = companyName
+    ? { ...initialValues, company: companyName }
+    : initialValues;
 
   const {
     control,
@@ -62,15 +86,18 @@ export function JobForm({
     trigger,
   } = useForm<CreateJobFormValues>({
     resolver: zodResolver(createJobFormSchema),
-    defaultValues: mapJobPayloadToFormValues(initialValues),
+    defaultValues: mapJobPayloadToFormValues(formInitialValues),
     mode: 'onBlur',
   });
 
   useEffect(() => {
-    if (!initialValues) return;
-
-    reset(mapJobPayloadToFormValues(initialValues));
-  }, [initialValues, reset]);
+    if (!initialValues && !companyName) return;
+    reset(
+      mapJobPayloadToFormValues(
+        companyName ? { ...initialValues, company: companyName } : initialValues
+      )
+    );
+  }, [companyName, initialValues, reset]);
 
   const handleSubmit = async (data: CreateJobFormValues) => {
     const requirements = parseListInput(data.requirementsInput);
@@ -110,7 +137,18 @@ export function JobForm({
       isActive: data.isActive ?? true,
     };
 
-    await onSubmit(payload);
+    if (props.employerMode) {
+      const {
+        company: _company,
+        companyId: _companyId,
+        companyCulture: _companyCulture,
+        ...employerPayload
+      } = payload;
+      await props.onSubmit(employerPayload);
+      return;
+    }
+
+    await props.onSubmit(payload);
   };
 
   const displayError = errors.root?.message ?? externalError;
@@ -153,22 +191,24 @@ export function JobForm({
             )}
           />
 
-          <Controller
-            control={control}
-            name="company"
-            render={({ field: { onChange, onBlur, value }, fieldState }) => (
-              <NamedField
-                label={t('form.company')}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                placeholder={t('form.company')}
-                autoCapitalize="words"
-                error={errors.company?.message}
-                touched={fieldState.isTouched}
-              />
-            )}
-          />
+          {!props.employerMode ? (
+            <Controller
+              control={control}
+              name="company"
+              render={({ field: { onChange, onBlur, value }, fieldState }) => (
+                <NamedField
+                  label={t('form.company')}
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  placeholder={t('form.company')}
+                  autoCapitalize="words"
+                  error={errors.company?.message}
+                  touched={fieldState.isTouched}
+                />
+              )}
+            />
+          ) : null}
 
           <Controller
             control={control}
@@ -292,23 +332,25 @@ export function JobForm({
             trigger={trigger}
           />
 
-          <Controller
-            control={control}
-            name="isActive"
-            render={({ field: { onChange, value } }) => (
-              <View className="mb-6 flex-row items-center justify-between">
-                <Text className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {t('form.isActive')}
-                </Text>
-                <Switch
-                  value={value ?? true}
-                  onValueChange={onChange}
-                  trackColor={{ false: '#d1d5db', true: '#93c5fd' }}
-                  thumbColor={(value ?? true) ? '#2563eb' : '#f3f4f6'}
-                />
-              </View>
-            )}
-          />
+          {!hideActiveToggle ? (
+            <Controller
+              control={control}
+              name="isActive"
+              render={({ field: { onChange, value } }) => (
+                <View className="mb-6 flex-row items-center justify-between">
+                  <Text className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {t('form.isActive')}
+                  </Text>
+                  <Switch
+                    value={value ?? true}
+                    onValueChange={onChange}
+                    trackColor={{ false: '#d1d5db', true: '#93c5fd' }}
+                    thumbColor={(value ?? true) ? '#2563eb' : '#f3f4f6'}
+                  />
+                </View>
+              )}
+            />
+          ) : null}
 
           {displayError && (
             <Text className="mb-4 text-sm text-red-600 dark:text-red-400">

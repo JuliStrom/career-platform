@@ -33,6 +33,7 @@ export interface UserPayload {
   userId: string;
   email: string;
   role: UserRole;
+  userType?: UserType | null;
   isSubscribed?: boolean;
 }
 

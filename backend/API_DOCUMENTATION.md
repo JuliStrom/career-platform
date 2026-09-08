@@ -1770,3 +1770,116 @@ axios.interceptors.response.use(
 - НЕ храните refresh token в localStorage
 - НЕ отправляйте refresh token в JSON
 - НЕ храните access token в cookie (должен быть доступен JS)
+
+---
+
+## Заказчик / работодатель
+
+Все эндпоинты требуют `Authorization: Bearer <accessToken>` и `userType=employer`.
+
+### Профиль компании
+
+**GET /api/employer/profile** — свой профиль компании. `404`, если ещё не создан.
+
+**POST /api/employer/profile** / **PUT /api/employer/profile**
+
+```json
+{
+  "name": "Studio North",
+  "description": "Делаем digital-продукты для ритейла",
+  "industry": "IT",
+  "taskType": "project",
+  "budgetRange": "500k_1m"
+}
+```
+
+`taskType`: `project` | `hire` | `one_off`.
+`budgetRange` опционален: `up_to_500k` | `500k_1m` | `1m_3m` | `3m_plus`.
+
+### Карточка компании
+
+У работодателя может быть одна компания. Старые административные компании без
+владельца не привязываются к работодателям автоматически.
+
+**GET /api/employer/company** — своя компания. `404`, если ещё не создана.
+
+**POST /api/employer/company** — создать компанию. Повторное создание возвращает
+`409`.
+
+**PUT /api/employer/company** — частично обновить свою компанию. При изменении
+названия оно также обновляется во всех связанных вакансиях.
+
+```json
+{
+  "name": "Studio North",
+  "logo": "https://example.com/logo.png",
+  "workFormat": "Remote",
+  "valuesTags": ["Прозрачность", "Развитие"],
+  "growthSpeed": "Fast",
+  "teamSize": "11-50",
+  "languages": ["RU", "EN"],
+  "description": "Распределённая продуктовая команда"
+}
+```
+
+Ответ: `{ "company": { ... } }`.
+
+### Вакансии работодателя
+
+**GET /api/employer/jobs** — все собственные вакансии, включая неактивные.
+Ответ: `{ "jobs": [ ... ], "total": 2 }`.
+
+**POST /api/employer/jobs** — создать и сразу опубликовать вакансию
+(`isActive=true`). Сначала должна быть создана компания. Поля `company` и
+`companyId` не принимаются: компания и автор устанавливаются сервером.
+
+**GET /api/employer/jobs/:id** — получить собственную вакансию.
+
+**PUT /api/employer/jobs/:id** — частично обновить собственную вакансию. Доступны
+`title`, `description`, `direction`, `level`, `workFormat`, `location`, `salary`,
+`requirements`, `responsibilities`, `isActive`. Поля компании не принимаются.
+
+**DELETE /api/employer/jobs/:id** — мягко деактивировать собственную вакансию.
+
+Создание отправляет подходящим специалистам уведомления `new_jobs`. В ответах
+вакансии содержат `companyId` и карточку `companyCulture`. Попытка прочитать или
+изменить чужую вакансию возвращает `404`.
+
+Пример тела создания:
+
+```json
+{
+  "title": "Middle Frontend Developer",
+  "description": "Разработка интерфейсов продуктовой платформы",
+  "direction": "IT",
+  "level": "Middle",
+  "workFormat": "Remote",
+  "location": "Алматы",
+  "salary": { "min": 700000, "max": 1000000, "currency": "KZT" },
+  "requirements": ["TypeScript", "React"],
+  "responsibilities": ["Разрабатывать интерфейсы"]
+}
+```
+
+### Поиск специалистов
+
+**GET /api/employer/specialists**
+
+Query: `direction`, `level`, `city`, `format` (`hire` | `project`), `page`, `limit`.
+
+`format=hire` — `fulltime` и `searching`, `format=project` — `freelance` и `business`.
+
+### Связаться со специалистом
+
+**POST /api/employer/specialists/:profileId/contact**
+
+```json
+{
+  "kind": "message",
+  "message": "Нужен Middle Frontend на 2 месяца"
+}
+```
+
+`kind`: `message` | `project_offer`. Требует созданную карточку компании и
+использует её название в уведомлении специалисту. Повтор того же типа к тому же
+человеку — не чаще одного раза в день (`409`).

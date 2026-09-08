@@ -4,11 +4,14 @@ import {
   CareerChangeTimeline,
   City,
   Direction,
+  EmployerBudgetRange,
+  EmployerTaskType,
   EmploymentType,
   GrowthSpeed,
   JobWorkFormat,
   Level,
   ProfileLang,
+  SpecialistWorkFormat,
   TeamSize,
   WorkLanguage,
 } from './enums';
@@ -42,3 +45,12 @@ export const EMPLOYMENT_TYPE_VALUES = Object.values(
   EmploymentType
 ) as EmploymentType[];
 export const PROFILE_LANG_VALUES = Object.values(ProfileLang) as ProfileLang[];
+export const EMPLOYER_TASK_TYPE_VALUES = Object.values(
+  EmployerTaskType
+) as EmployerTaskType[];
+export const EMPLOYER_BUDGET_RANGE_VALUES = Object.values(
+  EmployerBudgetRange
+) as EmployerBudgetRange[];
+export const SPECIALIST_WORK_FORMAT_VALUES = Object.values(
+  SpecialistWorkFormat
+) as SpecialistWorkFormat[];

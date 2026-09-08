@@ -81,6 +81,31 @@ export enum UserType {
   SPECIALIST = 'specialist',
 }
 
+/** Тип задач, которые обычно даёт заказчик. */
+export enum EmployerTaskType {
+  Project = 'project',
+  Hire = 'hire',
+  OneOff = 'one_off',
+}
+
+export enum EmployerBudgetRange {
+  UpTo500k = 'up_to_500k',
+  From500kTo1m = '500k_1m',
+  From1mTo3m = '1m_3m',
+  From3mPlus = '3m_plus',
+}
+
+/** Формат сотрудничества в поиске специалистов. */
+export enum SpecialistWorkFormat {
+  Hire = 'hire',
+  Project = 'project',
+}
+
+export enum EmployerContactKind {
+  Message = 'message',
+  ProjectOffer = 'project_offer',
+}
+
 export enum CareerGoal {
   Growth = 'Growth',
   Leadership = 'Leadership',

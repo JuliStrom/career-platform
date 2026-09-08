@@ -24,6 +24,14 @@
     "ai_risk_updated": {
       "title": "AI risk updated",
       "message": "We updated the AI risk data for your field — check your index."
+    },
+    "employer_message": {
+      "title": "A client wrote to you",
+      "message": "{{employerName}} wants to get in touch. {{message}}"
+    },
+    "employer_project_offer": {
+      "title": "Project offer",
+      "message": "{{employerName}} offered you a project. {{message}}"
     }
   }
 }

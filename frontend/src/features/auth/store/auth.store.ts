@@ -5,6 +5,7 @@ import { UserRole, UserType } from '@/shared/model';
 import { Platform } from 'react-native';
 import { create } from 'zustand';
 import { analytics } from '@/features/analytics/lib/track';
+import { useEmployerStore } from '@/features/employer/store/employer-store';
 import { useProfileStore } from '@/features/profile/store/profile-store';
 import * as authApi from '../api/auth.api';
 import {
@@ -59,6 +60,7 @@ function buildUserFromToken(accessToken: string): User | null {
 
 function clearProfileCache() {
   useProfileStore.getState().resetProfile();
+  useEmployerStore.getState().reset();
 }
 
 /** Параллельные вызовы revalidateSession (root layout + protected layout, StrictMode) → один проход. */
@@ -330,6 +332,7 @@ export async function applyAuthRefreshFailure(errorMessage?: string) {
     localStorage.removeItem('access_token');
   } else await secureStorage.clearTokens();
   useProfileStore.getState().resetProfile();
+  useEmployerStore.getState().reset();
   useAuthStore.setState({
     isAuthenticated: false,
     user: null,

@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { WorkFormat } from './jobEnums';
 
 export enum GrowthSpeed {
@@ -21,6 +21,7 @@ export enum WorkLanguage {
 }
 
 export interface ICompany extends Document {
+  ownerId?: Types.ObjectId | null;
   name: string;
   logo?: string | null;
   workFormat: WorkFormat;

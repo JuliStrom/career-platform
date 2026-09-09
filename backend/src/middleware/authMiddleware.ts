@@ -4,7 +4,11 @@ import { verifyAccessToken } from '../utils/tokenService';
 import User from '../models/User';
 
 // Middleware для проверки Access Token
-const authMiddleware = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+const authMiddleware = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -42,6 +46,7 @@ const authMiddleware = async (req: AuthRequest, res: Response, next: NextFunctio
       userId: user._id.toString(),
       email: user.email ?? '',
       role: user.role,
+      userType: user.userType ?? null,
       isSubscribed: user.isSubscribed ?? true,
     };
 

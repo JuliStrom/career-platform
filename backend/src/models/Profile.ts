@@ -177,6 +177,12 @@ const profileSchema = new Schema<IProfile>({
   timestamps: true,
 });
 
+// Employer search: chronological feed and common direction/level filters.
+profileSchema.index({ updatedAt: -1, _id: -1 });
+profileSchema.index({ direction: 1, updatedAt: -1, _id: -1 });
+profileSchema.index({ direction: 1, level: 1, updatedAt: -1, _id: -1 });
+profileSchema.index({ city: 1, updatedAt: -1, _id: -1 });
+
 profileSchema.virtual('yearsInCurrentRole').get(function (this: IProfile) {
   return computeYearsInCurrentRole(this.careerStartDate);
 });

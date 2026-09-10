@@ -3,6 +3,7 @@ import { Text, View } from 'react-native';
 
 interface MarketStatsCardProps {
   vacanciesValue: number | string;
+  level: string;
   direction: string;
   targetCountryMarketName: string;
   salaryRange: string;
@@ -11,6 +12,7 @@ interface MarketStatsCardProps {
 
 export function MarketStatsCard({
   vacanciesValue,
+  level,
   direction,
   targetCountryMarketName,
   salaryRange,
@@ -26,6 +28,7 @@ export function MarketStatsCard({
       <Text className="text-xl font-semibold text-gray-900 dark:text-white">
         {tProfile('careerAbroad.vacanciesNow', {
           count: vacanciesValue,
+          level,
           direction,
           targetCountry: targetCountryMarketName,
         })}

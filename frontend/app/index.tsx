@@ -1,11 +1,13 @@
 import { useAuthStore } from '@/features/auth/store/auth.store';
+import { UserType } from '@/shared/model';
 import { FullScreenLoader } from '@/src/shared/ui/common/FullScreenLoader';
-import { Redirect, useRootNavigationState } from 'expo-router';
+import { Redirect, type Href, useRootNavigationState } from 'expo-router';
 
 export default function Index() {
   const rootNavigationState = useRootNavigationState();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const isInitializing = useAuthStore((state) => state.isInitializing);
+  const userType = useAuthStore((state) => state.user?.userType);
 
   if (!rootNavigationState?.key) {
     return <FullScreenLoader />;
@@ -19,5 +21,13 @@ export default function Index() {
     return <Redirect href="/(auth)/login" />;
   }
 
-  return <Redirect href="/profile" />;
+  if (!userType) {
+    return <Redirect href="/choose-path" />;
+  }
+
+  return (
+    <Redirect
+      href={(userType === UserType.EMPLOYER ? '/employer' : '/jobs') as Href}
+    />
+  );
 }

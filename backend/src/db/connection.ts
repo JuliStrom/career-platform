@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import { backfillProfileDirections } from '../utils/backfillProfileDirections';
+import { backfillSkillsDictionary } from '../utils/backfillSkillsDictionary';
 
 // Подключение к MongoDB
 const connectDB = async (): Promise<void> => {
@@ -8,6 +10,8 @@ const connectDB = async (): Promise<void> => {
     }
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('MongoDB connected successfully');
+    await backfillProfileDirections();
+    await backfillSkillsDictionary();
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     console.error('MongoDB connection error:', errorMessage);

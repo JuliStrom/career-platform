@@ -29,6 +29,8 @@ export type ProfileExperienceProject = {
 export interface IProfile extends Document {
   userId: Types.ObjectId;
   name: string;
+  /** Короткий текст о себе (2–3 предложения), виден в карточке поиска */
+  aboutMe?: string | null;
   avatar?: string | null;
   portfolioPdfData?: Buffer | null;
   portfolioPdfContentType?: string | null;
@@ -73,6 +75,7 @@ export interface IProfile extends Document {
 // Request типы для профиля
 export type CreateProfileBody = {
   name: string;
+  aboutMe?: string | null;
   avatar?: string;
   directions: Direction[];
   level: Level;
@@ -101,6 +104,7 @@ export type CreateProfileBody = {
 
 export type UpdateProfileBody = {
   name?: string;
+  aboutMe?: string | null;
   avatar?: string;
   directions?: Direction[];
   level?: Level;

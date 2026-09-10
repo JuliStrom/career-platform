@@ -53,6 +53,7 @@ function buildProfileRequestBody(profile: Profile) {
   const track = Boolean(profile.careerChangeTrackActive);
   return {
     name: profile.name,
+    aboutMe: profile.aboutMe?.trim() ? profile.aboutMe.trim() : null,
     avatar: profile.avatar,
     directions: readProfileDirections(profile),
     level: profile.level,

@@ -65,18 +65,26 @@ export function SpecialistProfile({
             <Text className="mb-4 text-sm font-medium text-blue-600 dark:text-blue-300">
               {t('title')}
             </Text>
-            <View className="flex-row items-center gap-4">
+            <View className="flex-row items-center justify-center gap-16 self-start px-4">
               <AvatarSection
                 avatar={profile.avatar}
                 name={profile.name}
                 className="mb-0 shrink-0"
+                sizeClassName="h-[7.2rem] w-[7.2rem]"
               />
-              <Text
-                accessibilityRole="header"
-                className="min-w-0 flex-1 text-3xl font-bold text-gray-900 dark:text-white"
-              >
-                {profile.name}
-              </Text>
+              <View className="min-w-0 max-w-[28.6rem]">
+                <Text
+                  accessibilityRole="header"
+                  className="text-3xl font-bold text-gray-900 dark:text-white"
+                >
+                  {profile.name}
+                </Text>
+                {profile.aboutMe?.trim() ? (
+                  <Text className="mt-2 text-base leading-6 text-gray-700 dark:text-gray-300">
+                    {profile.aboutMe.trim()}
+                  </Text>
+                ) : null}
+              </View>
             </View>
             <View className="mt-6">
               <DirectionLevelBadge

@@ -4,6 +4,9 @@
   "createProfile": "Create Profile",
   "createProfileButton": "Create Profile",
   "name": "Name",
+  "aboutMe": "About me",
+  "aboutMePlaceholder": "Two or three sentences: who you are, what you do, and what you are looking for",
+  "aboutMeHint": "A short free-text intro. Employers see it first on the search card.",
   "avatarUrl": "Profile photo",
   "deleteAvatarButton": "Delete Avatar",
   "direction": "Direction",
@@ -280,6 +283,7 @@
   "validation": {
     "nameMin": "Name must contain at least 2 characters",
     "nameMax": "Name must not exceed 100 characters",
+    "aboutMeMax": "About me must be 400 characters or fewer",
     "avatarInvalid": "Invalid avatar value",
     "avatarValidationType": "Only JPG, PNG or WebP are allowed",
     "avatarValidationSize": "File size must be at most 5 MB",

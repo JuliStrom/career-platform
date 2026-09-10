@@ -19,6 +19,7 @@ export const create = async (req: AuthRequest<{}, {}, CreateProfileBody>, res: R
     const userId = req.user.userId;
     const {
       name,
+      aboutMe,
       avatar,
       directions: rawDirections,
       level,
@@ -75,6 +76,7 @@ export const create = async (req: AuthRequest<{}, {}, CreateProfileBody>, res: R
     const profile = await Profile.create({
       userId,
       name,
+      aboutMe: aboutMe?.trim() ? aboutMe.trim() : null,
       avatar,
       directions,
       level,
@@ -150,6 +152,7 @@ export const update = async (req: AuthRequest<{}, {}, UpdateProfileBody>, res: R
     const userId = req.user.userId;
     const {
       name,
+      aboutMe,
       avatar,
       directions: rawDirections,
       level,
@@ -183,6 +186,9 @@ export const update = async (req: AuthRequest<{}, {}, UpdateProfileBody>, res: R
     }
 
     if (name !== undefined) profile.name = name;
+    if (aboutMe !== undefined) {
+      profile.aboutMe = aboutMe?.trim() ? aboutMe.trim() : null;
+    }
     if (avatar !== undefined) profile.avatar = avatar;
     if (rawDirections !== undefined) {
       const directions = normalizeProfileDirections({ directions: rawDirections });

@@ -106,6 +106,7 @@ export function ProfileForm({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
       name: initialValues?.name ?? '',
+      aboutMe: initialValues?.aboutMe ?? '',
       avatar: initialValues?.avatar ?? '',
       directions: normalizeProfileDirections(
         initialValues?.directions ?? Direction.IT
@@ -146,6 +147,7 @@ export function ProfileForm({
   const initialValuesSyncKey = initialValues
     ? JSON.stringify({
         name: initialValues.name,
+        aboutMe: initialValues.aboutMe,
         avatar: initialValues.avatar,
         directions: initialValues.directions,
         skills: initialValues.skills,
@@ -165,6 +167,7 @@ export function ProfileForm({
 
     reset({
       ...initialValues,
+      aboutMe: initialValues.aboutMe ?? '',
       avatar: initialValues.avatar ?? '',
       directions: normalizeProfileDirections(
         initialValues.directions ?? Direction.IT
@@ -210,6 +213,7 @@ export function ProfileForm({
   const handleSubmit = async (data: ProfileFormValues) => {
     const payload: Profile = {
       name: data.name.trim(),
+      aboutMe: data.aboutMe?.trim() ?? '',
       avatar:
         typeof data.avatar === 'string' && data.avatar.trim()
           ? data.avatar.trim()
@@ -333,6 +337,30 @@ export function ProfileForm({
               />
             )}
           />
+
+          <Controller
+            control={control}
+            name="aboutMe"
+            render={({ field: { onChange, onBlur, value }, fieldState }) => (
+              <NamedField
+                label={t('aboutMe')}
+                value={value ?? ''}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                placeholder={t('aboutMePlaceholder')}
+                multiline
+                numberOfLines={3}
+                textAlignVertical="top"
+                error={errors.aboutMe?.message}
+                touched={fieldState.isTouched}
+                margin="mb-1"
+                inputClassName="min-h-[96px] rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+              />
+            )}
+          />
+          <Text className="mb-4 text-sm text-gray-500 dark:text-gray-400">
+            {t('aboutMeHint')}
+          </Text>
 
           <Controller
             control={control}

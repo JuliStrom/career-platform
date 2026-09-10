@@ -114,6 +114,12 @@ export const createProfileSchema = z.object({
       .string()
       .min(1, 'Имя обязательно')
       .trim(),
+    aboutMe: z
+      .string()
+      .trim()
+      .max(400, 'Текст «Обо мне» не длиннее 400 символов')
+      .optional()
+      .nullable(),
     avatar: z
       .union([
         z.string().url('Неверный формат URL'),
@@ -199,6 +205,12 @@ export const updateProfileSchema = z.object({
       .min(1, 'Имя не может быть пустым')
       .trim()
       .optional(),
+    aboutMe: z
+      .string()
+      .trim()
+      .max(400, 'Текст «Обо мне» не длиннее 400 символов')
+      .optional()
+      .nullable(),
     avatar: z
       .union([
         z.string().url('Неверный формат URL'),

@@ -34,6 +34,11 @@ export function SpecialistCardView({
 
   return (
     <View className="mb-3 rounded-xl bg-white p-4 shadow-sm dark:bg-gray-800">
+      {item.aboutMe?.trim() ? (
+        <Text className="mb-2 text-sm leading-5 text-gray-700 dark:text-gray-200">
+          {item.aboutMe.trim()}
+        </Text>
+      ) : null}
       <Text className="text-base font-semibold text-gray-900 dark:text-white">
         {item.name}
       </Text>

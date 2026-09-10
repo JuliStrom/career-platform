@@ -32,7 +32,7 @@ export function buildSpecialistSearchPipeline(
     { $sort: { updatedAt: -1, _id: -1 } },
     // Exclude PDF buffers and other fields not needed by the cards.
     { $project: {
-      userId: 1, name: 1, directions: 1, level: 1, skills: 1, careerGoal: 1,
+      userId: 1, name: 1, aboutMe: 1, directions: 1, level: 1, skills: 1, careerGoal: 1,
       city: 1, employmentType: 1, experience: 1, currentCompany: 1,
       wantsRelocation: 1, relocationToCountry: 1,
     } },
@@ -61,6 +61,7 @@ export function buildSpecialistSearchPipeline(
           _id: 0,
           id: '$_id',
           name: 1,
+          aboutMe: { $ifNull: ['$aboutMe', null] },
           directions: { $ifNull: ['$directions', []] },
           level: 1,
           skills: 1,

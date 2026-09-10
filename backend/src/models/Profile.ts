@@ -24,6 +24,12 @@ const profileSchema = new Schema<IProfile>({
     required: [true, 'Имя обязательно'],
     trim: true,
   },
+  aboutMe: {
+    type: String,
+    maxlength: 400,
+    default: null,
+    trim: true,
+  },
   avatar: {
     type: String,
     default: null,

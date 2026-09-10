@@ -75,6 +75,12 @@ export const baseProfileSchema = z.object({
     .min(2, getProfileValidationMessage('nameMin'))
     .max(100, getProfileValidationMessage('nameMax'))
     .trim(),
+  aboutMe: z
+    .string()
+    .trim()
+    .max(400, getProfileValidationMessage('aboutMeMax'))
+    .optional()
+    .default(''),
   // avatar: URL, путь /avatars/..., локальный URI (file, blob, content, …)
   avatar: z
     .union([

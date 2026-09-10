@@ -22,6 +22,7 @@ import {toCareerTriggerCardDto} from '../services/careerTriggerDto';
 import {loadActiveLearningResourcesLean} from '../services/matchLearningResourcesForRoadmap';
 import {buildCareerRoadmapDtos} from '../services/careerRoadmapDto';
 import {createNotification} from "../services/notificationDto";
+import {normalizeProfileDirections} from '../utils/profileDirections';
 
 type AiRiskIndexLean = IAiRiskIndex & {
     _id: mongoose.Types.ObjectId;
@@ -58,8 +59,9 @@ export const getCareerRoadmap = async (req: AuthRequest, res: Response): Promise
             return;
         }
 
+        const dirs = normalizeProfileDirections(profile);
         const roadmaps = await CareerRoadmap.find({
-            direction: profile.direction,
+            direction: { $in: dirs },
             fromLevel: profile.level,
             isActive: true,
         }).sort({sortOrder: 1, createdAt: 1});
@@ -69,7 +71,7 @@ export const getCareerRoadmap = async (req: AuthRequest, res: Response): Promise
 
         res.status(200).json({
             profileContext: {
-                direction: profile.direction,
+                direction: dirs[0],
                 fromLevel: profile.level,
             },
             roadmaps: roadmapsDto,
@@ -151,8 +153,9 @@ export const getAiRisk = async (req: AuthRequest, res: Response): Promise<void> 
             return;
         }
 
+        const dirs = normalizeProfileDirections(profile);
         const row = await AiRiskIndex.findOne({
-            direction: profile.direction,
+            direction: dirs[0],
             level: profile.level,
         }).lean<AiRiskIndexLean>();
 
@@ -166,7 +169,7 @@ export const getAiRisk = async (req: AuthRequest, res: Response): Promise<void> 
 
         res.status(200).json({
             profile: {
-                direction: profile.direction,
+                direction: dirs[0],
                 level: profile.level,
             },
             id: String(row._id),
@@ -340,9 +343,11 @@ export const getRecommendations = async (req: AuthRequest, res: Response): Promi
             return;
         }
 
+        const dirs = normalizeProfileDirections(profile);
+
         // Ищем подходящие сценарии по direction и level
         const scenarios = await CareerScenario.find({
-            direction: profile.direction,
+            direction: { $in: dirs },
             level: profile.level,
             isActive: true,
         }).select('-createdBy -__v');
@@ -354,7 +359,7 @@ export const getRecommendations = async (req: AuthRequest, res: Response): Promi
 
         res.status(200).json({
             profile: {
-                direction: profile.direction,
+                direction: dirs[0],
                 level: profile.level,
                 careerGoal: profile.careerGoal,
                 careerStartDate: profile.careerStartDate ?? null,
@@ -384,7 +389,7 @@ export const getRecommendationById = async (req: AuthRequest<{ id: string }>, re
 
         const scenario = await CareerScenario.findOne({
             _id: req.params.id,
-            direction: profile.direction,
+            direction: { $in: normalizeProfileDirections(profile) },
             level: profile.level,
             isActive: true,
         }).select('-createdBy -__v');
@@ -714,7 +719,7 @@ export const createLearningResource = async (req: AuthRequest, res: Response): P
         //триггер для генерации нового уведомления
         if (doc.isActive) {
             const profileFilter: Record<string, unknown> = {};
-            if (doc.direction) profileFilter.direction = doc.direction;
+            if (doc.direction) profileFilter.directions = doc.direction;
             if (doc.level) profileFilter.level = doc.level;
 
             const profiles = await Profile.find(profileFilter).select('userId');

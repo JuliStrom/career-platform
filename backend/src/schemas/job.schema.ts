@@ -18,7 +18,7 @@ const levelValues = Object.values(Level) as [string, ...string[]];
 const workFormatValues = Object.values(WorkFormat) as [string, ...string[]];
 
 // Схема зарплаты
-const salarySchema = z.object({
+export const salarySchema = z.object({
   min: z.number().min(0, 'Минимальная зарплата не может быть отрицательной').optional(),
   max: z.number().min(0, 'Максимальная зарплата не может быть отрицательной').optional(),
   currency: z.enum(['KZT', 'USD', 'EUR', 'RUB'], {
@@ -33,41 +33,44 @@ const salarySchema = z.object({
   message: 'Минимальная зарплата не может быть больше максимальной',
 });
 
+export const jobEditableFieldsSchema = z.object({
+  title: z
+    .string()
+    .min(1, 'Название вакансии обязательно')
+    .trim(),
+  description: z
+    .string()
+    .min(1, 'Описание обязательно')
+    .min(20, 'Описание должно содержать минимум 20 символов'),
+  direction: z.enum(directionValues, {
+    message: `Неверное направление. Допустимые значения: ${directionValues.join(', ')}`,
+  }),
+  level: z.enum(levelValues, {
+    message: `Неверный уровень. Допустимые значения: ${levelValues.join(', ')}`,
+  }),
+  workFormat: z.enum(workFormatValues, {
+    message: `Неверный формат работы. Допустимые значения: ${workFormatValues.join(', ')}`,
+  }),
+  location: z
+    .string()
+    .min(1, 'Локация обязательна')
+    .trim(),
+  salary: salarySchema,
+  requirements: z
+    .array(z.string().min(1, 'Требование не может быть пустым'))
+    .min(1, 'Должно быть хотя бы одно требование'),
+  responsibilities: z
+    .array(z.string().min(1, 'Обязанность не может быть пустой'))
+    .min(1, 'Должна быть хотя бы одна обязанность'),
+});
+
 export const createJobSchema = z.object({
-  body: z.object({
-    title: z
-      .string()
-      .min(1, 'Название вакансии обязательно')
-      .trim(),
-    description: z
-      .string()
-      .min(1, 'Описание обязательно')
-      .min(20, 'Описание должно содержать минимум 20 символов'),
+  body: jobEditableFieldsSchema.extend({
     company: z
       .string()
       .min(1, 'Название компании обязательно')
       .trim(),
     companyId: objectIdSchema.optional(),
-    direction: z.enum(directionValues, {
-      message: `Неверное направление. Допустимые значения: ${directionValues.join(', ')}`,
-    }),
-    level: z.enum(levelValues, {
-      message: `Неверный уровень. Допустимые значения: ${levelValues.join(', ')}`,
-    }),
-    workFormat: z.enum(workFormatValues, {
-      message: `Неверный формат работы. Допустимые значения: ${workFormatValues.join(', ')}`,
-    }),
-    location: z
-      .string()
-      .min(1, 'Локация обязательна')
-      .trim(),
-    salary: salarySchema,
-    requirements: z
-      .array(z.string().min(1, 'Требование не может быть пустым'))
-      .min(1, 'Должно быть хотя бы одно требование'),
-    responsibilities: z
-      .array(z.string().min(1, 'Обязанность не может быть пустой'))
-      .min(1, 'Должна быть хотя бы одна обязанность'),
   }),
 });
 
@@ -76,45 +79,13 @@ export const updateJobSchema = z.object({
   params: z.object({
     id: objectIdSchema,
   }),
-  body: z.object({
-    title: z
-      .string()
-      .min(1, 'Название вакансии не может быть пустым')
-      .trim()
-      .optional(),
-    description: z
-      .string()
-      .min(20, 'Описание должно содержать минимум 20 символов')
-      .optional(),
+  body: jobEditableFieldsSchema.partial().extend({
     company: z
       .string()
       .min(1, 'Название компании не может быть пустым')
       .trim()
       .optional(),
     companyId: objectIdSchema.optional(),
-    direction: z.enum(directionValues, {
-      message: `Неверное направление. Допустимые значения: ${directionValues.join(', ')}`,
-    }).optional(),
-    level: z.enum(levelValues, {
-      message: `Неверный уровень. Допустимые значения: ${levelValues.join(', ')}`,
-    }).optional(),
-    workFormat: z.enum(workFormatValues, {
-      message: `Неверный формат работы. Допустимые значения: ${workFormatValues.join(', ')}`,
-    }).optional(),
-    location: z
-      .string()
-      .min(1, 'Локация не может быть пустой')
-      .trim()
-      .optional(),
-    salary: salarySchema,
-    requirements: z
-      .array(z.string().min(1, 'Требование не может быть пустым'))
-      .min(1, 'Должно быть хотя бы одно требование')
-      .optional(),
-    responsibilities: z
-      .array(z.string().min(1, 'Обязанность не может быть пустой'))
-      .min(1, 'Должна быть хотя бы одна обязанность')
-      .optional(),
     isActive: z.boolean().optional(),
   }).refine(data => Object.keys(data).length > 0, {
     message: 'Необходимо указать хотя бы одно поле для обновления',

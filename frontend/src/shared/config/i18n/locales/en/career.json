@@ -163,7 +163,7 @@
   },
   "trigger": {
     "badge": "Time to grow",
-    "yearsInRole": "At current level: {{duration}}",
+    "yearsInRole": "Years at current level: {{years}}",
     "consultationTitle": "Career consultation",
     "consultationStub": "Consultation booking will be available in the next release.",
     "cta": {

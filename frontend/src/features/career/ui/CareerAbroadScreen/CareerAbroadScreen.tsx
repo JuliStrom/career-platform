@@ -13,6 +13,7 @@ import type { IJobsFilters, Job, JobSalary } from '@/features/jobs/model';
 import { formatSalary } from '@/features/jobs/utils/job-form.utils';
 import * as profileApi from '@/features/profile/api/profile.api';
 import { useProfileStore } from '@/features/profile/store/profile-store';
+import { primaryProfileDirection } from '@/features/profile/utils/directions.utils';
 import { useTranslation } from '@/shared/lib/hooks/useTranslation';
 import { PrimaryButton } from '@/shared/ui/buttons/PrimaryButton';
 import { useRouter } from 'expo-router';
@@ -114,14 +115,6 @@ function getCompanySummaries(jobs: Job[]): CompanySummary[] {
   );
 }
 
-function matchesRouteLocation(job: Job, targetCountryKey: string) {
-  const terms = COUNTRY_LOCATION_TERMS[targetCountryKey] ?? [];
-  if (terms.length === 0) return true;
-
-  const location = job.location.toLocaleLowerCase();
-  return terms.some((term) => location.includes(term.toLocaleLowerCase()));
-}
-
 export function CareerAbroadScreen() {
   const router = useRouter();
   const profile = useProfileStore((state) => state.profile);
@@ -158,8 +151,9 @@ export function CareerAbroadScreen() {
   const level = profile?.level
     ? tProfile(`levels.${profile.level}`)
     : EMPTY_ROUTE_VALUE;
-  const direction = profile?.direction
-    ? tProfile(`directions.${profile.direction}`)
+  const primaryDirection = primaryProfileDirection(profile?.directions);
+  const direction = primaryDirection
+    ? tProfile(`directions.${primaryDirection}`)
     : EMPTY_ROUTE_VALUE;
   const originCountry = tProfile('relocationOrigins.kazakhstan');
   const targetCountry = profile?.relocationToCountry
@@ -169,11 +163,15 @@ export function CareerAbroadScreen() {
     ? tProfile(`relocationCountryMarketNames.${profile.relocationToCountry}`)
     : tProfile('relocationCountryMarketNames.canada');
   const jobsFilters = useMemo<IJobsFilters>(() => {
+    const targetCountryKey = profile?.relocationToCountry ?? 'canada';
+
     return {
-      direction: profile?.direction,
+      direction: primaryProfileDirection(profile?.directions),
+      level: profile?.level,
+      location: COUNTRY_LOCATION_TERMS[targetCountryKey],
       limit: 100,
     };
-  }, [profile?.direction]);
+  }, [profile?.directions, profile?.level, profile?.relocationToCountry]);
   const averageSalary = useMemo(() => calculateAverageSalary(jobs), [jobs]);
   const companySummaries = useMemo(() => getCompanySummaries(jobs), [jobs]);
   const salaryRange = averageSalary
@@ -187,12 +185,12 @@ export function CareerAbroadScreen() {
       [
         'career-abroad-progress',
         profile?.name ?? 'guest',
-        profile?.direction ?? 'any-direction',
+        profile?.directions?.join(',') ?? 'any-direction',
         profile?.level ?? 'any-level',
         profile?.relocationToCountry ?? 'canada',
       ].join(':'),
     [
-      profile?.direction,
+      profile?.directions,
       profile?.level,
       profile?.name,
       profile?.relocationToCountry,
@@ -373,13 +371,8 @@ export function CareerAbroadScreen() {
 
         if (!isMounted) return;
 
-        const targetCountryKey = profile?.relocationToCountry ?? 'canada';
-        const routeJobs = response.jobs.filter((job) =>
-          matchesRouteLocation(job, targetCountryKey)
-        );
-
-        setJobs(routeJobs);
-        setVacanciesCount(routeJobs.length);
+        setJobs(response.jobs);
+        setVacanciesCount(response.total);
       } catch (error) {
         if (!isMounted) return;
 
@@ -396,7 +389,7 @@ export function CareerAbroadScreen() {
     return () => {
       isMounted = false;
     };
-  }, [jobsFilters, profile?.relocationToCountry]);
+  }, [jobsFilters]);
 
   useEffect(() => {
     setHydratedProgressStorageKey(null);
@@ -468,6 +461,7 @@ export function CareerAbroadScreen() {
         />
         <MarketStatsCard
           vacanciesValue={vacanciesValue}
+          level={level}
           direction={direction}
           targetCountryMarketName={targetCountryMarketName}
           salaryRange={salaryRange}

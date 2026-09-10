@@ -4,6 +4,8 @@ export enum NotificationType {
   NEW_COURSES = 'new_courses',
   CONSULTATION_REMINDER = 'consultation_reminder',
   AI_RISK_UPDATED = 'ai_risk_updated',
+  EMPLOYER_MESSAGE = 'employer_message',
+  EMPLOYER_PROJECT_OFFER = 'employer_project_offer',
 }
 
 export interface NotificationPayload {

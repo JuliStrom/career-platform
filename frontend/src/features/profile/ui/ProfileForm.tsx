@@ -20,6 +20,14 @@ import {
   type ProfileFormValues,
 } from '@/features/profile/model';
 import { SkillsAutosuggest } from '@/features/profile/ui/SkillsAutosuggest';
+import { ExperienceSection } from '@/features/profile/ui/ExperienceSection';
+import {
+  currentProjectsFromProfile,
+  formatCurrentPeriod,
+  parsePeriodStartDate,
+  summarizeExperience,
+  workplacesFromProfile,
+} from '@/features/profile/utils/experience.utils';
 import {
   MAX_PROFILE_DIRECTIONS,
   normalizeProfileDirections,
@@ -32,7 +40,7 @@ import { PrimaryButton } from '@/shared/ui/buttons/PrimaryButton';
 import { NamedField } from '@/shared/ui/inputs/NamedField';
 import { ChipSelector } from '@/shared/ui/selectors/ChipSelector';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import {
   KeyboardAvoidingView,
@@ -92,6 +100,7 @@ export function ProfileForm({
     control,
     handleSubmit: rhfHandleSubmit,
     formState: { errors },
+    getValues,
     reset,
   } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -104,11 +113,13 @@ export function ProfileForm({
       level: initialValues?.level ?? Level.Junior,
       skills: initialValues?.skills ?? [],
       experience: initialValues?.experience ?? '',
+      workplaces: workplacesFromProfile(initialValues),
+      projects: currentProjectsFromProfile(initialValues),
       careerGoal: initialValues?.careerGoal ?? CareerGoal.Growth,
-      careerStartDateInput: initialValues?.careerStartDate
-        ? new Date(initialValues.careerStartDate).toISOString().slice(0, 10)
-        : '',
+      careerStartDateInput: formatCurrentPeriod(initialValues?.careerStartDate),
       currentCompany: initialValues?.currentCompany ?? '',
+      currentPosition: initialValues?.currentPosition ?? '',
+      currentAchievement: initialValues?.currentAchievement ?? '',
       city: initialValues?.city ?? null,
       relocationFromCity: initialValues?.relocationFromCity ?? null,
       relocationToCountry: initialValues?.relocationToCountry ?? null,
@@ -132,8 +143,25 @@ export function ProfileForm({
     mode: 'onBlur',
   });
 
+  const initialValuesSyncKey = initialValues
+    ? JSON.stringify({
+        name: initialValues.name,
+        avatar: initialValues.avatar,
+        directions: initialValues.directions,
+        skills: initialValues.skills,
+        workplaces: initialValues.workplaces,
+        projects: initialValues.projects,
+        careerStartDate: initialValues.careerStartDate,
+        currentCompany: initialValues.currentCompany,
+        currentPosition: initialValues.currentPosition,
+        currentAchievement: initialValues.currentAchievement,
+      })
+    : '';
+  const lastSyncedKey = useRef<string>('');
+
   useEffect(() => {
-    if (!initialValues) return;
+    if (!initialValues || lastSyncedKey.current === initialValuesSyncKey) return;
+    lastSyncedKey.current = initialValuesSyncKey;
 
     reset({
       ...initialValues,
@@ -142,10 +170,13 @@ export function ProfileForm({
         initialValues.directions ?? Direction.IT
       ),
       skills: initialValues.skills ?? [],
-      careerStartDateInput: initialValues.careerStartDate
-        ? new Date(initialValues.careerStartDate).toISOString().slice(0, 10)
-        : '',
+      experience: initialValues.experience ?? '',
+      workplaces: workplacesFromProfile(initialValues),
+      projects: currentProjectsFromProfile(initialValues),
+      careerStartDateInput: formatCurrentPeriod(initialValues.careerStartDate),
       currentCompany: initialValues.currentCompany ?? '',
+      currentPosition: initialValues.currentPosition ?? '',
+      currentAchievement: initialValues.currentAchievement ?? '',
       city: initialValues.city ?? null,
       relocationFromCity: initialValues.relocationFromCity ?? null,
       relocationToCountry: initialValues.relocationToCountry ?? null,
@@ -165,7 +196,7 @@ export function ProfileForm({
       careerChangeTimeline:
         initialValues.careerChangeTimeline ?? CareerChangeTimeline.JustStudying,
     });
-  }, [initialValues, reset]);
+  }, [initialValues, initialValuesSyncKey, reset]);
 
   const watchedName = useWatch({ control, name: 'name', defaultValue: '' });
   const watchedCity = useWatch({ control, name: 'city', defaultValue: null });
@@ -186,15 +217,45 @@ export function ProfileForm({
       directions: normalizeProfileDirections(data.directions),
       level: data.level,
       skills: data.skills,
-      experience: data.experience.trim(),
+      workplaces: (data.workplaces ?? []).map((place) => ({
+        ...place,
+        projects: (place.projects ?? []).map((project) => ({
+          ...project,
+          link: project.link ?? '',
+        })),
+      })),
+      projects: (data.projects ?? []).map((project) => ({
+        ...project,
+        link: project.link ?? '',
+      })),
+      experience: summarizeExperience(
+        (data.workplaces ?? []).map((place) => ({
+          ...place,
+          projects: (place.projects ?? []).map((project) => ({
+            ...project,
+            link: project.link ?? '',
+          })),
+        })),
+        (data.projects ?? []).map((project) => ({
+          ...project,
+          link: project.link ?? '',
+        }))
+      ),
       careerGoal: data.careerGoal,
-      careerStartDate:
-        data.careerStartDateInput && data.careerStartDateInput.trim().length > 0
-          ? data.careerStartDateInput
-          : null,
+      careerStartDate: parsePeriodStartDate(
+        data.careerStartDateInput ?? ''
+      )?.toISOString() ?? null,
       currentCompany:
         data.currentCompany && data.currentCompany.trim().length > 0
           ? data.currentCompany.trim()
+          : null,
+      currentPosition:
+        data.currentPosition && data.currentPosition.trim().length > 0
+          ? data.currentPosition.trim()
+          : null,
+      currentAchievement:
+        data.currentAchievement && data.currentAchievement.trim().length > 0
+          ? data.currentAchievement.trim()
           : null,
       city: data.city ?? null,
       relocationFromCity:
@@ -340,23 +401,10 @@ export function ProfileForm({
             )}
           />
 
-          <Controller
+          <ExperienceSection
             control={control}
-            name="experience"
-            render={({ field: { onChange, onBlur, value }, fieldState }) => (
-              <NamedField
-                label={t('experience')}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                placeholder={t('experience')}
-                multiline
-                numberOfLines={4}
-                margin="mb-4"
-                error={errors.experience?.message}
-                touched={fieldState.isTouched}
-              />
-            )}
+            errors={errors}
+            getValues={getValues}
           />
 
           <Controller
@@ -370,64 +418,6 @@ export function ProfileForm({
                 onSelect={onChange}
                 translationKey="careerGoals"
                 classNameSelector="mb-6"
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="careerStartDateInput"
-            render={({ field: { onChange, onBlur, value }, fieldState }) => (
-              <View className="mb-4">
-                <Text className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {t('careerStartDate')}
-                </Text>
-                {Platform.OS === 'web' ? (
-                  <input
-                    type="date"
-                    value={value ?? ''}
-                    onChange={(event) => onChange(event.target.value)}
-                    onBlur={onBlur}
-                    aria-label={t('careerStartDate')}
-                    style={{
-                      width: '100%',
-                      borderWidth: 1,
-                      borderColor: '#D1D5DB',
-                      borderStyle: 'solid',
-                      borderRadius: 8,
-                      padding: 12,
-                      fontSize: 16,
-                      backgroundColor: '#FFFFFF',
-                    }}
-                  />
-                ) : (
-                  <NamedField
-                    label=""
-                    value={value ?? ''}
-                    onChangeText={onChange}
-                    onBlur={onBlur}
-                    placeholder={t('careerStartDatePlaceholder')}
-                    margin="mb-0"
-                    error={errors.careerStartDateInput?.message}
-                    touched={fieldState.isTouched}
-                  />
-                )}
-              </View>
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="currentCompany"
-            render={({ field: { onChange, onBlur, value }, fieldState }) => (
-              <NamedField
-                label={t('currentCompany')}
-                value={value ?? ''}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                placeholder={t('currentCompanyPlaceholder')}
-                error={errors.currentCompany?.message}
-                touched={fieldState.isTouched}
               />
             )}
           />

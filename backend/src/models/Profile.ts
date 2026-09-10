@@ -100,6 +100,54 @@ const profileSchema = new Schema<IProfile>({
     type: String,
     required: [true, 'Опыт обязателен'],
   },
+  workplaces: {
+    type: [
+      {
+        _id: false,
+        company: { type: String, required: true, trim: true, maxlength: 120 },
+        position: { type: String, required: true, trim: true, maxlength: 120 },
+        period: { type: String, required: true, trim: true, maxlength: 80 },
+        achievement: { type: String, required: true, trim: true, maxlength: 500 },
+        projects: {
+          type: [
+            {
+              _id: false,
+              name: { type: String, required: true, trim: true, maxlength: 120 },
+              role: { type: String, required: true, trim: true, maxlength: 120 },
+              result: { type: String, required: true, trim: true, maxlength: 500 },
+              link: { type: String, default: '', trim: true, maxlength: 500 },
+            },
+          ],
+          default: [],
+        },
+      },
+    ],
+    default: [],
+    validate: {
+      validator(value: unknown[]) {
+        return Array.isArray(value) && value.length <= 10;
+      },
+      message: 'Можно указать не больше 10 мест работы',
+    },
+  },
+  projects: {
+    type: [
+      {
+        _id: false,
+        name: { type: String, required: true, trim: true, maxlength: 120 },
+        role: { type: String, required: true, trim: true, maxlength: 120 },
+        result: { type: String, required: true, trim: true, maxlength: 500 },
+        link: { type: String, default: '', trim: true, maxlength: 500 },
+      },
+    ],
+    default: [],
+    validate: {
+      validator(value: unknown[]) {
+        return Array.isArray(value) && value.length <= 10;
+      },
+      message: 'Можно указать не больше 10 проектов',
+    },
+  },
   careerGoal: {
     type: String,
     required: [true, 'Карьерная цель обязательна'],
@@ -112,6 +160,18 @@ const profileSchema = new Schema<IProfile>({
   currentCompany: {
     type: String,
     maxlength: 255,
+    default: null,
+    trim: true,
+  },
+  currentPosition: {
+    type: String,
+    maxlength: 120,
+    default: null,
+    trim: true,
+  },
+  currentAchievement: {
+    type: String,
+    maxlength: 500,
     default: null,
     trim: true,
   },

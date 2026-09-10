@@ -29,20 +29,6 @@ export default function ProfileScreen() {
   const userType = useAuthStore((state) => state.user?.userType);
   const router = useRouter();
 
-  const yearsInCurrentRole = (() => {
-    if (!profile?.careerStartDate) return null;
-    const startedAt = new Date(profile.careerStartDate);
-    if (Number.isNaN(startedAt.getTime())) return null;
-    const now = new Date();
-    let years = now.getFullYear() - startedAt.getFullYear();
-    const hadAnniversary =
-      now.getMonth() > startedAt.getMonth() ||
-      (now.getMonth() === startedAt.getMonth() &&
-        now.getDate() >= startedAt.getDate());
-    if (!hadAnniversary) years -= 1;
-    return Math.max(0, years);
-  })();
-
   useEffect(() => {
     if (!isAuthenticated || userType === UserType.EMPLOYER) {
       return;
@@ -164,7 +150,6 @@ export default function ProfileScreen() {
     >
       <SpecialistProfile
         profile={profile}
-        yearsInCurrentRole={yearsInCurrentRole}
         onEdit={() => router.push('/profile/edit')}
         actions={actions}
       />

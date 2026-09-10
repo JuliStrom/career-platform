@@ -5,6 +5,7 @@ import { isMongoDuplicateError, isMongooseValidationError, getErrorMessage } fro
 import { uploadToYandexDisk, getAvatarPath, downloadFromYandexDisk } from '../services/yandexDisk';
 import { normalizeProfileDirections } from '../utils/profileDirections';
 import { resolveProfileSkills } from '../services/skillDictionary';
+import { resolveExperienceFields } from '../utils/profileExperience';
 
 // Создание профиля специалиста
 export const create = async (req: AuthRequest<{}, {}, CreateProfileBody>, res: Response): Promise<void> => {
@@ -23,9 +24,13 @@ export const create = async (req: AuthRequest<{}, {}, CreateProfileBody>, res: R
       level,
       skills,
       experience,
+      workplaces: rawWorkplaces,
+      projects: rawProjects,
       careerGoal,
       careerStartDate,
       currentCompany,
+      currentPosition,
+      currentAchievement,
       city,
       relocationFromCity,
       relocationToCountry,
@@ -53,6 +58,19 @@ export const create = async (req: AuthRequest<{}, {}, CreateProfileBody>, res: R
     }
 
     const resolvedSkills = await resolveProfileSkills(skills, []);
+    const {
+      workplaces,
+      projects,
+      experience: resolvedExperience,
+    } = resolveExperienceFields({
+      workplaces: rawWorkplaces,
+      projects: rawProjects,
+      experience,
+    });
+    if (!resolvedExperience) {
+      res.status(400).json({ error: 'Укажите хотя бы одно место работы' });
+      return;
+    }
 
     const profile = await Profile.create({
       userId,
@@ -61,10 +79,14 @@ export const create = async (req: AuthRequest<{}, {}, CreateProfileBody>, res: R
       directions,
       level,
       skills: resolvedSkills,
-      experience,
+      experience: resolvedExperience,
+      workplaces,
+      projects,
       careerGoal,
       careerStartDate,
       currentCompany,
+      currentPosition,
+      currentAchievement,
       city,
       relocationFromCity:
         city === 'abroad' ? relocationFromCity ?? 'kazakhstan' : null,
@@ -133,9 +155,13 @@ export const update = async (req: AuthRequest<{}, {}, UpdateProfileBody>, res: R
       level,
       skills,
       experience,
+      workplaces: rawWorkplaces,
+      projects: rawProjects,
       careerGoal,
       careerStartDate,
       currentCompany,
+      currentPosition,
+      currentAchievement,
       city,
       relocationFromCity,
       relocationToCountry,
@@ -170,10 +196,30 @@ export const update = async (req: AuthRequest<{}, {}, UpdateProfileBody>, res: R
     if (skills !== undefined) {
       profile.skills = await resolveProfileSkills(skills, profile.skills);
     }
-    if (experience !== undefined) profile.experience = experience;
+    if (
+      rawWorkplaces !== undefined ||
+      rawProjects !== undefined ||
+      experience !== undefined
+    ) {
+      const resolved = resolveExperienceFields({
+        workplaces: rawWorkplaces !== undefined ? rawWorkplaces : profile.workplaces,
+        projects: rawProjects !== undefined ? rawProjects : profile.projects,
+        experience:
+          experience !== undefined ? experience : profile.experience,
+      });
+      if (!resolved.experience) {
+        res.status(400).json({ error: 'Укажите хотя бы одно место работы' });
+        return;
+      }
+      profile.workplaces = resolved.workplaces;
+      profile.projects = resolved.projects;
+      profile.experience = resolved.experience;
+    }
     if (careerGoal !== undefined) profile.careerGoal = careerGoal;
     if (careerStartDate !== undefined) profile.careerStartDate = careerStartDate;
     if (currentCompany !== undefined) profile.currentCompany = currentCompany;
+    if (currentPosition !== undefined) profile.currentPosition = currentPosition;
+    if (currentAchievement !== undefined) profile.currentAchievement = currentAchievement;
     const nextCity = city !== undefined ? city : profile.city;
     if (city !== undefined) profile.city = city;
     if (nextCity !== 'abroad') {

@@ -13,14 +13,12 @@ import { ScrollView, Text, View } from 'react-native';
 
 interface SpecialistProfileProps {
   profile: Profile;
-  yearsInCurrentRole: number | null;
   onEdit: () => void;
   actions?: ReactNode;
 }
 
 export function SpecialistProfile({
   profile,
-  yearsInCurrentRole,
   onEdit,
   actions,
 }: SpecialistProfileProps) {
@@ -28,16 +26,6 @@ export function SpecialistProfile({
   const emptyValue = '—';
 
   const details = [
-    {
-      label: t('careerStartDate'),
-      value: profile.careerStartDate
-        ? new Date(profile.careerStartDate).toLocaleDateString()
-        : emptyValue,
-    },
-    {
-      label: t('currentCompany'),
-      value: profile.currentCompany || emptyValue,
-    },
     {
       label: t('city'),
       value: profile.city ? t(`cities.${profile.city}`) : emptyValue,
@@ -59,21 +47,10 @@ export function SpecialistProfile({
         ]
       : []),
     {
-      label: t('employmentType'),
-      value: profile.employmentType
-        ? t(`employmentTypes.${profile.employmentType}`)
-        : emptyValue,
-    },
-    {
       label: t('wantsRelocation'),
       value: t(
         `relocationOptions.${profile.wantsRelocation ? 'true' : 'false'}`
       ),
-    },
-    {
-      label: t('yearsInCurrentRole'),
-      value:
-        yearsInCurrentRole != null ? String(yearsInCurrentRole) : emptyValue,
     },
   ];
 
@@ -108,7 +85,7 @@ export function SpecialistProfile({
               />
             </View>
             <SkillsTagList skills={profile.skills} />
-            <ExperienceCard experience={profile.experience} />
+            <ExperienceCard profile={profile} />
             <CareerGoalSelector careerGoal={profile.careerGoal} />
             <View className="mt-2 flex-row flex-wrap gap-3">
               {details.map(({ label, value }) => (

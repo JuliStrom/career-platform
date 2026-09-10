@@ -11,6 +11,11 @@ import {
 } from '@/shared/model';
 import { getValidationMessage } from '@/src/shared/lib/utils';
 import { MAX_PROFILE_DIRECTIONS } from '@/features/profile/utils/directions.utils';
+import {
+  MAX_EXPERIENCE_PROJECTS,
+  MAX_WORKPLACES,
+  parsePeriodStartDate,
+} from '@/features/profile/utils/experience.utils';
 import { z } from 'zod';
 
 const getProfileValidationMessage = (key: string) =>
@@ -35,6 +40,34 @@ export const relocationCountrySchema = z.enum([
   'europe',
   'other',
 ]);
+
+const experienceProjectFormSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, getProfileValidationMessage('projectNameRequired'))
+    .max(120, getProfileValidationMessage('projectNameMax')),
+  role: z
+    .string()
+    .trim()
+    .min(1, getProfileValidationMessage('projectRoleRequired'))
+    .max(120, getProfileValidationMessage('projectRoleMax')),
+  result: z
+    .string()
+    .trim()
+    .min(1, getProfileValidationMessage('projectResultRequired'))
+    .max(500, getProfileValidationMessage('projectResultMax')),
+  link: z
+    .string()
+    .trim()
+    .max(500, getProfileValidationMessage('projectLinkMax'))
+    .refine(
+      (value) => value.length === 0 || /^https?:\/\//i.test(value),
+      getProfileValidationMessage('projectLinkInvalid')
+    )
+    .optional()
+    .default(''),
+});
 
 export const baseProfileSchema = z.object({
   name: z
@@ -86,14 +119,47 @@ export const baseProfileSchema = z.object({
       )
   ),
   level: levelSchema,
-  experience: z
-    .string()
-    .min(10, getProfileValidationMessage('experienceMin'))
-    .max(2000, getProfileValidationMessage('experienceMax'))
-    .trim(),
+  experience: z.string().max(2000).optional().default(''),
+  workplaces: z
+    .array(
+      z.object({
+        company: z
+          .string()
+          .trim()
+          .min(1, getProfileValidationMessage('workplaceCompanyRequired'))
+          .max(120, getProfileValidationMessage('workplaceCompanyMax')),
+        position: z
+          .string()
+          .trim()
+          .min(1, getProfileValidationMessage('workplacePositionRequired'))
+          .max(120, getProfileValidationMessage('workplacePositionMax')),
+        period: z
+          .string()
+          .trim()
+          .min(1, getProfileValidationMessage('workplacePeriodRequired'))
+          .max(80, getProfileValidationMessage('workplacePeriodMax')),
+        achievement: z
+          .string()
+          .trim()
+          .min(1, getProfileValidationMessage('workplaceAchievementRequired'))
+          .max(500, getProfileValidationMessage('workplaceAchievementMax')),
+        projects: z
+          .array(experienceProjectFormSchema)
+          .max(MAX_EXPERIENCE_PROJECTS, getProfileValidationMessage('projectsMax'))
+          .default([]),
+      })
+    )
+    .max(MAX_WORKPLACES, getProfileValidationMessage('workplacesMax'))
+    .default([]),
+  projects: z
+    .array(experienceProjectFormSchema)
+    .max(MAX_EXPERIENCE_PROJECTS, getProfileValidationMessage('projectsMax'))
+    .default([]),
   careerGoal: careerGoalSchema,
   careerStartDate: z.union([z.date(), z.string(), z.null()]).optional(),
   currentCompany: z.union([z.string(), z.null()]).optional(),
+  currentPosition: z.union([z.string(), z.null()]).optional(),
+  currentAchievement: z.union([z.string(), z.null()]).optional(),
   city: z.union([citySchema, z.null()]).optional(),
   relocationFromCity: z.union([relocationOriginSchema, z.null()]).optional(),
   relocationToCountry: z.union([relocationCountrySchema, z.null()]).optional(),
@@ -130,10 +196,17 @@ export const profileFormSchema = profileSchema
       .optional()
       .refine((val) => {
         if (!val || val.trim().length === 0) return true;
-        return !Number.isNaN(new Date(val).getTime());
+        return parsePeriodStartDate(val) != null;
       }, getProfileValidationMessage('careerStartDateInvalid')),
   })
   .superRefine((data, ctx) => {
+    if ((data.workplaces?.length ?? 0) < 1) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: getProfileValidationMessage('workplacesMin'),
+        path: ['workplaces'],
+      });
+    }
     if (!data.careerChangeTrackActive) return;
     const cur = data.careerChangeCurrentField?.trim() ?? '';
     if (cur.length < 2) {

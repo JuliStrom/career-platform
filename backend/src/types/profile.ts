@@ -6,6 +6,21 @@ import {
 } from './careerChangeTrack';
 import { Direction, Level, CareerGoal, City, EmploymentType, ProfileLang } from './profileEnums';
 
+export type ProfileWorkplace = {
+  company: string;
+  position: string;
+  period: string;
+  achievement: string;
+  projects?: ProfileExperienceProject[];
+};
+
+export type ProfileExperienceProject = {
+  name: string;
+  role: string;
+  result: string;
+  link?: string;
+};
+
 /**
  * ТЗ блок 1 — профиль специалиста: поля ниже + валидация в profile.schema;
  * yearsInCurrentRole не в БД (виртуал в Profile). Имена в REST — camelCase (аналог snake_case из ТЗ).
@@ -29,10 +44,14 @@ export interface IProfile extends Document {
   level: Level;
   skills: string[];
   experience: string;
+  workplaces: ProfileWorkplace[];
+  projects: ProfileExperienceProject[];
   careerGoal: CareerGoal;
   /** Дата начала текущей позиции (для триггеров роста и yearsInCurrentRole) */
   careerStartDate?: Date | null;
   currentCompany?: string | null;
+  currentPosition?: string | null;
+  currentAchievement?: string | null;
   city?: City | null;
   relocationFromCity?: string | null;
   relocationToCountry?: string | null;
@@ -58,10 +77,14 @@ export type CreateProfileBody = {
   directions: Direction[];
   level: Level;
   skills: string[];
-  experience: string;
+  experience?: string;
+  workplaces?: ProfileWorkplace[];
+  projects?: ProfileExperienceProject[];
   careerGoal: CareerGoal;
   careerStartDate?: Date | null;
   currentCompany?: string | null;
+  currentPosition?: string | null;
+  currentAchievement?: string | null;
   city?: City | null;
   relocationFromCity?: string | null;
   relocationToCountry?: string | null;
@@ -83,9 +106,13 @@ export type UpdateProfileBody = {
   level?: Level;
   skills?: string[];
   experience?: string;
+  workplaces?: ProfileWorkplace[];
+  projects?: ProfileExperienceProject[];
   careerGoal?: CareerGoal;
   careerStartDate?: Date | null;
   currentCompany?: string | null;
+  currentPosition?: string | null;
+  currentAchievement?: string | null;
   city?: City | null;
   relocationFromCity?: string | null;
   relocationToCountry?: string | null;

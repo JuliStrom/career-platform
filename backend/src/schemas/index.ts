@@ -11,3 +11,5 @@ export * from './adminCareerTriggers.schema';
 export * from './users.schema';
 export * from './invite.schema';
 export * from './analytics.schema';
+export * from './employer.schema';
+export * from './skills.schema';

@@ -1,9 +1,15 @@
 import { Request } from 'express';
 
-// Роли пользователей
+// Роли пользователей (права доступа: админка vs обычный пользователь)
 export enum UserRole {
   SPECIALIST = 'SPECIALIST',
   ADMIN = 'ADMIN',
+}
+
+/** Путь в продукте: работодатель/заказчик или специалист. Выбирается при регистрации. */
+export enum UserType {
+  EMPLOYER = 'employer',
+  SPECIALIST = 'specialist',
 }
 
 // JWT Payload для Access Token
@@ -11,6 +17,7 @@ export interface JWTPayload {
   userId: string;
   email: string;
   role: UserRole;
+  userType?: UserType;
   type: 'access'; // Тип токена
 }
 
@@ -26,6 +33,7 @@ export interface UserPayload {
   userId: string;
   email: string;
   role: UserRole;
+  userType?: UserType | null;
   isSubscribed?: boolean;
 }
 
@@ -43,6 +51,7 @@ export type RegisterBody = {
   email: string;
   password: string;
   inviteCode?: string;
+  userType?: UserType;
 };
 
 export type LoginBody = {

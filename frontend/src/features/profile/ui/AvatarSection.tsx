@@ -7,9 +7,16 @@ import { Text, View } from 'react-native';
 interface AvatarSectionProps {
   avatar?: string;
   name: string;
+  className?: string;
+  sizeClassName?: string;
 }
 
-export const AvatarSection = ({ avatar, name }: AvatarSectionProps) => {
+export const AvatarSection = ({
+  avatar,
+  name,
+  className,
+  sizeClassName = 'h-24 w-24',
+}: AvatarSectionProps) => {
   const { t } = useTranslation('profile');
   const [avatarLoadFailed, setAvatarLoadFailed] = useState(false);
 
@@ -34,8 +41,10 @@ export const AvatarSection = ({ avatar, name }: AvatarSectionProps) => {
   }, [avatar]);
 
   return (
-    <View className="mb-6 items-center justify-center">
-      <View className="h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+    <View className={`items-center justify-center ${className ?? 'mb-6'}`}>
+      <View
+        className={`${sizeClassName} items-center justify-center overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700`}
+      >
         {showImage ? (
           <Image
             source={imageSource as never}

@@ -187,7 +187,7 @@ export default function AdminRecommendationDetailsScreen() {
             {t('scenarios.details.description')}
           </Text>
           <Text className="text-sm leading-5 text-gray-700 dark:text-gray-300">
-            {description}
+            {selectedScenario.description}
           </Text>
         </View>
 

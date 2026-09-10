@@ -2,7 +2,7 @@ import { surfaceColor } from '@/shared/config/theme/colors';
 import { Stack } from 'expo-router';
 import { useColorScheme } from 'react-native';
 
-export default function AuthLayout() {
+export default function OnboardingLayout() {
   const colorScheme = useColorScheme();
   const backgroundColor = surfaceColor('canvas', colorScheme);
 
@@ -10,23 +10,8 @@ export default function AuthLayout() {
     <Stack
       screenOptions={{
         headerShown: false,
-        contentStyle: {
-          backgroundColor,
-        },
+        contentStyle: { backgroundColor },
       }}
-    >
-      <Stack.Screen
-        name="login"
-        options={{
-          title: 'Login',
-        }}
-      />
-      <Stack.Screen
-        name="register"
-        options={{
-          title: 'Register',
-        }}
-      />
-    </Stack>
+    />
   );
 }

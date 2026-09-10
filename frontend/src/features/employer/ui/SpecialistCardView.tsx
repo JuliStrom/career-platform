@@ -1,4 +1,5 @@
 import type { SpecialistCard } from '@/features/employer/model';
+import { normalizeProfileDirections } from '@/features/profile/utils/directions.utils';
 import { useTranslation } from '@/shared/lib/hooks/useTranslation';
 import { EmployerContactKind } from '@/shared/model';
 import { NamedField } from '@/shared/ui';
@@ -37,7 +38,9 @@ export function SpecialistCardView({
         {item.name}
       </Text>
       <Text className="mt-1 text-sm text-gray-600 dark:text-gray-300">
-        {tProfile(`directions.${item.direction}`)} ·{' '}
+        {normalizeProfileDirections(item.directions)
+          .map((itemDirection) => tProfile(`directions.${itemDirection}`))
+          .join(', ')} ·{' '}
         {tProfile(`levels.${item.level}`)}
         {item.city ? ` · ${tProfile(`cities.${item.city}`)}` : ''}
       </Text>

@@ -112,7 +112,8 @@ export const getDetails = async (
       aiRiskDistribution,
     ] = await Promise.all([
       Profile.aggregate([
-        { $group: { _id: '$direction', count: { $sum: 1 } } },
+        { $unwind: '$directions' },
+        { $group: { _id: '$directions', count: { $sum: 1 } } },
         { $sort: { count: -1, _id: 1 } },
       ]),
       Profile.aggregate([
@@ -166,13 +167,16 @@ export const getDetails = async (
         {
           $lookup: {
             from: 'ai_risk_index',
-            let: { direction: '$direction', level: '$level' },
+            let: {
+              directions: { $ifNull: ['$directions', []] },
+              level: '$level',
+            },
             pipeline: [
               {
                 $match: {
                   $expr: {
                     $and: [
-                      { $eq: ['$direction', '$$direction'] },
+                      { $in: ['$direction', '$$directions'] },
                       { $eq: ['$level', '$$level'] },
                     ],
                   },

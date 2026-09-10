@@ -13,6 +13,7 @@ import type { IJobsFilters, Job, JobSalary } from '@/features/jobs/model';
 import { formatSalary } from '@/features/jobs/utils/job-form.utils';
 import * as profileApi from '@/features/profile/api/profile.api';
 import { useProfileStore } from '@/features/profile/store/profile-store';
+import { primaryProfileDirection } from '@/features/profile/utils/directions.utils';
 import { useTranslation } from '@/shared/lib/hooks/useTranslation';
 import { PrimaryButton } from '@/shared/ui/buttons/PrimaryButton';
 import { useRouter } from 'expo-router';
@@ -150,8 +151,9 @@ export function CareerAbroadScreen() {
   const level = profile?.level
     ? tProfile(`levels.${profile.level}`)
     : EMPTY_ROUTE_VALUE;
-  const direction = profile?.direction
-    ? tProfile(`directions.${profile.direction}`)
+  const primaryDirection = primaryProfileDirection(profile?.directions);
+  const direction = primaryDirection
+    ? tProfile(`directions.${primaryDirection}`)
     : EMPTY_ROUTE_VALUE;
   const originCountry = tProfile('relocationOrigins.kazakhstan');
   const targetCountry = profile?.relocationToCountry
@@ -164,12 +166,12 @@ export function CareerAbroadScreen() {
     const targetCountryKey = profile?.relocationToCountry ?? 'canada';
 
     return {
-      direction: profile?.direction,
+      direction: primaryProfileDirection(profile?.directions),
       level: profile?.level,
       location: COUNTRY_LOCATION_TERMS[targetCountryKey],
       limit: 100,
     };
-  }, [profile?.direction, profile?.level, profile?.relocationToCountry]);
+  }, [profile?.directions, profile?.level, profile?.relocationToCountry]);
   const averageSalary = useMemo(() => calculateAverageSalary(jobs), [jobs]);
   const companySummaries = useMemo(() => getCompanySummaries(jobs), [jobs]);
   const salaryRange = averageSalary
@@ -183,12 +185,12 @@ export function CareerAbroadScreen() {
       [
         'career-abroad-progress',
         profile?.name ?? 'guest',
-        profile?.direction ?? 'any-direction',
+        profile?.directions?.join(',') ?? 'any-direction',
         profile?.level ?? 'any-level',
         profile?.relocationToCountry ?? 'canada',
       ].join(':'),
     [
-      profile?.direction,
+      profile?.directions,
       profile?.level,
       profile?.name,
       profile?.relocationToCountry,

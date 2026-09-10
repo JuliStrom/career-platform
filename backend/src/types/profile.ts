@@ -25,7 +25,7 @@ export interface IProfile extends Document {
     data: Buffer;
     uploadedAt: Date;
   }[];
-  direction: Direction;
+  directions: Direction[];
   level: Level;
   skills: string[];
   experience: string;
@@ -55,7 +55,7 @@ export interface IProfile extends Document {
 export type CreateProfileBody = {
   name: string;
   avatar?: string;
-  direction: Direction;
+  directions: Direction[];
   level: Level;
   skills: string[];
   experience: string;
@@ -79,7 +79,7 @@ export type CreateProfileBody = {
 export type UpdateProfileBody = {
   name?: string;
   avatar?: string;
-  direction?: Direction;
+  directions?: Direction[];
   level?: Level;
   skills?: string[];
   experience?: string;

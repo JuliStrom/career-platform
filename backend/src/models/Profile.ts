@@ -9,6 +9,7 @@ import {
   ProfileLang,
 } from '../types';
 import { computeYearsInCurrentRole } from '../utils/profileYears';
+import { normalizeProfileDirections } from '../utils/profileDirections';
 
 // Схема профиля
 const profileSchema = new Schema<IProfile>({
@@ -67,10 +68,18 @@ const profileSchema = new Schema<IProfile>({
     ],
     default: [],
   },
-  direction: {
-    type: String,
+  directions: {
+    type: [String],
     required: [true, 'Направление обязательно'],
     enum: Object.values(Direction),
+    validate: {
+      validator(value: string[]) {
+        if (!Array.isArray(value)) return false;
+        if (value.length < 1 || value.length > 3) return false;
+        return new Set(value).size === value.length;
+      },
+      message: 'Можно выбрать от 1 до 3 уникальных направлений',
+    },
   },
   level: {
     type: String,
@@ -177,10 +186,20 @@ const profileSchema = new Schema<IProfile>({
   timestamps: true,
 });
 
+profileSchema.pre('validate', function () {
+  const directions = normalizeProfileDirections({
+    direction: (this as { direction?: unknown }).direction,
+    directions: this.directions,
+  });
+  if (directions.length > 0) {
+    this.directions = directions;
+  }
+});
+
 // Employer search: chronological feed and common direction/level filters.
 profileSchema.index({ updatedAt: -1, _id: -1 });
-profileSchema.index({ direction: 1, updatedAt: -1, _id: -1 });
-profileSchema.index({ direction: 1, level: 1, updatedAt: -1, _id: -1 });
+profileSchema.index({ directions: 1, updatedAt: -1, _id: -1 });
+profileSchema.index({ directions: 1, level: 1, updatedAt: -1, _id: -1 });
 profileSchema.index({ city: 1, updatedAt: -1, _id: -1 });
 
 profileSchema.virtual('yearsInCurrentRole').get(function (this: IProfile) {
@@ -195,12 +214,15 @@ profileSchema.set('toJSON', {
       lang?: string | null;
       wantsRelocation?: boolean | null;
       careerChangeTrackActive?: boolean | null;
+      directions?: unknown;
       portfolioPdfData?: unknown;
       certificatePdfs?: { data?: unknown }[];
     };
     if (plain.lang == null) plain.lang = ProfileLang.RU;
     if (plain.wantsRelocation == null) plain.wantsRelocation = false;
     if (plain.careerChangeTrackActive == null) plain.careerChangeTrackActive = false;
+    plain.directions = normalizeProfileDirections(plain);
+    delete (plain as { direction?: unknown }).direction;
     delete plain.portfolioPdfData;
     if (Array.isArray(plain.certificatePdfs)) {
       plain.certificatePdfs = plain.certificatePdfs.map((certificate) => {

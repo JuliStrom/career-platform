@@ -60,7 +60,7 @@ export type EmployerProfilePayload = {
 export interface SpecialistCard {
   id: string;
   name: string;
-  direction: Direction;
+  directions: Direction[];
   level: Level;
   skills: string[];
   careerGoal: string;

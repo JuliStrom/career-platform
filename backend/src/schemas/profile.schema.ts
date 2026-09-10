@@ -34,6 +34,18 @@ const relocationOriginValues = ['kazakhstan'] as [string, ...string[]];
 
 const optionalDateNullable = z.union([z.coerce.date(), z.null()]).optional();
 
+const directionsField = z
+  .array(
+    z.enum(directionValues, {
+      message: `Неверное направление. Допустимые значения: ${directionValues.join(', ')}`,
+    })
+  )
+  .min(1, 'Выберите хотя бы одно направление')
+  .max(3, 'Можно выбрать не больше 3 направлений')
+  .refine((values) => new Set(values).size === values.length, {
+    message: 'Направления должны быть уникальными',
+  });
+
 const careerChangeTrackFields = {
   careerChangeTrackActive: z.boolean().optional().default(false),
   careerChangeCurrentField: z
@@ -78,9 +90,7 @@ export const createProfileSchema = z.object({
       ])
       .optional()
       .nullable(),
-    direction: z.enum(directionValues, {
-      message: `Неверное направление. Допустимые значения: ${directionValues.join(', ')}`,
-    }),
+    directions: directionsField,
     level: z.enum(levelValues, {
       message: `Неверный уровень. Допустимые значения: ${levelValues.join(', ')}`,
     }),
@@ -144,9 +154,7 @@ export const updateProfileSchema = z.object({
       ])
       .optional()
       .nullable(),
-    direction: z.enum(directionValues, {
-      message: `Неверное направление. Допустимые значения: ${directionValues.join(', ')}`,
-    }).optional(),
+    directions: directionsField.optional(),
     level: z.enum(levelValues, {
       message: `Неверный уровень. Допустимые значения: ${levelValues.join(', ')}`,
     }).optional(),

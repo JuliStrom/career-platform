@@ -6,6 +6,7 @@ import {
   ICareerTrigger,
   CareerTriggerMatchReason,
 } from '../types/careerTrigger';
+import { normalizeProfileDirections } from '../utils/profileDirections';
 
 export type ResolvedCareerTrigger = {
   doc: ICareerTrigger;
@@ -44,13 +45,13 @@ export async function resolveCareerTrigger(
     return null;
   }
 
-  const dir = profile.direction;
+  const dirs = normalizeProfileDirections(profile);
   const doc = await CareerTrigger.findOne({
     isActive: true,
     specialCase: { $exists: false },
     currentLevel: level,
     minYears: { $lte: yearsInCurrentRole },
-    $or: [{ direction: null }, { direction: dir }],
+    $or: [{ direction: null }, { direction: { $in: dirs } }],
   }).sort({ minYears: -1, sortOrder: 1 });
 
   if (!doc) {

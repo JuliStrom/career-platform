@@ -1,11 +1,13 @@
 import express, { Router } from 'express';
 import * as authController from '../controllers/authController';
 import { validateRequest } from '../middleware/validateRequest';
+import authMiddleware from '../middleware/authMiddleware';
 import {
   registerSchema,
   loginSchema,
   googleAuthSchema,
   telegramAuthSchema,
+  setUserTypeSchema,
 } from '../schemas';
 import { authRateLimiter } from '../middleware/rateLimiter';
 
@@ -31,5 +33,13 @@ router.post('/refresh', authController.refresh);
 
 // POST /api/auth/logout - Выход из системы (удаляет refresh token и cookie)
 router.post('/logout', authController.logout);
+
+// PATCH /api/auth/user-type - Выбор пути после регистрации: employer | specialist
+router.patch(
+  '/user-type',
+  authMiddleware,
+  validateRequest(setUserTypeSchema),
+  authController.setUserType
+);
 
 export default router;

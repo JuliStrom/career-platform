@@ -20,6 +20,8 @@ import { errorHandler } from './middleware/errorHandler';
 import { generalRateLimiter } from './middleware/rateLimiter';
 import learningRoutes from './routes/learning';
 import notificationRoutes from './routes/notification';
+import employerRoutes from './routes/employer';
+import skillsRoutes from './routes/skills';
 const app: Express = express();
 app.set('trust proxy', 1); // добавила для запуска на railway
 // Security middleware (COOP/COEP отключены для OAuth popup от Google)
@@ -84,6 +86,8 @@ app.use('/api/admin/ai-risk-index', adminAiRiskIndexRoutes);
 app.use('/api/admin/career-triggers', adminCareerTriggersRoutes);
 app.use('/api/learning', learningRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use("/api/employer", employerRoutes);
+app.use('/api/skills', skillsRoutes);
 // Обработка 404 для несуществующих роутов
 app.use((req, res) => {
   res.status(404).json({

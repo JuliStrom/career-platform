@@ -29,7 +29,8 @@ http://localhost:3000
   "user": {
     "id": "507f1f77bcf86cd799439011",
     "email": "user@example.com",
-    "role": "SPECIALIST"
+    "role": "SPECIALIST",
+    "userType": null
   }
 }
 ```
@@ -43,6 +44,7 @@ refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; HttpOnly; Secure; SameSite
 - Refresh token устанавливается в httpOnly cookie и недоступен для JavaScript
 - SameSite настраивается через переменную окружения `COOKIE_SAME_SITE` (по умолчанию `lax`)
 - Пароль: минимум 8 символов, хотя бы одна заглавная буква и одна цифра
+- `userType` (`employer` | `specialist`) — путь платформы. Поле опционально: обычно выбирается на отдельном экране после регистрации через `PATCH /api/auth/user-type`, у аккаунтов без выбора в ответе `null`.
 
 ---
 
@@ -66,7 +68,8 @@ refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; HttpOnly; Secure; SameSite
   "user": {
     "id": "507f1f77bcf86cd799439011",
     "email": "user@example.com",
-    "role": "SPECIALIST"
+    "role": "SPECIALIST",
+    "userType": "specialist"
   }
 }
 ```
@@ -210,6 +213,48 @@ refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; HttpOnly; Secure; SameSite
 - Refresh token удаляется из БД и cookie
 - Access token продолжит работать до истечения (максимум 20 минут)
 - Клиент должен удалить access token из памяти/storage
+
+---
+
+### 7. Выбор пути платформы
+
+**Endpoint:** `PATCH /api/auth/user-type`
+
+**Описание:** Сохраняет путь, выбранный на экране после регистрации: работодатель или специалист.
+
+**Заголовки:**
+```
+Authorization: Bearer <accessToken>
+```
+
+**Тело запроса:**
+```json
+{
+  "userType": "employer"
+}
+```
+
+`userType` — обязательное поле, допустимые значения: `employer`, `specialist`.
+
+**Успешный ответ (200):**
+```json
+{
+  "user": {
+    "id": "6a91b166a0a815c5d1a2b690",
+    "email": "user@example.com",
+    "role": "SPECIALIST",
+    "userType": "employer"
+  },
+  "accessToken": "eyJhbGciOiJIUzI1NiIs..."
+}
+```
+
+Новый access token содержит выбранный `userType`; клиент должен заменить им текущий access token.
+
+**Ошибки:**
+- `400` — недопустимое значение `userType`
+- `401` — отсутствует или недействителен access token
+- `404` — пользователь не найден
 
 ---
 
@@ -1077,11 +1122,27 @@ Authorization: Bearer <accessToken>
 ```json
 {
   "name": "Иван Иванов",
+  "aboutMe": "Frontend-разработчик с фокусом на продукт. Собираю понятные интерфейсы и люблю доводить фичи до релиза. Ищу команду с сильной инженерной культурой.",
   "avatar": "https://example.com/avatar.jpg",
-  "direction": "IT",
+  "directions": ["IT", "Design"],
   "level": "Middle",
   "skills": ["JavaScript", "React", "Node.js"],
-  "experience": "5 лет опыта в веб-разработке",
+  "workplaces": [
+    {
+      "company": "Example",
+      "position": "Frontend developer",
+      "period": "2022 — н.в.",
+      "achievement": "Запустил личный кабинет и сократил время релиза"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Career platform",
+      "role": "Frontend",
+      "result": "Собрал форму профиля со структурированным опытом",
+      "link": "https://example.com"
+    }
+  ],
   "careerGoal": "Growth"
 }
 ```
@@ -1089,7 +1150,7 @@ Authorization: Bearer <accessToken>
 **Важно:** Поле `favoriteJobs` передавать НЕ нужно - оно автоматически создается как пустой массив.
 
 **Допустимые значения:**
-- `direction`: `'Creative'`, `'IT'`, `'Design'`, `'E-commerce'`, `'HoReCa'`, `'Architecture & Design'`, `'Production'`, `'Marketing'`, `'Sales & Business Development'`, `'Finance & Accounting'`, `'HR & People'`, `'Operations & Logistics'`, `'Education'`, `'Legal & Compliance'`
+- `directions`: массив из 1–3 уникальных значений `'Creative'`, `'IT'`, `'Design'`, `'E-commerce'`, `'HoReCa'`, `'Architecture & Design'`, `'Production'`, `'Marketing'`, `'Sales & Business Development'`, `'Finance & Accounting'`, `'HR & People'`, `'Operations & Logistics'`, `'Education'`, `'Legal & Compliance'`
 - `level`: `'Junior'`, `'Middle'`, `'Senior'`, `'Lead'`
 - `careerGoal`: `'Growth'`, `'Career Change'`, `'Skill Development'`, `'Leadership'`, `'Expertise'`
 
@@ -1099,8 +1160,9 @@ Authorization: Bearer <accessToken>
   "_id": "507f1f77bcf86cd799439011",
   "userId": "507f1f77bcf86cd799439012",
   "name": "Иван Иванов",
+  "aboutMe": "Frontend-разработчик с фокусом на продукт. Собираю понятные интерфейсы и люблю доводить фичи до релиза. Ищу команду с сильной инженерной культурой.",
   "avatar": "https://example.com/avatar.jpg",
-  "direction": "IT",
+  "directions": ["IT", "Design"],
   "level": "Middle",
   "skills": ["JavaScript", "React", "Node.js"],
   "experience": "5 лет опыта в веб-разработке",
@@ -1725,3 +1787,118 @@ axios.interceptors.response.use(
 - НЕ храните refresh token в localStorage
 - НЕ отправляйте refresh token в JSON
 - НЕ храните access token в cookie (должен быть доступен JS)
+
+---
+
+## Заказчик / работодатель
+
+Все эндпоинты требуют `Authorization: Bearer <accessToken>` и `userType=employer`.
+
+### Профиль компании
+
+**GET /api/employer/profile** — свой профиль компании. `404`, если ещё не создан.
+
+**POST /api/employer/profile** / **PUT /api/employer/profile**
+
+```json
+{
+  "name": "Studio North",
+  "description": "Делаем digital-продукты для ритейла",
+  "industry": "IT",
+  "taskType": "project",
+  "budgetRange": "500k_1m"
+}
+```
+
+`taskType`: `project` | `hire` | `one_off`.
+`budgetRange` опционален: `up_to_500k` | `500k_1m` | `1m_3m` | `3m_plus`.
+
+### Карточка компании
+
+У работодателя может быть одна компания. Старые административные компании без
+владельца не привязываются к работодателям автоматически.
+
+**GET /api/employer/company** — своя компания. `404`, если ещё не создана.
+
+**POST /api/employer/company** — создать компанию. Повторное создание возвращает
+`409`.
+
+**PUT /api/employer/company** — частично обновить свою компанию. При изменении
+названия оно также обновляется во всех связанных вакансиях.
+
+```json
+{
+  "name": "Studio North",
+  "logo": "https://example.com/logo.png",
+  "workFormat": "Remote",
+  "valuesTags": ["Прозрачность", "Развитие"],
+  "growthSpeed": "Fast",
+  "teamSize": "11-50",
+  "languages": ["RU", "EN"],
+  "description": "Распределённая продуктовая команда"
+}
+```
+
+Ответ: `{ "company": { ... } }`.
+
+### Вакансии работодателя
+
+**GET /api/employer/jobs** — все собственные вакансии, включая неактивные.
+Ответ: `{ "jobs": [ ... ], "total": 2 }`.
+
+**POST /api/employer/jobs** — создать и сразу опубликовать вакансию
+(`isActive=true`). Сначала должна быть создана компания. Поля `company` и
+`companyId` не принимаются: компания и автор устанавливаются сервером.
+
+**GET /api/employer/jobs/:id** — получить собственную вакансию.
+
+**PUT /api/employer/jobs/:id** — частично обновить собственную вакансию. Доступны
+`title`, `description`, `direction`, `level`, `workFormat`, `location`, `salary`,
+`requirements`, `responsibilities`, `isActive`. Поля компании не принимаются.
+
+**DELETE /api/employer/jobs/:id** — мягко деактивировать собственную вакансию.
+
+Создание отправляет подходящим специалистам уведомления `new_jobs`. В ответах
+вакансии содержат `companyId` и карточку `companyCulture`. Попытка прочитать или
+изменить чужую вакансию возвращает `404`.
+
+Пример тела создания:
+
+```json
+{
+  "title": "Middle Frontend Developer",
+  "description": "Разработка интерфейсов продуктовой платформы",
+  "direction": "IT",
+  "level": "Middle",
+  "workFormat": "Remote",
+  "location": "Алматы",
+  "salary": { "min": 700000, "max": 1000000, "currency": "KZT" },
+  "requirements": ["TypeScript", "React"],
+  "responsibilities": ["Разрабатывать интерфейсы"]
+}
+```
+
+### Поиск специалистов
+
+**GET /api/employer/specialists**
+
+Query: `direction`, `level`, `city`, `format` (`hire` | `project`), `page`, `limit`.
+
+`format=hire` — `fulltime` и `searching`, `format=project` — `freelance` и `business`.
+
+В карточке специалиста первым идёт `aboutMe` (короткий свободный текст о себе, до 400 символов).
+
+### Связаться со специалистом
+
+**POST /api/employer/specialists/:profileId/contact**
+
+```json
+{
+  "kind": "message",
+  "message": "Нужен Middle Frontend на 2 месяца"
+}
+```
+
+`kind`: `message` | `project_offer`. Требует созданную карточку компании и
+использует её название в уведомлении специалисту. Повтор того же типа к тому же
+человеку — не чаще одного раза в день (`409`).

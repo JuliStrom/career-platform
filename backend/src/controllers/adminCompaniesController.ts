@@ -70,6 +70,12 @@ export const updateCompany = async (
       res.status(404).json({ error: 'Company not found' });
       return;
     }
+    if (payload.name !== undefined) {
+      await Job.updateMany(
+        { companyId: company._id },
+        { $set: { company: company.name } }
+      );
+    }
     res.status(200).json(company);
   } catch (error: unknown) {
     res.status(500).json({ error: getErrorMessage(error) });

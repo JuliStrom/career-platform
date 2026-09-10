@@ -1,3 +1,4 @@
+import { UserType } from '@/shared/model';
 import { getValidationMessage } from '@/src/shared/lib/utils';
 import { z } from 'zod';
 
@@ -30,6 +31,11 @@ export function createLoginSchema() {
     email: createEmailSchema(),
     password: z.string().min(1, { message: authMsg('passwordRequired') }),
   });
+}
+
+/** Путь платформы (работодатель / специалист). Подключается на отдельном шаге, не на форме регистрации. */
+export function createUserTypeSchema() {
+  return z.enum(UserType, { error: authMsg('userTypeRequired') });
 }
 
 /** Обычная регистрация (без invite) */

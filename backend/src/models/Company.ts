@@ -9,6 +9,11 @@ import { WorkFormat } from '../types';
 
 const companySchema = new Schema<ICompany>(
   {
+    ownerId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
+    },
     name: {
       type: String,
       required: [true, 'Company name is required'],
@@ -63,6 +68,13 @@ const companySchema = new Schema<ICompany>(
 );
 
 companySchema.index({ name: 1 });
+companySchema.index(
+  { ownerId: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { ownerId: { $type: 'objectId' } },
+  }
+);
 
 const Company: Model<ICompany> = mongoose.model<ICompany>(
   'Company',

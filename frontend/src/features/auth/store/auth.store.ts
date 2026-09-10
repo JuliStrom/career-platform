@@ -1,13 +1,19 @@
 import { secureStorage } from '@/features/auth/lib';
 import { resolveAuthFlowErrorMessage } from '@/features/auth/lib/mapBackendAuthError';
 import i18n from '@/shared/config/i18n';
-import { UserRole } from '@/shared/model';
+import { UserRole, UserType } from '@/shared/model';
 import { Platform } from 'react-native';
 import { create } from 'zustand';
 import { analytics } from '@/features/analytics/lib/track';
+import { useEmployerStore } from '@/features/employer/store/employer-store';
 import { useProfileStore } from '@/features/profile/store/profile-store';
 import * as authApi from '../api/auth.api';
-import { getRoleFromToken, getUserIdFromToken, isTokenValid } from '../lib/jwt';
+import {
+  getRoleFromToken,
+  getUserIdFromToken,
+  getUserTypeFromToken,
+  isTokenValid,
+} from '../lib/jwt';
 import { LoginFormData } from '../model/schemas';
 import {
   AuthState,
@@ -28,6 +34,7 @@ interface AuthStore extends AuthState {
   refreshAccessToken: () => Promise<void>;
   revalidateSession: () => Promise<boolean>;
   setUser: (user: User) => void;
+  setUserType: (userType: UserType) => Promise<void>;
   clearError: () => void;
   initializeAuth: () => Promise<void>;
 }
@@ -35,16 +42,25 @@ interface AuthStore extends AuthState {
 function buildUserFromToken(accessToken: string): User | null {
   const userId = getUserIdFromToken(accessToken);
   const roleStr = getRoleFromToken(accessToken)?.toUpperCase();
+  const userTypeStr = getUserTypeFromToken(accessToken);
   if (!userId) return null;
 
   const role =
     roleStr === UserRole.ADMIN ? UserRole.ADMIN : UserRole.SPECIALIST;
 
-  return { id: userId, email: '', role };
+  const userType =
+    userTypeStr === UserType.EMPLOYER
+      ? UserType.EMPLOYER
+      : userTypeStr === UserType.SPECIALIST
+        ? UserType.SPECIALIST
+        : null;
+
+  return { id: userId, email: '', role, userType };
 }
 
 function clearProfileCache() {
   useProfileStore.getState().resetProfile();
+  useEmployerStore.getState().reset();
 }
 
 /** Параллельные вызовы revalidateSession (root layout + protected layout, StrictMode) → один проход. */
@@ -98,6 +114,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         email: data.email,
         password: data.password,
         ...(data.inviteCode && { inviteCode: data.inviteCode }),
+        ...(data.userType && { userType: data.userType }),
       });
       if (Platform.OS === 'web')
         localStorage.setItem('access_token', response.accessToken);
@@ -261,6 +278,20 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     set({ user });
   },
 
+  setUserType: async (userType: UserType) => {
+    set({ isLoading: true, authError: null });
+    try {
+      const user = await authApi.setUserType(userType);
+      set({ user, isLoading: false, authError: null });
+    } catch (error) {
+      set({
+        isLoading: false,
+        authError: resolveAuthFlowErrorMessage(error),
+      });
+      throw error;
+    }
+  },
+
   clearError: () => {
     set({ authError: null });
   },
@@ -280,7 +311,15 @@ export async function applyAccessTokenUpdate(accessToken: string) {
   if (Platform.OS === 'web') localStorage.setItem('access_token', accessToken);
   else await secureStorage.setAccessToken(accessToken);
   const currentUser = useAuthStore.getState().user;
-  const user = currentUser ?? buildUserFromToken(accessToken);
+  const tokenUser = buildUserFromToken(accessToken);
+  const user =
+    currentUser && tokenUser
+      ? {
+          ...currentUser,
+          role: tokenUser.role,
+          userType: tokenUser.userType ?? currentUser.userType,
+        }
+      : tokenUser;
   useAuthStore.setState({
     isAuthenticated: true,
     user,
@@ -293,6 +332,7 @@ export async function applyAuthRefreshFailure(errorMessage?: string) {
     localStorage.removeItem('access_token');
   } else await secureStorage.clearTokens();
   useProfileStore.getState().resetProfile();
+  useEmployerStore.getState().reset();
   useAuthStore.setState({
     isAuthenticated: false,
     user: null,

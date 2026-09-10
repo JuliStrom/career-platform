@@ -1,5 +1,5 @@
 import mongoose, { Schema, Model } from 'mongoose';
-import { IUser, UserRole } from '../types';
+import { IUser, UserRole, UserType } from '../types';
 import type { AuthProvider } from '../types/auth';
 
 const AUTH_PROVIDERS: AuthProvider[] = ['email', 'google', 'telegram'];
@@ -46,6 +46,11 @@ const userSchema = new Schema<IUser>({
     type: String,
     enum: Object.values(UserRole),
     default: UserRole.SPECIALIST,
+  },
+  userType: {
+    type: String,
+    enum: Object.values(UserType),
+    required: false,
   },
   isBlocked: {
     type: Boolean,

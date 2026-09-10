@@ -1,6 +1,9 @@
 import { apiClient } from '@/shared/config/api';
 import { isAxiosError } from 'axios';
 import { Profile } from '../model';
+import {
+  normalizeProfileDirections,
+} from '../utils/directions.utils';
 
 function isLocalFileUri(uri: string): boolean {
   const trimmed = uri.trim();
@@ -32,12 +35,26 @@ function avatarUploadFileName(uri: string, blob?: Blob): string {
   return 'avatar.jpg';
 }
 
+function readProfileDirections(profile: {
+  directions?: unknown;
+  direction?: unknown;
+}) {
+  return normalizeProfileDirections(profile.directions ?? profile.direction);
+}
+
+function normalizeProfileResponse(profile: Profile): Profile {
+  return {
+    ...profile,
+    directions: readProfileDirections(profile),
+  };
+}
+
 function buildProfileRequestBody(profile: Profile) {
   const track = Boolean(profile.careerChangeTrackActive);
   return {
     name: profile.name,
     avatar: profile.avatar,
-    direction: profile.direction,
+    directions: readProfileDirections(profile),
     level: profile.level,
     skills: profile.skills,
     experience: profile.experience,
@@ -182,7 +199,7 @@ export async function getCertificatePdfFile(id: string): Promise<Blob> {
 export async function getProfile(): Promise<Profile | null> {
   try {
     const response = await apiClient.get<Profile>('/profile');
-    return response.data;
+    return normalizeProfileResponse(response.data);
   } catch (error) {
     if (isAxiosError(error) && error.response?.status === 404) {
       return null;
@@ -197,7 +214,7 @@ export async function createProfile(body: Profile): Promise<Profile> {
       '/profile',
       buildProfileRequestBody(body)
     );
-    return response.data;
+    return normalizeProfileResponse(response.data);
   } catch (error) {
     throw error;
   }
@@ -209,7 +226,7 @@ export async function updateProfile(body: Profile): Promise<Profile> {
       '/profile',
       buildProfileRequestBody(body)
     );
-    return response.data;
+    return normalizeProfileResponse(response.data);
   } catch (error) {
     throw error;
   }
@@ -225,5 +242,5 @@ export async function deleteProfile(): Promise<void> {
 
 export async function deleteAvatar(): Promise<Profile> {
   const response = await apiClient.delete<Profile>('/profile/avatar');
-  return response.data;
+  return normalizeProfileResponse(response.data);
 }

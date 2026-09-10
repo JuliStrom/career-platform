@@ -3,6 +3,8 @@ import Profile from '../models/Profile';
 import { AuthRequest, CreateProfileBody, UpdateProfileBody } from '../types';
 import { isMongoDuplicateError, isMongooseValidationError, getErrorMessage } from '../utils/errorHandlers';
 import { uploadToYandexDisk, getAvatarPath, downloadFromYandexDisk } from '../services/yandexDisk';
+import { normalizeProfileDirections } from '../utils/profileDirections';
+import { resolveProfileSkills } from '../services/skillDictionary';
 
 // Создание профиля специалиста
 export const create = async (req: AuthRequest<{}, {}, CreateProfileBody>, res: Response): Promise<void> => {
@@ -17,7 +19,7 @@ export const create = async (req: AuthRequest<{}, {}, CreateProfileBody>, res: R
     const {
       name,
       avatar,
-      direction,
+      directions: rawDirections,
       level,
       skills,
       experience,
@@ -38,19 +40,27 @@ export const create = async (req: AuthRequest<{}, {}, CreateProfileBody>, res: R
       careerChangeTimeline,
     } = req.body;
 
+    const directions = normalizeProfileDirections({ directions: rawDirections });
+    if (directions.length === 0) {
+      res.status(400).json({ error: 'Выберите хотя бы одно направление' });
+      return;
+    }
+
     const existingProfile = await Profile.findOne({ userId });
     if (existingProfile) {
       res.status(409).json({ error: 'Профиль уже существует. Используйте PUT для обновления' });
       return;
     }
 
+    const resolvedSkills = await resolveProfileSkills(skills, []);
+
     const profile = await Profile.create({
       userId,
       name,
       avatar,
-      direction,
+      directions,
       level,
-      skills,
+      skills: resolvedSkills,
       experience,
       careerGoal,
       careerStartDate,
@@ -119,7 +129,7 @@ export const update = async (req: AuthRequest<{}, {}, UpdateProfileBody>, res: R
     const {
       name,
       avatar,
-      direction,
+      directions: rawDirections,
       level,
       skills,
       experience,
@@ -148,9 +158,18 @@ export const update = async (req: AuthRequest<{}, {}, UpdateProfileBody>, res: R
 
     if (name !== undefined) profile.name = name;
     if (avatar !== undefined) profile.avatar = avatar;
-    if (direction !== undefined) profile.direction = direction;
+    if (rawDirections !== undefined) {
+      const directions = normalizeProfileDirections({ directions: rawDirections });
+      if (directions.length === 0) {
+        res.status(400).json({ error: 'Выберите хотя бы одно направление' });
+        return;
+      }
+      profile.directions = directions;
+    }
     if (level !== undefined) profile.level = level;
-    if (skills !== undefined) profile.skills = skills;
+    if (skills !== undefined) {
+      profile.skills = await resolveProfileSkills(skills, profile.skills);
+    }
     if (experience !== undefined) profile.experience = experience;
     if (careerGoal !== undefined) profile.careerGoal = careerGoal;
     if (careerStartDate !== undefined) profile.careerStartDate = careerStartDate;
@@ -556,6 +575,8 @@ export const deleteProfile = async (req: AuthRequest, res: Response): Promise<vo
       res.status(404).json({ error: 'Профиль не найден' });
       return;
     }
+
+    await resolveProfileSkills([], profile.skills);
 
     res.status(200).json({ 
       message: 'Профиль успешно удалён',

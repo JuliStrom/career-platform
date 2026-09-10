@@ -13,19 +13,20 @@ import {
   EmploymentType,
   Level,
   Profile,
-  PROFILE_LANG_VALUES,
   ProfileLang,
   profileFormSchema,
   DIRECTION_VALUES,
   LEVEL_VALUES,
   type ProfileFormValues,
 } from '@/features/profile/model';
+import { SkillsAutosuggest } from '@/features/profile/ui/SkillsAutosuggest';
 import {
-  formatSkillsInput,
-  parseSkillsInput,
-} from '@/features/profile/utils/skills.utils';
+  MAX_PROFILE_DIRECTIONS,
+  normalizeProfileDirections,
+  toggleProfileDirection,
+} from '@/features/profile/utils/directions.utils';
 import { ProfileAvatarUpload } from '@/features/profile/ui/ProfileAvatarUpload';
-import { setLanguage } from '@/shared/config/i18n';
+import i18n from '@/shared/config/i18n';
 import { useTranslation } from '@/shared/lib/hooks/useTranslation';
 import { PrimaryButton } from '@/shared/ui/buttons/PrimaryButton';
 import { NamedField } from '@/shared/ui/inputs/NamedField';
@@ -97,9 +98,11 @@ export function ProfileForm({
     defaultValues: {
       name: initialValues?.name ?? '',
       avatar: initialValues?.avatar ?? '',
-      direction: initialValues?.direction ?? Direction.IT,
+      directions: normalizeProfileDirections(
+        initialValues?.directions ?? Direction.IT
+      ),
       level: initialValues?.level ?? Level.Junior,
-      skillsInput: initialValues ? formatSkillsInput(initialValues.skills) : '',
+      skills: initialValues?.skills ?? [],
       experience: initialValues?.experience ?? '',
       careerGoal: initialValues?.careerGoal ?? CareerGoal.Growth,
       careerStartDateInput: initialValues?.careerStartDate
@@ -135,7 +138,10 @@ export function ProfileForm({
     reset({
       ...initialValues,
       avatar: initialValues.avatar ?? '',
-      skillsInput: formatSkillsInput(initialValues.skills),
+      directions: normalizeProfileDirections(
+        initialValues.directions ?? Direction.IT
+      ),
+      skills: initialValues.skills ?? [],
       careerStartDateInput: initialValues.careerStartDate
         ? new Date(initialValues.careerStartDate).toISOString().slice(0, 10)
         : '',
@@ -171,17 +177,15 @@ export function ProfileForm({
   const baselineServerAvatar = initialValues?.avatar?.trim() ?? '';
 
   const handleSubmit = async (data: ProfileFormValues) => {
-    const skills = parseSkillsInput(data.skillsInput);
-
     const payload: Profile = {
       name: data.name.trim(),
       avatar:
         typeof data.avatar === 'string' && data.avatar.trim()
           ? data.avatar.trim()
           : undefined,
-      direction: data.direction,
+      directions: normalizeProfileDirections(data.directions),
       level: data.level,
-      skills,
+      skills: data.skills,
       experience: data.experience.trim(),
       careerGoal: data.careerGoal,
       careerStartDate:
@@ -202,7 +206,8 @@ export function ProfileForm({
           ? (data.relocationToCountry ?? 'europe')
           : null,
       employmentType: data.employmentType ?? null,
-      lang: data.lang ?? ProfileLang.RU,
+      lang:
+        i18n.language?.slice(0, 2) === 'en' ? ProfileLang.EN : ProfileLang.RU,
       wantsRelocation: Boolean(data.wantsRelocation),
       careerChangeTrackActive: Boolean(data.careerChangeTrackActive),
       careerChangeCurrentField: data.careerChangeTrackActive
@@ -287,13 +292,22 @@ export function ProfileForm({
 
           <Controller
             control={control}
-            name="direction"
+            name="directions"
             render={({ field: { onChange, value } }) => (
               <ChipSelector
                 label={t('direction')}
+                hint={t('directionHint')}
                 options={DIRECTION_VALUES}
-                selectedValue={value}
-                onSelect={onChange}
+                selectedValues={normalizeProfileDirections(value)}
+                onSelect={(selected) =>
+                  onChange(
+                    toggleProfileDirection(
+                      normalizeProfileDirections(value),
+                      selected as Direction
+                    )
+                  )
+                }
+                maxSelected={MAX_PROFILE_DIRECTIONS}
                 translationKey="directions"
               />
             )}
@@ -315,16 +329,13 @@ export function ProfileForm({
 
           <Controller
             control={control}
-            name="skillsInput"
-            render={({ field: { onChange, onBlur, value }, fieldState }) => (
-              <NamedField
-                label={t('skills')}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                placeholder={t('skillsPlaceholder')}
-                error={errors.skillsInput?.message}
-                touched={fieldState.isTouched}
+            name="skills"
+            render={({ field: { onChange, value }, fieldState }) => (
+              <SkillsAutosuggest
+                value={value ?? []}
+                onChange={onChange}
+                error={errors.skills?.message}
+                touched={fieldState.isTouched || (value?.length ?? 0) > 0}
               />
             )}
           />
@@ -480,24 +491,6 @@ export function ProfileForm({
                 }
                 onSelect={onChange}
                 translationKey="employmentTypes"
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="lang"
-            render={({ field: { onChange, value } }) => (
-              <ChipSelector
-                label={t('profileLang')}
-                options={PROFILE_LANG_VALUES}
-                selectedValue={(value ?? ProfileLang.RU) as ProfileLang}
-                onSelect={(selected) => {
-                  const lang = selected as ProfileLang;
-                  onChange(lang);
-                  void setLanguage(lang);
-                }}
-                translationKey="profileLangs"
               />
             )}
           />

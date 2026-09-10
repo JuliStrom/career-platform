@@ -10,7 +10,7 @@ import {
   ProfileLang,
 } from '@/shared/model';
 import { getValidationMessage } from '@/src/shared/lib/utils';
-import { parseSkillsInput } from '@/features/profile/utils/skills.utils';
+import { MAX_PROFILE_DIRECTIONS } from '@/features/profile/utils/directions.utils';
 import { z } from 'zod';
 
 const getProfileValidationMessage = (key: string) =>
@@ -71,7 +71,20 @@ export const baseProfileSchema = z.object({
       })
     )
     .optional(),
-  direction: directionSchema,
+  directions: z.preprocess(
+    (value) => (Array.isArray(value) ? value : value ? [value] : []),
+    z
+      .array(directionSchema)
+      .min(1, getProfileValidationMessage('directionMin'))
+      .max(
+        MAX_PROFILE_DIRECTIONS,
+        getProfileValidationMessage('directionMax')
+      )
+      .refine(
+        (values) => new Set(values).size === values.length,
+        getProfileValidationMessage('directionUnique')
+      )
+  ),
   level: levelSchema,
   experience: z
     .string()
@@ -110,20 +123,8 @@ export const profileSchema = baseProfileSchema.extend({
     .max(20, getProfileValidationMessage('skillsMax')),
 });
 
-// Валидация skillsInput: проверяем количество навыков (1–20), а не длину строки
-export const profileFormSchema = baseProfileSchema
+export const profileFormSchema = profileSchema
   .extend({
-    skillsInput: z
-      .string()
-      .min(1, getProfileValidationMessage('skillsMin'))
-      .refine(
-        (val) => parseSkillsInput(val).length >= 1,
-        getProfileValidationMessage('skillsMin')
-      )
-      .refine(
-        (val) => parseSkillsInput(val).length <= 20,
-        getProfileValidationMessage('skillsMax')
-      ),
     careerStartDateInput: z
       .string()
       .optional()

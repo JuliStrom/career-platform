@@ -6,6 +6,7 @@ import { Platform } from 'react-native';
 import enAuth from './i18n/locales/en/auth.json';
 import enCareer from './i18n/locales/en/career.json';
 import enCommon from './i18n/locales/en/common.json';
+import enEmployer from './i18n/locales/en/employer.json';
 import enJobs from './i18n/locales/en/jobs.json';
 import enNotifications from './i18n/locales/en/notifications.json';
 import privacyEn from './i18n/locales/en/privacy.json';
@@ -14,6 +15,7 @@ import termsEn from './i18n/locales/en/terms.json';
 import ruAuth from './i18n/locales/ru/auth.json';
 import ruCareer from './i18n/locales/ru/career.json';
 import ruCommon from './i18n/locales/ru/common.json';
+import ruEmployer from './i18n/locales/ru/employer.json';
 import ruJobs from './i18n/locales/ru/jobs.json';
 import ruNotifications from './i18n/locales/ru/notifications.json';
 import privacyRu from './i18n/locales/ru/privacy.json';
@@ -25,6 +27,7 @@ const resources = {
     common: ruCommon,
     profile: ruProfile,
     auth: ruAuth,
+    employer: ruEmployer,
     jobs: ruJobs,
     notifications: ruNotifications,
     career: ruCareer,
@@ -35,6 +38,7 @@ const resources = {
     common: enCommon,
     profile: enProfile,
     auth: enAuth,
+    employer: enEmployer,
     jobs: enJobs,
     notifications: enNotifications,
     career: enCareer,

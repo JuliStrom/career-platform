@@ -15,22 +15,6 @@ interface Props {
   onCancel: () => void;
 }
 
-function listToInput(value: unknown): string {
-  if (!value) return '';
-  if (Array.isArray(value)) {
-    return value.map(String).filter(Boolean).join(', ');
-  }
-
-  return String(value);
-}
-
-function inputToList(value: string): string[] {
-  return value
-    .split(',')
-    .map((item) => item.trim())
-    .filter(Boolean);
-}
-
 export function CareerRouteForm({
   initialValues,
   loading,
@@ -43,8 +27,8 @@ export function CareerRouteForm({
   const [direction, setDirection] = useState<Direction>(DIRECTION_VALUES[0]);
   const [fromCity, setFromCity] = useState('');
   const [toCountry, setToCountry] = useState('');
-  const [steps, setSteps] = useState('');
-  const [resources, setResources] = useState('');
+  const [steps, setSteps] = useState('[]');
+  const [resources, setResources] = useState('[]');
   const [isFeatured, setIsFeatured] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
 
@@ -54,8 +38,8 @@ export function CareerRouteForm({
     setDirection(initialValues.direction);
     setFromCity(initialValues.fromCity ?? '');
     setToCountry(initialValues.toCountry);
-    setSteps(listToInput(initialValues.steps));
-    setResources(listToInput(initialValues.resources));
+    setSteps(JSON.stringify(initialValues.steps ?? [], null, 2));
+    setResources(JSON.stringify(initialValues.resources ?? [], null, 2));
     setIsFeatured(initialValues.isFeatured);
   }, [initialValues]);
 
@@ -64,17 +48,22 @@ export function CareerRouteForm({
       setValidationError(t('adminRoutes.required'));
       return;
     }
-
-    setValidationError(null);
-    await onSubmit({
-      title: title.trim(),
-      direction,
-      fromCity: fromCity.trim() || null,
-      toCountry: toCountry.trim(),
-      steps: inputToList(steps),
-      resources: inputToList(resources),
-      isFeatured,
-    });
+    try {
+      const parsedSteps: unknown = JSON.parse(steps);
+      const parsedResources: unknown = JSON.parse(resources);
+      setValidationError(null);
+      await onSubmit({
+        title: title.trim(),
+        direction,
+        fromCity: fromCity.trim() || null,
+        toCountry: toCountry.trim(),
+        steps: parsedSteps,
+        resources: parsedResources,
+        isFeatured,
+      });
+    } catch {
+      setValidationError(t('adminRoutes.invalidJson'));
+    }
   }
 
   return (
@@ -114,9 +103,8 @@ export function CareerRouteForm({
         value={steps}
         onChangeText={setSteps}
         multiline
-        numberOfLines={3}
+        numberOfLines={8}
         autoCapitalize="none"
-        placeholder={t('adminRoutes.stepsPlaceholder')}
         editable={!loading}
       />
       <NamedField
@@ -124,9 +112,8 @@ export function CareerRouteForm({
         value={resources}
         onChangeText={setResources}
         multiline
-        numberOfLines={3}
+        numberOfLines={8}
         autoCapitalize="none"
-        placeholder={t('adminRoutes.resourcesPlaceholder')}
         editable={!loading}
       />
       <View className="mb-5 flex-row items-center justify-between">

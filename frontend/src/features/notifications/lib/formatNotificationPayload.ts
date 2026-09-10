@@ -52,6 +52,16 @@ export function formatNotificationPayload(
   payload: NotificationPayload,
   language: string
 ): Record<string, unknown> {
+  if (type === 'employer_message' || type === 'employer_project_offer') {
+    return {
+      ...payload,
+      message:
+        typeof payload.message === 'string' && payload.message.trim()
+          ? payload.message.trim()
+          : '',
+    };
+  }
+
   if (type !== 'growth_trigger' || typeof payload.years !== 'number') {
     return payload;
   }

@@ -1,9 +1,8 @@
 import {Request, Response} from 'express';
 import Job from '../models/Job';
-import {AuthRequest, CreateJobBody, ICompany, NotificationType, UpdateJobBody} from '../types';
+import {AuthRequest, CreateJobBody, UpdateJobBody} from '../types';
 import {getErrorMessage, isMongooseValidationError} from '../utils/errorHandlers';
-import {createNotification} from "../services/notificationDto";
-import Profile from "../models/Profile";
+import {notifyAboutNewJob, serializeJob} from '../services/jobDto';
 
 /** Поля, разрешённые к обновлению через API (без createdBy и служебных). */
 const JOB_UPDATE_FIELDS = [
@@ -20,23 +19,6 @@ const JOB_UPDATE_FIELDS = [
   'responsibilities',
   'isActive',
 ] as const satisfies readonly (keyof UpdateJobBody)[];
-
-type JobResponseObject = Record<string, unknown> & {
-  companyId?: unknown;
-  companyCulture?: unknown;
-};
-
-const isPopulatedCompany = (value: unknown): value is ICompany =>
-  Boolean(value && typeof value === 'object' && 'name' in value);
-
-const serializeJob = (job: { toObject: () => JobResponseObject }): JobResponseObject => {
-  const data = job.toObject();
-  if (isPopulatedCompany(data.companyId)) {
-    data.companyCulture = data.companyId;
-    data.companyId = data.companyId._id;
-  }
-  return data;
-};
 
 // Создание вакансии (только ADMIN)
 export const createJob = async (req: AuthRequest<{}, {}, CreateJobBody>, res: Response): Promise<void> => {
@@ -55,26 +37,7 @@ export const createJob = async (req: AuthRequest<{}, {}, CreateJobBody>, res: Re
     };
 
     const job = await Job.create(jobData);
-    // триггер для генерации уведомления
-    const profiles = await Profile.find({
-      direction: job.direction,
-      level: job.level,
-    }).select('userId');
-
-    await Promise.all(
-        profiles.map((profile) => {
-          createNotification({
-            userId: profile.userId,
-            type: NotificationType.NEW_JOBS,
-            payload: {
-              count: 1,
-              jobIds: [job._id.toString()],
-              route: `/jobs/${job._id}`,
-            },
-            deduplicationKey: `new-job: ${job._id}:${profile.userId}`,
-          })
-        })
-    );
+    await notifyAboutNewJob(job);
 
     await job.populate('companyId');
 

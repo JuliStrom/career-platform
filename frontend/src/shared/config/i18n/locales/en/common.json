@@ -163,15 +163,13 @@
     "direction": "Direction",
     "fromCity": "Origin city",
     "toCountry": "Destination country",
-    "steps": "Steps",
-    "resources": "Resources",
-    "stepsPlaceholder": "Prepare a resume, build a portfolio, submit applications",
-    "resourcesPlaceholder": "LinkedIn, visa center, English courses",
+    "steps": "Steps (JSON)",
+    "resources": "Resources (JSON)",
     "isFeatured": "Featured route",
     "featured": "Featured",
     "anyCity": "Any city",
     "required": "Title and destination country are required",
-    "invalidJson": "Enter steps and resources separated by commas"
+    "invalidJson": "Steps and resources must contain valid JSON"
   },
   "adminCompanies": {
     "listTitle": "Company cards",

@@ -15,3 +15,5 @@ export * from './aiRiskIndex';
 export * from './careerChangeTrack';
 export * from './invite';
 export * from './notification';
+export * from './employer';
+export * from './skill';

@@ -29,7 +29,6 @@ export function EducationField({
               ? 'font-semibold text-gray-900 dark:text-white'
               : 'text-gray-400 dark:text-gray-500'
           }`}
-          style={{ flexShrink: 1 }}
         >
           {value}
         </Text>

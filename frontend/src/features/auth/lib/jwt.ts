@@ -2,6 +2,7 @@ interface JWTPayload {
   userId?: string;
   sub?: string; // стандартное поле для subject (обычно userId)
   role?: string;
+  userType?: string;
   exp?: number; // expiration timestamp
   iat?: number; // issued at timestamp
   [key: string]: unknown;
@@ -42,6 +43,15 @@ export function getRoleFromToken(token: string): string | null {
   }
 
   return payload.role || null;
+}
+
+export function getUserTypeFromToken(token: string): string | null {
+  const payload = decodeJWT(token);
+  if (!payload) {
+    return null;
+  }
+
+  return payload.userType || null;
 }
 
 export function isTokenExpired(token: string): boolean {

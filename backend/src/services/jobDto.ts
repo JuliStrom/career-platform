@@ -29,7 +29,7 @@ export const notifyAboutNewJob = async (
   job: InstanceType<typeof Job>
 ): Promise<void> => {
   const profiles = await Profile.find({
-    direction: job.direction,
+    directions: job.direction,
     level: job.level,
   }).select('userId');
 

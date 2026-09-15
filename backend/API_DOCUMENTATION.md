@@ -1122,11 +1122,27 @@ Authorization: Bearer <accessToken>
 ```json
 {
   "name": "Иван Иванов",
+  "aboutMe": "Frontend-разработчик с фокусом на продукт. Собираю понятные интерфейсы и люблю доводить фичи до релиза. Ищу команду с сильной инженерной культурой.",
   "avatar": "https://example.com/avatar.jpg",
-  "direction": "IT",
+  "directions": ["IT", "Design"],
   "level": "Middle",
   "skills": ["JavaScript", "React", "Node.js"],
-  "experience": "5 лет опыта в веб-разработке",
+  "workplaces": [
+    {
+      "company": "Example",
+      "position": "Frontend developer",
+      "period": "2022 — н.в.",
+      "achievement": "Запустил личный кабинет и сократил время релиза"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Career platform",
+      "role": "Frontend",
+      "result": "Собрал форму профиля со структурированным опытом",
+      "link": "https://example.com"
+    }
+  ],
   "careerGoal": "Growth"
 }
 ```
@@ -1134,7 +1150,7 @@ Authorization: Bearer <accessToken>
 **Важно:** Поле `favoriteJobs` передавать НЕ нужно - оно автоматически создается как пустой массив.
 
 **Допустимые значения:**
-- `direction`: `'Creative'`, `'IT'`, `'Design'`, `'E-commerce'`, `'HoReCa'`, `'Architecture & Design'`, `'Production'`, `'Marketing'`, `'Sales & Business Development'`, `'Finance & Accounting'`, `'HR & People'`, `'Operations & Logistics'`, `'Education'`, `'Legal & Compliance'`
+- `directions`: массив из 1–3 уникальных значений `'Creative'`, `'IT'`, `'Design'`, `'E-commerce'`, `'HoReCa'`, `'Architecture & Design'`, `'Production'`, `'Marketing'`, `'Sales & Business Development'`, `'Finance & Accounting'`, `'HR & People'`, `'Operations & Logistics'`, `'Education'`, `'Legal & Compliance'`
 - `level`: `'Junior'`, `'Middle'`, `'Senior'`, `'Lead'`
 - `careerGoal`: `'Growth'`, `'Career Change'`, `'Skill Development'`, `'Leadership'`, `'Expertise'`
 
@@ -1144,8 +1160,9 @@ Authorization: Bearer <accessToken>
   "_id": "507f1f77bcf86cd799439011",
   "userId": "507f1f77bcf86cd799439012",
   "name": "Иван Иванов",
+  "aboutMe": "Frontend-разработчик с фокусом на продукт. Собираю понятные интерфейсы и люблю доводить фичи до релиза. Ищу команду с сильной инженерной культурой.",
   "avatar": "https://example.com/avatar.jpg",
-  "direction": "IT",
+  "directions": ["IT", "Design"],
   "level": "Middle",
   "skills": ["JavaScript", "React", "Node.js"],
   "experience": "5 лет опыта в веб-разработке",
@@ -1868,6 +1885,8 @@ axios.interceptors.response.use(
 Query: `direction`, `level`, `city`, `format` (`hire` | `project`), `page`, `limit`.
 
 `format=hire` — `fulltime` и `searching`, `format=project` — `freelance` и `business`.
+
+В карточке специалиста первым идёт `aboutMe` (короткий свободный текст о себе, до 400 символов).
 
 ### Связаться со специалистом
 

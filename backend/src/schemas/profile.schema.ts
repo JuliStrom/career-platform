@@ -34,6 +34,49 @@ const relocationOriginValues = ['kazakhstan'] as [string, ...string[]];
 
 const optionalDateNullable = z.union([z.coerce.date(), z.null()]).optional();
 
+const optionalUrl = z
+  .string()
+  .trim()
+  .max(500, 'Ссылка не длиннее 500 символов')
+  .refine(
+    (value) => value.length === 0 || /^https?:\/\//i.test(value),
+    'Ссылка должна начинаться с http:// или https://'
+  );
+
+const experienceProjectSchema = z.object({
+  name: z.string().trim().min(1, 'Укажите название проекта').max(120, 'Название не длиннее 120 символов'),
+  role: z.string().trim().min(1, 'Укажите роль в проекте').max(120, 'Роль не длиннее 120 символов'),
+  result: z.string().trim().min(1, 'Укажите результат').max(500, 'Результат не длиннее 500 символов'),
+  link: optionalUrl.optional().or(z.literal('')),
+});
+
+const workplaceSchema = z.object({
+  company: z.string().trim().min(1, 'Укажите компанию').max(120, 'Компания не длиннее 120 символов'),
+  position: z.string().trim().min(1, 'Укажите должность').max(120, 'Должность не длиннее 120 символов'),
+  period: z.string().trim().min(1, 'Укажите период').max(80, 'Период не длиннее 80 символов'),
+  achievement: z
+    .string()
+    .trim()
+    .min(1, 'Укажите достижение')
+    .max(500, 'Достижение не длиннее 500 символов'),
+  projects: z.array(experienceProjectSchema).max(5, 'Можно указать не больше 5 проектов').optional(),
+});
+
+const workplacesField = z.array(workplaceSchema).max(10, 'Можно указать не больше 10 мест работы');
+const projectsField = z.array(experienceProjectSchema).max(5, 'Можно указать не больше 5 проектов');
+
+const directionsField = z
+  .array(
+    z.enum(directionValues, {
+      message: `Неверное направление. Допустимые значения: ${directionValues.join(', ')}`,
+    })
+  )
+  .min(1, 'Выберите хотя бы одно направление')
+  .max(3, 'Можно выбрать не больше 3 направлений')
+  .refine((values) => new Set(values).size === values.length, {
+    message: 'Направления должны быть уникальными',
+  });
+
 const careerChangeTrackFields = {
   careerChangeTrackActive: z.boolean().optional().default(false),
   careerChangeCurrentField: z
@@ -71,6 +114,12 @@ export const createProfileSchema = z.object({
       .string()
       .min(1, 'Имя обязательно')
       .trim(),
+    aboutMe: z
+      .string()
+      .trim()
+      .max(400, 'Текст «Обо мне» не длиннее 400 символов')
+      .optional()
+      .nullable(),
     avatar: z
       .union([
         z.string().url('Неверный формат URL'),
@@ -78,9 +127,7 @@ export const createProfileSchema = z.object({
       ])
       .optional()
       .nullable(),
-    direction: z.enum(directionValues, {
-      message: `Неверное направление. Допустимые значения: ${directionValues.join(', ')}`,
-    }),
+    directions: directionsField,
     level: z.enum(levelValues, {
       message: `Неверный уровень. Допустимые значения: ${levelValues.join(', ')}`,
     }),
@@ -90,9 +137,9 @@ export const createProfileSchema = z.object({
       .refine(skills => skills.every(skill => skill.trim().length > 0), {
         message: 'Все навыки должны быть непустыми строками',
       }),
-    experience: z
-      .string()
-      .min(1, 'Опыт обязателен'),
+    experience: z.string().max(2000, 'Опыт не длиннее 2000 символов').optional(),
+    workplaces: workplacesField.optional(),
+    projects: projectsField.optional(),
     careerGoal: z.enum(careerGoalValues, {
       message: `Неверная карьерная цель. Допустимые значения: ${careerGoalValues.join(', ')}`,
     }),
@@ -100,6 +147,18 @@ export const createProfileSchema = z.object({
     currentCompany: z
       .string()
       .max(255, 'Компания не длиннее 255 символов')
+      .trim()
+      .optional()
+      .nullable(),
+    currentPosition: z
+      .string()
+      .max(120, 'Должность не длиннее 120 символов')
+      .trim()
+      .optional()
+      .nullable(),
+    currentAchievement: z
+      .string()
+      .max(500, 'Достижение не длиннее 500 символов')
       .trim()
       .optional()
       .nullable(),
@@ -118,6 +177,15 @@ export const createProfileSchema = z.object({
     ...careerChangeTrackFields,
   })
     .superRefine((data, ctx) => {
+      const hasWorkplaces = (data.workplaces?.length ?? 0) > 0;
+      const hasExperienceText = Boolean(data.experience?.trim());
+      if (!hasWorkplaces && !hasExperienceText) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Укажите хотя бы одно место работы',
+          path: ['workplaces'],
+        });
+      }
       if (!refineCareerChangeTrack(data)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -137,6 +205,12 @@ export const updateProfileSchema = z.object({
       .min(1, 'Имя не может быть пустым')
       .trim()
       .optional(),
+    aboutMe: z
+      .string()
+      .trim()
+      .max(400, 'Текст «Обо мне» не длиннее 400 символов')
+      .optional()
+      .nullable(),
     avatar: z
       .union([
         z.string().url('Неверный формат URL'),
@@ -144,9 +218,7 @@ export const updateProfileSchema = z.object({
       ])
       .optional()
       .nullable(),
-    direction: z.enum(directionValues, {
-      message: `Неверное направление. Допустимые значения: ${directionValues.join(', ')}`,
-    }).optional(),
+    directions: directionsField.optional(),
     level: z.enum(levelValues, {
       message: `Неверный уровень. Допустимые значения: ${levelValues.join(', ')}`,
     }).optional(),
@@ -157,10 +229,9 @@ export const updateProfileSchema = z.object({
         message: 'Все навыки должны быть непустыми строками',
       })
       .optional(),
-    experience: z
-      .string()
-      .min(1, 'Опыт не может быть пустым')
-      .optional(),
+    experience: z.string().max(2000, 'Опыт не длиннее 2000 символов').optional(),
+    workplaces: workplacesField.optional(),
+    projects: projectsField.optional(),
     careerGoal: z.enum(careerGoalValues, {
       message: `Неверная карьерная цель. Допустимые значения: ${careerGoalValues.join(', ')}`,
     }).optional(),
@@ -168,6 +239,18 @@ export const updateProfileSchema = z.object({
     currentCompany: z
       .string()
       .max(255, 'Компания не длиннее 255 символов')
+      .trim()
+      .optional()
+      .nullable(),
+    currentPosition: z
+      .string()
+      .max(120, 'Должность не длиннее 120 символов')
+      .trim()
+      .optional()
+      .nullable(),
+    currentAchievement: z
+      .string()
+      .max(500, 'Достижение не длиннее 500 символов')
       .trim()
       .optional()
       .nullable(),

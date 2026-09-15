@@ -9,6 +9,7 @@ import {
   ProfileLang,
 } from '../types';
 import { computeYearsInCurrentRole } from '../utils/profileYears';
+import { normalizeProfileDirections } from '../utils/profileDirections';
 
 // Схема профиля
 const profileSchema = new Schema<IProfile>({
@@ -21,6 +22,12 @@ const profileSchema = new Schema<IProfile>({
   name: {
     type: String,
     required: [true, 'Имя обязательно'],
+    trim: true,
+  },
+  aboutMe: {
+    type: String,
+    maxlength: 400,
+    default: null,
     trim: true,
   },
   avatar: {
@@ -67,10 +74,18 @@ const profileSchema = new Schema<IProfile>({
     ],
     default: [],
   },
-  direction: {
-    type: String,
+  directions: {
+    type: [String],
     required: [true, 'Направление обязательно'],
     enum: Object.values(Direction),
+    validate: {
+      validator(value: string[]) {
+        if (!Array.isArray(value)) return false;
+        if (value.length < 1 || value.length > 3) return false;
+        return new Set(value).size === value.length;
+      },
+      message: 'Можно выбрать от 1 до 3 уникальных направлений',
+    },
   },
   level: {
     type: String,
@@ -91,6 +106,54 @@ const profileSchema = new Schema<IProfile>({
     type: String,
     required: [true, 'Опыт обязателен'],
   },
+  workplaces: {
+    type: [
+      {
+        _id: false,
+        company: { type: String, required: true, trim: true, maxlength: 120 },
+        position: { type: String, required: true, trim: true, maxlength: 120 },
+        period: { type: String, required: true, trim: true, maxlength: 80 },
+        achievement: { type: String, required: true, trim: true, maxlength: 500 },
+        projects: {
+          type: [
+            {
+              _id: false,
+              name: { type: String, required: true, trim: true, maxlength: 120 },
+              role: { type: String, required: true, trim: true, maxlength: 120 },
+              result: { type: String, required: true, trim: true, maxlength: 500 },
+              link: { type: String, default: '', trim: true, maxlength: 500 },
+            },
+          ],
+          default: [],
+        },
+      },
+    ],
+    default: [],
+    validate: {
+      validator(value: unknown[]) {
+        return Array.isArray(value) && value.length <= 10;
+      },
+      message: 'Можно указать не больше 10 мест работы',
+    },
+  },
+  projects: {
+    type: [
+      {
+        _id: false,
+        name: { type: String, required: true, trim: true, maxlength: 120 },
+        role: { type: String, required: true, trim: true, maxlength: 120 },
+        result: { type: String, required: true, trim: true, maxlength: 500 },
+        link: { type: String, default: '', trim: true, maxlength: 500 },
+      },
+    ],
+    default: [],
+    validate: {
+      validator(value: unknown[]) {
+        return Array.isArray(value) && value.length <= 10;
+      },
+      message: 'Можно указать не больше 10 проектов',
+    },
+  },
   careerGoal: {
     type: String,
     required: [true, 'Карьерная цель обязательна'],
@@ -103,6 +166,18 @@ const profileSchema = new Schema<IProfile>({
   currentCompany: {
     type: String,
     maxlength: 255,
+    default: null,
+    trim: true,
+  },
+  currentPosition: {
+    type: String,
+    maxlength: 120,
+    default: null,
+    trim: true,
+  },
+  currentAchievement: {
+    type: String,
+    maxlength: 500,
     default: null,
     trim: true,
   },
@@ -177,10 +252,20 @@ const profileSchema = new Schema<IProfile>({
   timestamps: true,
 });
 
+profileSchema.pre('validate', function () {
+  const directions = normalizeProfileDirections({
+    direction: (this as { direction?: unknown }).direction,
+    directions: this.directions,
+  });
+  if (directions.length > 0) {
+    this.directions = directions;
+  }
+});
+
 // Employer search: chronological feed and common direction/level filters.
 profileSchema.index({ updatedAt: -1, _id: -1 });
-profileSchema.index({ direction: 1, updatedAt: -1, _id: -1 });
-profileSchema.index({ direction: 1, level: 1, updatedAt: -1, _id: -1 });
+profileSchema.index({ directions: 1, updatedAt: -1, _id: -1 });
+profileSchema.index({ directions: 1, level: 1, updatedAt: -1, _id: -1 });
 profileSchema.index({ city: 1, updatedAt: -1, _id: -1 });
 
 profileSchema.virtual('yearsInCurrentRole').get(function (this: IProfile) {
@@ -195,12 +280,15 @@ profileSchema.set('toJSON', {
       lang?: string | null;
       wantsRelocation?: boolean | null;
       careerChangeTrackActive?: boolean | null;
+      directions?: unknown;
       portfolioPdfData?: unknown;
       certificatePdfs?: { data?: unknown }[];
     };
     if (plain.lang == null) plain.lang = ProfileLang.RU;
     if (plain.wantsRelocation == null) plain.wantsRelocation = false;
     if (plain.careerChangeTrackActive == null) plain.careerChangeTrackActive = false;
+    plain.directions = normalizeProfileDirections(plain);
+    delete (plain as { direction?: unknown }).direction;
     delete plain.portfolioPdfData;
     if (Array.isArray(plain.certificatePdfs)) {
       plain.certificatePdfs = plain.certificatePdfs.map((certificate) => {

@@ -3,6 +3,7 @@ import LearningResource from '../models/LearningResource';
 import Profile from '../models/Profile';
 import { getErrorMessage } from '../utils/errorHandlers';
 import {AuthRequest} from "../types";
+import {normalizeProfileDirections} from '../utils/profileDirections';
 
 type LearningQuery = {
     direction?: string;
@@ -99,9 +100,10 @@ export const getRecommendedLearning = async (
             return;
         }
 
+        const dirs = normalizeProfileDirections(profile);
         const resources = await LearningResource.find({
             isActive: true,
-            direction: profile.direction,
+            direction: { $in: dirs },
             level: profile.level,
         })
             .sort({ isFeatured: -1, sortOrder: 1, title: 1 })
@@ -109,7 +111,7 @@ export const getRecommendedLearning = async (
 
         res.status(200).json({
             profile: {
-                direction: profile.direction,
+                direction: dirs[0],
                 level: profile.level,
                 careerGoal: profile.careerGoal,
             },

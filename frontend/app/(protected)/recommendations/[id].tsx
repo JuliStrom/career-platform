@@ -85,7 +85,6 @@ export default function RecommendationDetailScreen() {
   const title = recommendation.translationKey
     ? t(`recommendations.content.${recommendation.translationKey}.title`)
     : recommendation.title;
-
   return (
     <SafeAreaView
       className="flex-1 bg-gray-50 dark:bg-gray-900"
